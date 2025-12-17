@@ -69,7 +69,7 @@ const TIERS: Record<string, TierData> = {
     productId: "prod_TaYIMTXlNTLZwc",
     features: [
       "1.000 queries/mês",
-      "Marcas ilimitadas",
+      "Até 7 marcas monitoradas",
       "Relatórios white-label",
       "Certificação IGO oficial",
       "API access completa",
