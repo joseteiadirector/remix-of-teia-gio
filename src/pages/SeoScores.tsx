@@ -22,8 +22,30 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, LineChart, Line, BarChart, Bar, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { logger } from "@/utils/logger";
+
+// Premium Tooltip Component with Glassmorphism
+const PremiumTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="px-4 py-3 rounded-xl border border-white/20 shadow-2xl"
+           style={{
+             background: 'linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.98))',
+             backdropFilter: 'blur(20px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+           }}>
+        <p className="text-sm font-semibold text-white/90 mb-2">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+            {entry.name}: <span className="font-bold">{typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 interface SeoAnalysis {
   id: string;
@@ -776,8 +798,13 @@ const SeoScores = () => {
         {/* Charts - Evolution of Scores */}
         <div className="grid grid-cols-1 gap-4 md:gap-8">
           {/* Radar Chart - SEO vs GEO Comparison */}
-          <Card className="p-4 sm:p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-300 card-hover animate-slide-up">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4">Comparação SEO vs GEO</h3>
+          <Card className="p-4 sm:p-6 border border-white/10 shadow-2xl transition-all duration-300 hover:shadow-primary/20 animate-slide-up relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                  boxShadow: '0 0 40px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-green-500/5 pointer-events-none" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 relative z-10 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Comparação SEO vs GEO</h3>
             <ResponsiveContainer width="100%" height={300}>
               <RadarChart data={[
                 { subject: 'Técnico', seo: latestAnalysis.seo_score, geo: latestAnalysis.geo_score, fullMark: 100 },
@@ -786,84 +813,197 @@ const SeoScores = () => {
                 { subject: 'Estrutura', seo: latestAnalysis.seo_score * 0.95, geo: latestAnalysis.geo_score * 1.05, fullMark: 100 },
                 { subject: 'Otimização', seo: latestAnalysis.seo_score, geo: latestAnalysis.geo_score, fullMark: 100 },
               ]}>
-                <PolarGrid stroke="hsl(var(--border))" />
+                <defs>
+                  <linearGradient id="seoRadarGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#059669" stopOpacity={0.3} />
+                  </linearGradient>
+                  <linearGradient id="geoRadarGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a855f7" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.3} />
+                  </linearGradient>
+                  <filter id="radarGlow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <PolarGrid stroke="rgba(255, 255, 255, 0.1)" />
                 <PolarAngleAxis 
                   dataKey="subject"
-                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }}
+                  tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 11, fontWeight: 500 }}
                 />
                 <PolarRadiusAxis 
                   angle={90} 
                   domain={[0, 100]}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  tick={{ fill: 'rgba(255, 255, 255, 0.5)', fontSize: 10 }}
+                  axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }}
                 />
                 <Radar 
                   name="SEO" 
                   dataKey="seo" 
-                  stroke="hsl(142, 76%, 36%)" 
-                  fill="hsl(142, 76%, 36%)"
-                  fillOpacity={0.3}
+                  stroke="#10b981" 
+                  fill="url(#seoRadarGradient)"
+                  strokeWidth={2}
+                  filter="url(#radarGlow)"
                 />
                 <Radar 
                   name="GEO" 
                   dataKey="geo" 
-                  stroke="hsl(262, 83%, 58%)" 
-                  fill="hsl(262, 83%, 58%)" 
-                  fillOpacity={0.3}
+                  stroke="#a855f7" 
+                  fill="url(#geoRadarGradient)"
+                  strokeWidth={2}
+                  filter="url(#radarGlow)"
                 />
-                <Legend />
-                <Tooltip />
+                <Legend 
+                  wrapperStyle={{ paddingTop: 10 }}
+                  formatter={(value) => <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 12 }}>{value}</span>}
+                />
+                <Tooltip content={<PremiumTooltip />} />
               </RadarChart>
             </ResponsiveContainer>
           </Card>
 
-          {/* Evolution Chart - SEO vs GEO vs Overall */}
-          <Card id="seo-metrics-chart" className="p-4 sm:p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-300 card-hover animate-slide-up">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4">Evolução dos Scores</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-                <Tooltip />
-                <Legend wrapperStyle={{ fontSize: '12px' }} />
-                <Line type="monotone" dataKey="overallScore" stroke="hsl(var(--primary))" strokeWidth={2} name="Score Geral" />
-                <Line type="monotone" dataKey="seoScore" stroke="hsl(142, 76%, 36%)" strokeWidth={2} name="SEO Score" />
-                <Line type="monotone" dataKey="geoScore" stroke="hsl(262, 83%, 58%)" strokeWidth={2} name="GEO Score" />
-              </LineChart>
+          {/* Evolution Chart - SEO vs GEO vs Overall with Area Fill */}
+          <Card id="seo-metrics-chart" className="p-4 sm:p-6 border border-white/10 shadow-2xl transition-all duration-300 hover:shadow-primary/20 animate-slide-up relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                  boxShadow: '0 0 40px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-green-500/5 pointer-events-none" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 relative z-10 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Evolução dos Scores</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <AreaChart data={timeSeriesData}>
+                <defs>
+                  <linearGradient id="overallAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a855f7" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#a855f7" stopOpacity={0.05} />
+                  </linearGradient>
+                  <linearGradient id="seoAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity={0.05} />
+                  </linearGradient>
+                  <linearGradient id="geoAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.05} />
+                  </linearGradient>
+                  <filter id="lineGlow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
+                <XAxis dataKey="date" tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+                <YAxis domain={[0, 100]} tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+                <Tooltip content={<PremiumTooltip />} />
+                <Legend 
+                  wrapperStyle={{ fontSize: '12px', paddingTop: 10 }} 
+                  formatter={(value) => <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{value}</span>}
+                />
+                <Area type="monotone" dataKey="overallScore" stroke="#a855f7" strokeWidth={2} fill="url(#overallAreaGradient)" name="Score Geral" filter="url(#lineGlow)" />
+                <Area type="monotone" dataKey="seoScore" stroke="#10b981" strokeWidth={2} fill="url(#seoAreaGradient)" name="SEO Score" filter="url(#lineGlow)" />
+                <Area type="monotone" dataKey="geoScore" stroke="#8b5cf6" strokeWidth={2} fill="url(#geoAreaGradient)" name="GEO Score" filter="url(#lineGlow)" />
+              </AreaChart>
             </ResponsiveContainer>
           </Card>
         </div>
 
         {/* Gap Evolution Chart */}
-        <Card id="seo-evolution-chart" className="p-4 sm:p-6 card-hover animate-slide-up">
-          <h3 className="text-lg sm:text-xl font-semibold mb-4">Evolução do Gap (Diferença SEO - GEO)</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={timeSeriesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: '12px' }} />
-              <Line type="monotone" dataKey="gap" stroke="hsl(47, 96%, 53%)" strokeWidth={2} name="Gap (Diferença)" />
-            </LineChart>
+        <Card id="seo-evolution-chart" className="p-4 sm:p-6 border border-white/10 shadow-2xl transition-all duration-300 hover:shadow-yellow-500/20 animate-slide-up relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                boxShadow: '0 0 40px rgba(234, 179, 8, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+              }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 relative z-10 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Evolução do Gap (Diferença SEO - GEO)</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={timeSeriesData}>
+              <defs>
+                <linearGradient id="gapAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#eab308" stopOpacity={0.5} />
+                  <stop offset="100%" stopColor="#eab308" stopOpacity={0.05} />
+                </linearGradient>
+                <filter id="gapGlow">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
+              <XAxis dataKey="date" tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+              <YAxis tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+              <Tooltip content={<PremiumTooltip />} />
+              <Legend 
+                wrapperStyle={{ fontSize: '12px', paddingTop: 10 }} 
+                formatter={(value) => <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{value}</span>}
+              />
+              <Area type="monotone" dataKey="gap" stroke="#eab308" strokeWidth={2} fill="url(#gapAreaGradient)" name="Gap (Diferença)" filter="url(#gapGlow)" dot={{ fill: '#eab308', strokeWidth: 2, r: 4 }} />
+            </AreaChart>
           </ResponsiveContainer>
         </Card>
 
-        {/* Bar Chart - Metrics Comparison */}
-        <Card className="p-4 sm:p-6 card-hover animate-slide-up">
-          <h3 className="text-lg sm:text-xl font-semibold mb-4">Comparação de Métricas</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        {/* Bar Chart - Metrics Comparison with Colored Bars */}
+        <Card className="p-4 sm:p-6 border border-white/10 shadow-2xl transition-all duration-300 hover:shadow-primary/20 animate-slide-up relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                boxShadow: '0 0 40px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+              }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-primary/5 to-blue-500/5 pointer-events-none" />
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 relative z-10 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Comparação de Métricas</h3>
+          <ResponsiveContainer width="100%" height={280}>
             <BarChart data={[
-              { name: 'SEO Score', value: latestAnalysis.seo_score },
-              { name: 'GEO Score', value: latestAnalysis.geo_score },
-              { name: 'Overall Score', value: latestAnalysis.overall_score },
+              { name: 'SEO Score', value: latestAnalysis.seo_score, color: '#10b981' },
+              { name: 'GEO Score', value: latestAnalysis.geo_score, color: '#a855f7' },
+              { name: 'Overall Score', value: latestAnalysis.overall_score, color: '#3b82f6' },
             ]}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: '12px' }} />
-              <Bar dataKey="value" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} name="Score" />
+              <defs>
+                <linearGradient id="seoBarGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#059669" stopOpacity={0.8} />
+                </linearGradient>
+                <linearGradient id="geoBarGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#a855f7" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8} />
+                </linearGradient>
+                <linearGradient id="overallBarGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8} />
+                </linearGradient>
+                <filter id="barGlow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
+              <XAxis dataKey="name" tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 11 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+              <YAxis domain={[0, 100]} tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }} axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }} />
+              <Tooltip content={<PremiumTooltip />} />
+              <Legend 
+                wrapperStyle={{ fontSize: '12px', paddingTop: 10 }} 
+                formatter={(value) => <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{value}</span>}
+              />
+              <Bar dataKey="value" radius={[8, 8, 0, 0]} name="Score" filter="url(#barGlow)">
+                {[
+                  { name: 'SEO Score', value: latestAnalysis.seo_score, color: '#10b981' },
+                  { name: 'GEO Score', value: latestAnalysis.geo_score, color: '#a855f7' },
+                  { name: 'Overall Score', value: latestAnalysis.overall_score, color: '#3b82f6' },
+                ].map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={index === 0 ? 'url(#seoBarGradient)' : index === 1 ? 'url(#geoBarGradient)' : 'url(#overallBarGradient)'} 
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Card>
