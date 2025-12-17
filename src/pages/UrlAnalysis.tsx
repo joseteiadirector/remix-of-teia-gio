@@ -16,7 +16,7 @@ import { MonitoringSchedule } from '@/components/url-analysis/MonitoringSchedule
 import { CompetitorAnalysis } from '@/components/url-analysis/CompetitorAnalysis';
 import { ActionableChecklist } from '@/components/url-analysis/ActionableChecklist';
 import { VirtualizedAnalysisList } from '@/components/url-analysis/VirtualizedAnalysisList';
-import { exportAnalysisToExcel } from '@/utils/legacyExports';
+
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Select,
@@ -44,8 +44,7 @@ import {
   Target,
   Zap,
   BarChart3,
-  Download,
-  FileSpreadsheet
+  Download
 } from 'lucide-react';
 import { DataSourceBadge, DataSourceExplanation } from '@/components/DataSourceBadge';
 import { logger } from "@/utils/logger";
@@ -495,12 +494,12 @@ export default function UrlAnalysis() {
     }
   }, [selectedBrandId, brands]);
 
-  const handleExportHistory = async (format: 'pdf' | 'excel') => {
+  const handleExportHistory = async () => {
     if (!user) return;
 
     try {
       // Para PDF: limitar a 20 análises mais recentes para evitar limite de tamanho
-      const limit = format === 'pdf' ? 20 : 100;
+      const limit = 20;
       
       let query = supabase
         .from('url_analysis_history')
@@ -534,61 +533,55 @@ export default function UrlAnalysis() {
         results: h.analysis_data,
       }));
 
-      if (format === 'pdf') {
-        // ✅ Gerar PDF usando PDFShift (limitado a 20 análises)
-        const html = generateUrlAnalysisHTML(historyData);
-        
-        // Chamar função via fetch para obter blob binário corretamente
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-pdf-with-pdfshift`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            html,
-            filename: `analises-url-${Date.now()}.pdf`,
-            options: {
-              landscape: false,
-              format: 'A4',
-              margin: {
-                top: '20mm',
-                bottom: '20mm',
-                left: '15mm',
-                right: '15mm',
-              },
+      // ✅ Gerar PDF usando PDFShift (limitado a 20 análises)
+      const html = generateUrlAnalysisHTML(historyData);
+      
+      // Chamar função via fetch para obter blob binário corretamente
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-pdf-with-pdfshift`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          html,
+          filename: `analises-url-${Date.now()}.pdf`,
+          options: {
+            landscape: false,
+            format: 'A4',
+            margin: {
+              top: '20mm',
+              bottom: '20mm',
+              left: '15mm',
+              right: '15mm',
             },
-          }),
-        });
+          },
+        }),
+      });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          logger.error('Erro ao gerar PDF', { error: errorText });
-          throw new Error(`Erro ao gerar PDF: ${response.status}`);
-        }
-
-        // Download do PDF
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `analises-url-${Date.now()}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      } else {
-        exportAnalysisToExcel(analysesData);
+      if (!response.ok) {
+        const errorText = await response.text();
+        logger.error('Erro ao gerar PDF', { error: errorText });
+        throw new Error(`Erro ao gerar PDF: ${response.status}`);
       }
+
+      // Download do PDF
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analises-url-${Date.now()}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
       toast({
         title: "Exportação concluída!",
-        description: format === 'pdf' 
-          ? `${historyData.length} análises mais recentes exportadas em PDF`
-          : `${historyData.length} análises exportadas em Excel`,
+        description: `${historyData.length} análises mais recentes exportadas em PDF`,
       });
     } catch (error) {
-      logger.error('Erro ao exportar análise URL', { error, format });
+      logger.error('Erro ao exportar análise URL', { error });
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o histórico",
@@ -807,12 +800,7 @@ export default function UrlAnalysis() {
         
         {user && (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => handleExportHistory('excel')}>
-              <FileSpreadsheet className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Exportar Histórico (Excel)</span>
-              <span className="sm:hidden">Excel</span>
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => handleExportHistory('pdf')}>
+            <Button variant="outline" size="sm" onClick={() => handleExportHistory()}>
               <Download className="w-4 h-4 sm:mr-2" />
               <span className="hidden sm:inline">Exportar Histórico (PDF)</span>
               <span className="sm:hidden">PDF</span>
