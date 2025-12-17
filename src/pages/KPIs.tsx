@@ -280,381 +280,423 @@ export default function KPIs() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>KPIs</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div className="min-h-screen">
+      {/* Premium Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/10 via-purple-500/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-green-500/10 via-emerald-500/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold">KPIs</h1>
-              <p className="text-muted-foreground">
-                Indicadores-chave de performance em linguagem simples
-              </p>
-              {/* Indicador de Consistência Matemática */}
-              <ConsistencyIndicator 
-                brandId={selectedBrand}
-                brandName={brands.find(b => b.id === selectedBrand)?.name}
-                autoValidate={false}
-                showDetails={true}
-              />
-            </div>
-            {lastAuditResult && (
-              <AuditBadge 
-                status={lastAuditResult.status}
-                maxDivergence={lastAuditResult.max_divergence_percentage}
-                inconsistencies={lastAuditResult.inconsistencies_found}
-              />
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          {brands.length > 0 && (
-            <>
-              <Button
-                onClick={() => {
-                  setRealtimeEnabled(!realtimeEnabled);
-                  toast.success(
-                    realtimeEnabled 
-                      ? 'Notificações em tempo real desativadas' 
-                      : 'Notificações em tempo real ativadas',
-                    { duration: 3000 }
-                  );
-                }}
-                variant="outline"
-                size="icon"
-                className={`relative ${
-                  realtimeEnabled 
-                    ? 'bg-green-100 dark:bg-green-950 border-green-300 hover:bg-green-200' 
-                    : 'border-muted'
-                }`}
-                title={realtimeEnabled ? 'Desativar notificações' : 'Ativar notificações'}
-              >
-                {realtimeEnabled ? (
-                  <Bell className="h-4 w-4 text-green-600" />
-                ) : (
-                  <BellOff className="h-4 w-4 text-muted-foreground" />
-                )}
-                {realtimeEnabled && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                )}
-              </Button>
+      <div className="container mx-auto p-6 space-y-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-foreground font-medium">KPIs</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-              <Button
-                onClick={loadKPIData}
-                disabled={loading}
-                size="default"
-                className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Calculando...
-                  </>
-                ) : (
-                  <>
-                    <TrendingUp className="mr-2 h-4 w-4" />
-                    Atualizar Dados
-                  </>
-                )}
+        {/* Premium Header */}
+        <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl p-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-green-500/5" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/20 to-transparent rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+          
+          <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="hover:bg-primary/10">
+                <ArrowLeft className="w-5 h-5" />
               </Button>
-              
-              {kpiData && (
-                <>
-                  <AuditButton 
-                    onClick={async () => {
-                      const brandName = brands.find(b => b.id === selectedBrand)?.name;
-                      if (selectedBrand) {
-                        await executeAudit(selectedBrand, brandName);
-                      }
-                    }}
-                    isAuditing={isAuditing}
-                    disabled={!kpiData}
-                    className="bg-foreground text-background hover:bg-foreground/90"
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="space-y-2">
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text">
+                    KPIs
+                  </h1>
+                  <p className="text-muted-foreground text-lg">
+                    Indicadores-chave de performance em linguagem simples
+                  </p>
+                  <ConsistencyIndicator 
+                    brandId={selectedBrand}
+                    brandName={brands.find(b => b.id === selectedBrand)?.name}
+                    autoValidate={false}
+                    showDetails={true}
                   />
+                </div>
+                {lastAuditResult && (
+                  <AuditBadge 
+                    status={lastAuditResult.status}
+                    maxDivergence={lastAuditResult.max_divergence_percentage}
+                    inconsistencies={lastAuditResult.inconsistencies_found}
+                  />
+                )}
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-3">
+              {brands.length > 0 && (
+                <>
+                  <Button
+                    onClick={() => {
+                      setRealtimeEnabled(!realtimeEnabled);
+                      toast.success(
+                        realtimeEnabled 
+                          ? 'Notificações em tempo real desativadas' 
+                          : 'Notificações em tempo real ativadas',
+                        { duration: 3000 }
+                      );
+                    }}
+                    variant="outline"
+                    size="icon"
+                    className={`relative transition-all duration-300 ${
+                      realtimeEnabled 
+                        ? 'bg-green-500/10 border-green-500/30 hover:bg-green-500/20 hover:border-green-500/50' 
+                        : 'border-border/50 hover:bg-muted/50'
+                    }`}
+                    title={realtimeEnabled ? 'Desativar notificações' : 'Ativar notificações'}
+                  >
+                    {realtimeEnabled ? (
+                      <Bell className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <BellOff className="h-4 w-4 text-muted-foreground" />
+                    )}
+                    {realtimeEnabled && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-lg shadow-green-500/50" />
+                    )}
+                  </Button>
 
                   <Button
-                    onClick={handleExportPDF}
-                    disabled={isExporting}
-                    className="gap-2 bg-foreground text-background hover:bg-foreground/90"
+                    onClick={loadKPIData}
+                    disabled={loading}
+                    size="default"
+                    className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300"
                   >
-                    {isExporting ? (
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] animate-shimmer" />
+                    {loading ? (
                       <>
-                        <Download className="w-4 h-4 animate-pulse" />
-                        Gerando PDF...
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Calculando...
                       </>
                     ) : (
                       <>
-                        <Download className="w-4 h-4" />
-                        Exportar PDF
+                        <TrendingUp className="mr-2 h-4 w-4" />
+                        Atualizar Dados
                       </>
                     )}
                   </Button>
+                  
+                  {kpiData && (
+                    <>
+                      <AuditButton 
+                        onClick={async () => {
+                          const brandName = brands.find(b => b.id === selectedBrand)?.name;
+                          if (selectedBrand) {
+                            await executeAudit(selectedBrand, brandName);
+                          }
+                        }}
+                        isAuditing={isAuditing}
+                        disabled={!kpiData}
+                        className="bg-foreground/90 text-background hover:bg-foreground transition-all duration-300"
+                      />
+
+                      <Button
+                        onClick={handleExportPDF}
+                        disabled={isExporting}
+                        className="gap-2 bg-foreground/90 text-background hover:bg-foreground transition-all duration-300"
+                      >
+                        {isExporting ? (
+                          <>
+                            <Download className="w-4 h-4 animate-pulse" />
+                            Gerando PDF...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="w-4 h-4" />
+                            Exportar PDF
+                          </>
+                        )}
+                      </Button>
+                    </>
+                  )}
+                  
+                  <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+                    <SelectTrigger className="w-[200px] border-border/50 bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all">
+                      <SelectValue placeholder="Selecione a marca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.id} value={brand.id}>
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </>
               )}
-              
-              <Select value={selectedBrand} onValueChange={setSelectedBrand}>
-                <SelectTrigger className="w-[200px] border-purple-200">
-                  <SelectValue placeholder="Selecione a marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {brands.map((brand) => (
-                    <SelectItem key={brand.id} value={brand.id}>
-                      {brand.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </>
-          )}
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="space-y-6">
-          <Skeleton className="h-[200px] w-full" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3].map(i => (
-              <Skeleton key={i} className="h-[180px]" />
-            ))}
+            </div>
           </div>
         </div>
-      ) : kpiData ? (
-        <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-8 glass-card bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20 shadow-xl hover:shadow-purple-500/30 transition-all duration-300">
-              <div className="text-center space-y-2">
-                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                  Score GEO (IAs)
-                </h2>
-                <div className="text-6xl font-bold gradient-text drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
-                  {kpiData.geo.score.toFixed(1)}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Posicionamento nas Inteligências Artificiais
-                </p>
-              </div>
-            </Card>
 
-            <Card className="p-8 glass-card bg-gradient-to-br from-green-500/5 to-emerald-500/5 border-2 border-green-500/20 shadow-xl hover:shadow-green-500/30 transition-all duration-300">
-              <div className="text-center space-y-2">
-                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                  Score SEO
-                </h2>
-                <div className="text-6xl font-bold text-green-600 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-                  {kpiData.seo.score.toFixed(1)}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Otimização para Motores de Busca
-                </p>
-              </div>
-            </Card>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <Brain className="w-6 h-6 text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
-              <div>
-                <h2 className="text-2xl font-bold">Presença nas IAs</h2>
-                <p className="text-sm text-muted-foreground">
-                  Dados coletados diretamente das respostas das Inteligências Artificiais
-                </p>
-              </div>
-            </div>
-            
+        {loading ? (
+          <div className="space-y-6">
+            <Skeleton className="h-[200px] w-full rounded-2xl" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <KPICard
-                title="Menções Positivas"
-                value={`${kpiData.geo.mentionRate.toFixed(0)}%`}
-                icon={Target}
-                description="Sua marca é mencionada positivamente"
-                dataSource="real"
-                colorClass="from-primary/5 to-primary/10 border-primary/20"
-                tooltip={{
-                  title: "O que são Menções Positivas?",
-                  description: "É a porcentagem de vezes que sua marca aparece quando as IAs respondem perguntas relevantes ao seu negócio.",
-                  whyMatters: "Quanto maior, mais as IAs recomendam você. Isso significa mais visibilidade e credibilidade."
-                }}
-              />
-
-              <KPICard
-                title="Tópicos Cobertos"
-                value={kpiData.geo.topicCoverage}
-                icon={Activity}
-                description="Temas onde você aparece"
-                dataSource="real"
-                colorClass="from-secondary/5 to-secondary/10 border-secondary/20"
-                tooltip={{
-                  title: "O que são Tópicos Cobertos?",
-                  description: "É a quantidade de assuntos diferentes onde sua marca é mencionada pelas IAs.",
-                  whyMatters: "Mais tópicos significa que você é relevante em mais áreas. Isso amplia seu alcance."
-                }}
-              />
-
-              <KPICard
-                title="Confiança das IAs"
-                value={`${kpiData.geo.confidence.toFixed(0)}%`}
-                icon={TrendingUp}
-                description="Certeza ao recomendar você"
-                dataSource="real"
-                colorClass="from-accent/5 to-accent/10 border-accent/20"
-                tooltip={{
-                  title: "O que é Confiança das IAs?",
-                  description: "É o nível de certeza que as IAs têm ao mencionar sua marca nas respostas.",
-                  whyMatters: "Alta confiança significa que as IAs têm informações confiáveis sobre você e recomendam com segurança."
-                }}
-              />
+              {[1, 2, 3].map(i => (
+                <Skeleton key={i} className="h-[180px] rounded-xl" />
+              ))}
             </div>
           </div>
+        ) : kpiData ? (
+          <div className="space-y-10">
+            {/* Score Cards Premium */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="group relative p-8 overflow-hidden rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-purple-500/5 to-background backdrop-blur-xl shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.02]">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/30 rounded-full blur-3xl group-hover:bg-primary/40 transition-colors" />
+                <div className="relative text-center space-y-3">
+                  <h2 className="text-sm font-bold text-primary/80 uppercase tracking-widest">
+                    Score GEO (IAs)
+                  </h2>
+                  <div className="text-7xl font-black bg-gradient-to-r from-primary via-purple-400 to-primary bg-clip-text text-transparent drop-shadow-2xl">
+                    {kpiData.geo.score.toFixed(1)}
+                  </div>
+                  <p className="text-sm text-muted-foreground font-medium">
+                    Posicionamento nas Inteligências Artificiais
+                  </p>
+                </div>
+              </Card>
 
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <Target className="w-6 h-6 text-green-600 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-              <div>
-                <h2 className="text-2xl font-bold">Otimização SEO</h2>
-                <p className="text-sm text-muted-foreground">
-                  Desempenho nos motores de busca tradicionais
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <KPICard
-                title="Tráfego Orgânico"
-                value={kpiData.seo.traffic.toLocaleString('pt-BR')}
-                icon={TrendingUp}
-                description="Visitantes do Google"
-                dataSource="real"
-                colorClass="from-green-500/5 to-green-500/10 border-green-500/20"
-                tooltip={{
-                  title: "O que é Tráfego Orgânico?",
-                  description: "É o número de visitantes que chegam ao seu site através dos resultados de busca do Google.",
-                  whyMatters: "Mais tráfego orgânico significa maior visibilidade e potencial de conversões sem custo de anúncios."
-                }}
-              />
-
-              <KPICard
-                title="Posição Média"
-                value={kpiData.seo.position.toFixed(1)}
-                icon={Target}
-                description="Ranking médio no Google"
-                dataSource="real"
-                colorClass="from-emerald-500/5 to-emerald-500/10 border-emerald-500/20"
-                tooltip={{
-                  title: "O que é Posição Média?",
-                  description: "É a posição média do seu site nos resultados de busca do Google para as palavras-chave relevantes.",
-                  whyMatters: "Posições mais altas (números menores) significam mais visibilidade e cliques. A primeira página (posições 1-10) recebe a maioria dos cliques."
-                }}
-              />
-
-              <KPICard
-                title="CTR (Taxa de Cliques)"
-                value={`${(kpiData.seo.ctr * 100).toFixed(1)}%`}
-                icon={Activity}
-                description="Cliques / Impressões"
-                dataSource="real"
-                colorClass="from-teal-500/5 to-teal-500/10 border-teal-500/20"
-                tooltip={{
-                  title: "O que é CTR?",
-                  description: "É a porcentagem de pessoas que clicam no seu site após vê-lo nos resultados de busca.",
-                  whyMatters: "Um CTR alto indica que seu título e descrição são atrativos e relevantes para as buscas."
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <Zap className="w-6 h-6 text-amber-600 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
-              <div>
-                <h2 className="text-2xl font-bold">Indicadores de Convergência</h2>
-                <p className="text-sm text-muted-foreground">
-                  Análise estratégica do alinhamento GEO-SEO
-                </p>
-              </div>
+              <Card className="group relative p-8 overflow-hidden rounded-2xl border-2 border-green-500/30 bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-background backdrop-blur-xl shadow-2xl hover:shadow-green-500/20 transition-all duration-500 hover:scale-[1.02]">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-green-500/30 rounded-full blur-3xl group-hover:bg-green-500/40 transition-colors" />
+                <div className="relative text-center space-y-3">
+                  <h2 className="text-sm font-bold text-green-500/80 uppercase tracking-widest">
+                    Score SEO
+                  </h2>
+                  <div className="text-7xl font-black bg-gradient-to-r from-green-500 via-emerald-400 to-green-500 bg-clip-text text-transparent drop-shadow-2xl">
+                    {kpiData.seo.score.toFixed(1)}
+                  </div>
+                  <p className="text-sm text-muted-foreground font-medium">
+                    Otimização para Motores de Busca
+                  </p>
+                </div>
+              </Card>
             </div>
 
-            {/* Card de Fundamentação */}
-            <Card className="p-6 mb-6 bg-gradient-to-br from-amber-50/50 to-cyan-50/50 dark:from-amber-950/20 dark:to-cyan-950/20 border-2 border-amber-200/50 dark:border-amber-800/50">
-              <div className="space-y-4">
+            {/* Presença nas IAs Section */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+                  <Brain className="w-6 h-6 text-primary" />
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2 flex items-center gap-2">
-                    <Activity className="w-5 h-5" />
-                    ICE (Index of Cognitive Efficiency)
-                  </h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">
-                    <strong>O que é:</strong> Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Fórmula: ICE = 1 - σ(taxas de menção entre LLMs).
-                  </p>
-                  <p className="text-sm text-foreground/80 leading-relaxed mt-2">
-                    <strong>Como interpretar:</strong> Um ICE alto (≥75) significa que os LLMs concordam sobre sua presença. Valores baixos indicam percepções divergentes entre provedores que precisam ser harmonizadas.
-                  </p>
-                </div>
-
-                <div className="border-t border-amber-200/50 dark:border-amber-800/50 pt-4">
-                  <h3 className="text-lg font-bold text-orange-900 dark:text-orange-100 mb-2 flex items-center gap-2">
-                    <Zap className="w-5 h-5" />
-                    GAP (Precisão de Alinhamento de Observabilidade)
-                  </h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">
-                    <strong>O que é:</strong> Mede a precisão do alinhamento entre provedores de LLM. Fórmula: GAP = (Pₐ / Pₜ) × 100 × C, onde Pₐ = provedores alinhados, Pₜ = total de provedores, C = fator de consenso.
-                  </p>
-                  <p className="text-sm text-foreground/80 leading-relaxed mt-2">
-                    <strong>Como interpretar:</strong> Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que exigem ação para aumentar a consistência.
-                  </p>
-                </div>
-
-                <div className="bg-white/50 dark:bg-black/20 p-3 rounded-lg border border-amber-200/30 dark:border-amber-800/30">
-                  <p className="text-xs text-foreground/70 italic">
-                    💡 <strong>Dica Estratégica:</strong> Priorize ações quando ICE e GAP estão baixos. Isso indica inconsistências na percepção da sua marca entre LLMs que precisam ser corrigidas.
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                    Presença nas IAs
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Dados coletados diretamente das respostas das Inteligências Artificiais
                   </p>
                 </div>
               </div>
-            </Card>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <KPICard
-                title="ICE - Índice de Convergência Estratégica"
-                value={kpiData.convergence.ice.toFixed(1)}
-                icon={Activity}
-                description="Consenso entre LLMs (0 a 100, maior = melhor)"
-                dataSource="real"
-                colorClass="from-cyan-500/5 to-blue-500/10 border-cyan-500/20"
-                tooltip={{
-                  title: "O que é o ICE?",
-                  description: "Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Calculado como 1 - σ(taxas de menção).",
-                  whyMatters: "Um ICE alto (≥75) significa que os LLMs concordam sobre sua marca. Valores baixos indicam percepções divergentes que precisam ser harmonizadas."
-                }}
-              />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <KPICard
+                  title="Menções Positivas"
+                  value={`${kpiData.geo.mentionRate.toFixed(0)}%`}
+                  icon={Target}
+                  description="Sua marca é mencionada positivamente"
+                  dataSource="real"
+                  colorClass="from-primary/10 to-primary/5 border-primary/30"
+                  tooltip={{
+                    title: "O que são Menções Positivas?",
+                    description: "É a porcentagem de vezes que sua marca aparece quando as IAs respondem perguntas relevantes ao seu negócio.",
+                    whyMatters: "Quanto maior, mais as IAs recomendam você. Isso significa mais visibilidade e credibilidade."
+                  }}
+                />
 
-              <KPICard
-                title="GAP - Prioridade Estratégica de Ação"
-                value={kpiData.convergence.gap.toFixed(1)}
-                icon={Zap}
-                description="Alinhamento de observabilidade (0 a 100, maior = melhor)"
-                dataSource="real"
-                colorClass="from-amber-500/5 to-orange-500/10 border-amber-500/20"
-                tooltip={{
-                  title: "O que é o GAP?",
-                  description: "Mede a precisão do alinhamento de observabilidade entre provedores de LLM. Fórmula: (Pₐ/Pₜ) × 100 × C.",
-                  whyMatters: "Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que precisam de atenção."
-                }}
-              />
+                <KPICard
+                  title="Tópicos Cobertos"
+                  value={kpiData.geo.topicCoverage}
+                  icon={Activity}
+                  description="Temas onde você aparece"
+                  dataSource="real"
+                  colorClass="from-secondary/10 to-secondary/5 border-secondary/30"
+                  tooltip={{
+                    title: "O que são Tópicos Cobertos?",
+                    description: "É a quantidade de assuntos diferentes onde sua marca é mencionada pelas IAs.",
+                    whyMatters: "Mais tópicos significa que você é relevante em mais áreas. Isso amplia seu alcance."
+                  }}
+                />
+
+                <KPICard
+                  title="Confiança das IAs"
+                  value={`${kpiData.geo.confidence.toFixed(0)}%`}
+                  icon={TrendingUp}
+                  description="Certeza ao recomendar você"
+                  dataSource="real"
+                  colorClass="from-accent/10 to-accent/5 border-accent/30"
+                  tooltip={{
+                    title: "O que é Confiança das IAs?",
+                    description: "É o nível de certeza que as IAs têm ao mencionar sua marca nas respostas.",
+                    whyMatters: "Alta confiança significa que as IAs têm informações confiáveis sobre você e recomendam com segurança."
+                  }}
+                />
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
+            {/* Otimização SEO Section */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30">
+                  <Target className="w-6 h-6 text-green-500" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                    Otimização SEO
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Desempenho nos motores de busca tradicionais
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <KPICard
+                  title="Tráfego Orgânico"
+                  value={kpiData.seo.traffic.toLocaleString('pt-BR')}
+                  icon={TrendingUp}
+                  description="Visitantes do Google"
+                  dataSource="real"
+                  colorClass="from-green-500/10 to-green-500/5 border-green-500/30"
+                  tooltip={{
+                    title: "O que é Tráfego Orgânico?",
+                    description: "É o número de visitantes que chegam ao seu site através dos resultados de busca do Google.",
+                    whyMatters: "Mais tráfego orgânico significa maior visibilidade e potencial de conversões sem custo de anúncios."
+                  }}
+                />
+
+                <KPICard
+                  title="Posição Média"
+                  value={kpiData.seo.position.toFixed(1)}
+                  icon={Target}
+                  description="Ranking médio no Google"
+                  dataSource="real"
+                  colorClass="from-emerald-500/10 to-emerald-500/5 border-emerald-500/30"
+                  tooltip={{
+                    title: "O que é Posição Média?",
+                    description: "É a posição média do seu site nos resultados de busca do Google para as palavras-chave relevantes.",
+                    whyMatters: "Posições mais altas (números menores) significam mais visibilidade e cliques. A primeira página (posições 1-10) recebe a maioria dos cliques."
+                  }}
+                />
+
+                <KPICard
+                  title="CTR (Taxa de Cliques)"
+                  value={`${(kpiData.seo.ctr * 100).toFixed(1)}%`}
+                  icon={Activity}
+                  description="Cliques / Impressões"
+                  dataSource="real"
+                  colorClass="from-teal-500/10 to-teal-500/5 border-teal-500/30"
+                  tooltip={{
+                    title: "O que é CTR?",
+                    description: "É a porcentagem de pessoas que clicam no seu site após vê-lo nos resultados de busca.",
+                    whyMatters: "Um CTR alto indica que seu título e descrição são atrativos e relevantes para as buscas."
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Indicadores de Convergência Section */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+                  <Zap className="w-6 h-6 text-amber-500" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                    Indicadores de Convergência
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Análise estratégica do alinhamento GEO-SEO
+                  </p>
+                </div>
+              </div>
+
+              {/* Card de Fundamentação Premium */}
+              <Card className="p-6 overflow-hidden relative rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-cyan-500/10 border border-amber-500/30 backdrop-blur-xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-500/20 to-transparent rounded-full blur-2xl" />
+                <div className="relative space-y-6">
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-cyan-500/20">
+                        <Activity className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      ICE (Index of Cognitive Efficiency)
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      <strong className="text-foreground">O que é:</strong> Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Fórmula: ICE = 1 - σ(taxas de menção entre LLMs).
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                      <strong className="text-foreground">Como interpretar:</strong> Um ICE alto (≥75) significa que os LLMs concordam sobre sua presença. Valores baixos indicam percepções divergentes entre provedores que precisam ser harmonizadas.
+                    </p>
+                  </div>
+
+                  <div className="border-t border-border/50 pt-6">
+                    <h3 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-amber-500/20">
+                        <Zap className="w-4 h-4 text-amber-400" />
+                      </div>
+                      GAP (Precisão de Alinhamento de Observabilidade)
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      <strong className="text-foreground">O que é:</strong> Mede a precisão do alinhamento entre provedores de LLM. Fórmula: GAP = (Pₐ / Pₜ) × 100 × C, onde Pₐ = provedores alinhados, Pₜ = total de provedores, C = fator de consenso.
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                      <strong className="text-foreground">Como interpretar:</strong> Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que exigem ação para aumentar a consistência.
+                    </p>
+                  </div>
+
+                  <div className="bg-background/50 p-4 rounded-xl border border-amber-500/20">
+                    <p className="text-sm text-muted-foreground">
+                      <span className="text-amber-400 font-semibold">💡 Dica Estratégica:</span> Priorize ações quando ICE e GAP estão baixos. Isso indica inconsistências na percepção da sua marca entre LLMs que precisam ser corrigidas.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <KPICard
+                  title="ICE - Índice de Convergência Estratégica"
+                  value={kpiData.convergence.ice.toFixed(1)}
+                  icon={Activity}
+                  description="Consenso entre LLMs (0 a 100, maior = melhor)"
+                  dataSource="real"
+                  colorClass="from-cyan-500/10 to-blue-500/5 border-cyan-500/30"
+                  tooltip={{
+                    title: "O que é o ICE?",
+                    description: "Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Calculado como 1 - σ(taxas de menção).",
+                    whyMatters: "Um ICE alto (≥75) significa que os LLMs concordam sobre sua marca. Valores baixos indicam percepções divergentes que precisam ser harmonizadas."
+                  }}
+                />
+
+                <KPICard
+                  title="GAP - Prioridade Estratégica de Ação"
+                  value={kpiData.convergence.gap.toFixed(1)}
+                  icon={Zap}
+                  description="Alinhamento de observabilidade (0 a 100, maior = melhor)"
+                  dataSource="real"
+                  colorClass="from-amber-500/10 to-orange-500/5 border-amber-500/30"
+                  tooltip={{
+                    title: "O que é o GAP?",
+                    description: "Mede a precisão do alinhamento de observabilidade entre provedores de LLM. Fórmula: (Pₐ/Pₜ) × 100 × C.",
+                    whyMatters: "Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que precisam de atenção."
+                  }}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6">
               {/* Gráfico ICE - Mostrar Pilares */}
               <Card className="p-6 glass-card border-2 shadow-xl hover:shadow-cyan-500/20 transition-all duration-300">
                 <h3 className="text-lg font-bold mb-4 text-center">Índice de Convergência Estratégica (ICE)</h3>
@@ -745,23 +787,27 @@ export default function KPIs() {
             </div>
           </div>
 
-          <Card className="p-6 glass-card bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
-            <div className="flex items-start gap-4">
-              <Zap className="w-8 h-8 text-primary flex-shrink-0" />
-              <div className="flex-1">
-                <h3 className="font-bold mb-2">Quer melhorar seus KPIs?</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Conecte suas ferramentas de análise para obter insights mais detalhados e recomendações personalizadas.
-                </p>
-                <Button 
-                  onClick={() => navigate('/google-setup')}
-                  className="gap-2"
-                >
-                  Conectar Google Search Console
-                </Button>
+            {/* Card CTA Premium */}
+            <Card className="p-8 overflow-hidden relative rounded-2xl bg-gradient-to-br from-primary/10 via-purple-500/5 to-accent/10 border border-primary/30 backdrop-blur-xl">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-primary/20 to-transparent rounded-full blur-3xl" />
+              <div className="relative flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+                  <Zap className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg mb-2">Quer melhorar seus KPIs?</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Conecte suas ferramentas de análise para obter insights mais detalhados e recomendações personalizadas.
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/google-setup')}
+                    className="gap-2 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 shadow-lg shadow-primary/25"
+                  >
+                    Conectar Google Search Console
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
         </div>
       ) : (
         <div className="text-center py-12">
@@ -772,6 +818,7 @@ export default function KPIs() {
           </p>
         </div>
       )}
+      </div>
     </div>
   );
 }
