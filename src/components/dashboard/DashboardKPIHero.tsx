@@ -7,6 +7,7 @@ import {
   Search, 
   Zap, 
   Target,
+  Shield,
   TrendingUp,
   TrendingDown,
   Minus,
@@ -20,7 +21,7 @@ interface KPICardProps {
   suffix?: string;
   icon: React.ReactNode;
   trend?: number;
-  color: 'purple' | 'blue' | 'emerald' | 'amber';
+  color: 'purple' | 'blue' | 'emerald' | 'amber' | 'cyan';
   description: string;
   delay?: number;
 }
@@ -53,6 +54,13 @@ const colorVariants = {
     icon: 'bg-amber-500/20 text-amber-400',
     value: 'text-amber-400',
     glow: 'shadow-amber-500/20',
+  },
+  cyan: {
+    bg: 'from-cyan-500/20 via-cyan-500/10 to-transparent',
+    border: 'border-cyan-500/30 hover:border-cyan-500/50',
+    icon: 'bg-cyan-500/20 text-cyan-400',
+    value: 'text-cyan-400',
+    glow: 'shadow-cyan-500/20',
   },
 };
 
@@ -149,6 +157,15 @@ export function DashboardKPIHero() {
         .eq('brand_id', selectedBrandId)
         .eq('mentioned', true);
 
+      // Fetch IGO metrics (for Stability)
+      const { data: igoData } = await supabase
+        .from('igo_metrics_history')
+        .select('cognitive_stability')
+        .eq('brand_id', selectedBrandId)
+        .order('calculated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
       // Calculate LLM visibility score
       const llmVisibility = mentionsData?.length 
         ? Math.round(mentionsData.reduce((acc, m) => acc + m.confidence, 0) / mentionsData.length)
@@ -167,11 +184,13 @@ export function DashboardKPIHero() {
         seoScore,
         llmVisibility,
         cpi: geoData?.cpi || null,
+        stability: igoData?.cognitive_stability || null,
         // Mock trends for now - in production these would be calculated from historical data
         geoTrend: 2.3,
         seoTrend: -1.2,
         llmTrend: 5.0,
         cpiTrend: 0,
+        stabilityTrend: 1.5,
       };
     },
     enabled: !!selectedBrandId && selectedBrandId !== 'all',
@@ -180,8 +199,8 @@ export function DashboardKPIHero() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {[...Array(5)].map((_, i) => (
           <div key={i} className="rounded-2xl border border-border/50 bg-card/50 p-6">
             <Skeleton className="h-12 w-12 rounded-xl mb-4" />
             <Skeleton className="h-4 w-20 mb-2" />
@@ -193,7 +212,7 @@ export function DashboardKPIHero() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <KPICard
         title="GEO Score"
         value={kpiData?.geoScore || null}
@@ -228,8 +247,18 @@ export function DashboardKPIHero() {
         icon={<Target className="h-6 w-6" />}
         trend={kpiData?.cpiTrend}
         color="amber"
-        description="Índice de Performance Cognitiva"
+        description="Performance Cognitiva"
         delay={300}
+      />
+      <KPICard
+        title="Stability"
+        value={kpiData?.stability || null}
+        suffix="%"
+        icon={<Shield className="h-6 w-6" />}
+        trend={kpiData?.stabilityTrend}
+        color="cyan"
+        description="Estabilidade Cognitiva"
+        delay={400}
       />
     </div>
   );
