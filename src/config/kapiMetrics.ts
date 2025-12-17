@@ -51,24 +51,28 @@ export const ICE_CONFIG: KAPIMetricConfig = {
 };
 
 /**
- * GAP - Gap de Alinhamento de Prioridades
- * Mede a divergência entre estratégias GEO e SEO
- * LÓGICA INVERSA: menor valor = melhor alinhamento (menos divergência)
+ * GAP - Precisão de Alinhamento de Observabilidade (Artigo Científico - Cap. 3)
+ * Mede o grau de concordância entre diferentes LLMs
+ * LÓGICA DIRETA: maior valor = melhor alinhamento (mais provedores alinhados)
+ * 
+ * FÓRMULA CIENTÍFICA: GAP = (Pₐ / Pₜ) × 100 × C
+ * Onde: Pₐ = provedores alinhados, Pₜ = total de provedores, C = fator de consenso
+ * Base teórica: Landis & Koch (1977)
  */
 export const GAP_CONFIG: KAPIMetricConfig = {
   id: 'gap',
   name: 'GAP',
-  fullName: 'Gap de Alinhamento de Prioridades',
-  description: 'Divergência entre estratégias GEO e SEO (quanto menor, melhor)',
-  formula: 'GAP = |GEO_priority - SEO_priority|',
-  logic: 'inverse', // CRÍTICO: Lógica INVERSA - menor é melhor!
-  threshold: 25, // Máximo para ser considerado "Bom"
-  unit: 'pontos',
+  fullName: 'Precisão de Alinhamento de Observabilidade',
+  description: 'Concordância entre LLMs na representação da marca (quanto maior, melhor)',
+  formula: 'GAP = (Pₐ / Pₜ) × 100 × C',
+  logic: 'direct', // CORRIGIDO: Lógica DIRETA conforme artigo - maior é melhor!
+  threshold: 60, // Mínimo para ser considerado "Bom"
+  unit: '%',
   levels: {
-    excellent: { value: 10, label: 'Excelente' },   // ≤ 10 = Excelente
-    good: { value: 25, label: 'Bom' },              // ≤ 25 = Bom
-    regular: { value: 40, label: 'Atenção' },       // ≤ 40 = Atenção
-    critical: { value: 100, label: 'Crítico' }      // > 40 = Crítico
+    excellent: { value: 80, label: 'Excelente' },   // ≥ 80 = Excelente
+    good: { value: 60, label: 'Bom' },              // ≥ 60 = Bom
+    regular: { value: 40, label: 'Regular' },       // ≥ 40 = Regular
+    critical: { value: 0, label: 'Crítico' }        // < 40 = Crítico
   }
 };
 

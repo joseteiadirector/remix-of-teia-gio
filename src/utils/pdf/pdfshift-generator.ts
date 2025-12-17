@@ -2121,12 +2121,13 @@ export function generateGovernanceHTML(data: ExportDataGovernance): string {
       : '<span style="display: inline-block; padding: 4px 12px; background: #fee2e2; color: #dc2626; border-radius: 6px; font-size: 11px; font-weight: 600;">⚠ Atenção</span>';
   };
 
-  // Build metrics cards HTML - Todas as métricas usam lógica direta (maior = melhor)
+  // Build metrics cards HTML - Todas as métricas KAPI usam lógica DIRETA (maior = melhor)
+  // Conforme Artigo Científico Cap. 3: ICE, GAP, Estabilidade, CPI
   const metricsCardsHTML = [
-    { label: 'ICE', value: data.avgICE, threshold: 80, icon: '🧊', color: '#8b5cf6' },
+    { label: 'ICE', value: data.avgICE, threshold: 75, icon: '🧊', color: '#8b5cf6' },
     { label: 'Estabilidade', value: data.avgStability, threshold: 70, icon: '⚖️', color: '#10b981' },
-    { label: 'CPI', value: data.avgCPI, threshold: 60, icon: '🎯', color: '#f59e0b' },
-    { label: 'GAP', value: data.avgGAP, threshold: 75, icon: '📊', color: '#ec4899' }
+    { label: 'CPI', value: data.avgCPI, threshold: 65, icon: '🎯', color: '#f59e0b' },
+    { label: 'GAP', value: data.avgGAP, threshold: 60, icon: '📊', color: '#ec4899' } // GAP: maior = melhor
   ].map(m => {
     // Todas as métricas KAPI: maior = melhor
     const isOk = m.value >= m.threshold;
@@ -2147,12 +2148,13 @@ export function generateGovernanceHTML(data: ExportDataGovernance): string {
     `;
   }).join('');
 
-  // Build checklist table rows - Todas as métricas usam lógica direta (maior = melhor)
+  // Build checklist table rows - Todas as métricas KAPI usam lógica DIRETA (maior = melhor)
+  // Conforme Artigo Científico Cap. 3
   const checklistRows = [
-    { name: 'ICE (Eficiência Cognitiva)', value: data.avgICE, threshold: 80 },
+    { name: 'ICE (Eficiência Cognitiva)', value: data.avgICE, threshold: 75 },
     { name: 'Estabilidade Cognitiva', value: data.avgStability, threshold: 70 },
-    { name: 'CPI Score', value: data.avgCPI, threshold: 60 },
-    { name: 'Alinhamento de Governança (GAP)', value: data.avgGAP, threshold: 75 }
+    { name: 'CPI Score', value: data.avgCPI, threshold: 65 },
+    { name: 'GAP (Alinhamento de Observabilidade)', value: data.avgGAP, threshold: 60 } // maior = melhor
   ].map((item, idx) => {
     const isOk = item.value >= item.threshold;
     const valueColor = isOk ? '#16a34a' : '#dc2626';
