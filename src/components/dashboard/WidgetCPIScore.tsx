@@ -220,66 +220,78 @@ export function WidgetCPIScore({ brandId }: WidgetCPIScoreProps) {
   const level = getCPILevel(cpiData.current);
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
+    <Card className="relative overflow-hidden border-2 border-primary/40 bg-gradient-to-br from-primary/20 via-background to-primary/10 backdrop-blur-xl shadow-[0_0_40px_rgba(139,92,246,0.2)] hover:shadow-[0_0_60px_rgba(139,92,246,0.3)] hover:border-primary/60 transition-all duration-500 group">
+      <div className="absolute top-0 right-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all duration-500" />
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-violet-500/15 rounded-full blur-2xl" />
+      <CardHeader className="pb-3 relative z-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            <CardTitle className="text-base font-semibold">CPI Score</CardTitle>
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-violet-600 border border-primary/50 shadow-[0_0_25px_rgba(139,92,246,0.4)]">
+              <Brain className="h-5 w-5 text-white" />
+            </div>
+            <CardTitle className="text-base font-bold text-primary-foreground">CPI Score</CardTitle>
           </div>
-          {getTrendIcon()}
+          <div className="p-2 rounded-lg bg-background/50 backdrop-blur-sm">
+            {getTrendIcon()}
+          </div>
         </div>
-        <CardDescription className="text-xs">
+        <CardDescription className="text-xs text-primary/80 mt-2">
           Cognitive Predictive Index — Consistência Inter-IA
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 relative z-10">
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent shadow-[0_0_20px_rgba(139,92,246,0.4)]"></div>
           </div>
         ) : (
           <>
             <div className="flex items-baseline gap-2">
-              <div className={`text-4xl font-bold ${getTrendColor()}`}>
+              <div className="text-5xl font-black bg-gradient-to-r from-primary via-violet-300 to-primary bg-clip-text text-transparent drop-shadow-lg">
                 {cpiData.current}
               </div>
-              <div className="text-sm text-muted-foreground">/100</div>
+              <div className="text-lg text-primary/60 font-medium">/100</div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Badge variant={level.variant}>{level.label}</Badge>
+            <div className="flex items-center gap-3">
+              <Badge className={`${
+                level.variant === 'default' ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' :
+                level.variant === 'secondary' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)]' :
+                level.variant === 'outline' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-[0_0_15px_rgba(245,158,11,0.4)]' :
+                'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]'
+              } border-0 px-4 py-1 font-bold`}>{level.label}</Badge>
               <span className="text-xs text-muted-foreground">{level.desc}</span>
             </div>
 
             {cpiData.history.length > 0 && (
-              <div className="pt-4">
+              <div className="pt-4 p-4 rounded-xl bg-background/30 backdrop-blur-sm border border-primary/20">
                 <ResponsiveContainer width="100%" height={120}>
                   <LineChart data={cpiData.history}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(139,92,246,0.2)" />
                     <XAxis 
                       dataKey="date" 
-                      tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                      stroke="hsl(var(--border))"
+                      tick={{ fontSize: 10, fill: 'rgba(139,92,246,0.7)' }}
+                      stroke="rgba(139,92,246,0.3)"
                     />
                     <YAxis 
                       domain={[0, 100]}
-                      tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                      stroke="hsl(var(--border))"
+                      tick={{ fontSize: 10, fill: 'rgba(139,92,246,0.7)' }}
+                      stroke="rgba(139,92,246,0.3)"
                     />
                     <Tooltip 
                       contentStyle={{
                         backgroundColor: 'hsl(var(--background))',
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '6px'
+                        border: '2px solid rgba(139,92,246,0.4)',
+                        borderRadius: '12px',
+                        boxShadow: '0 0 20px rgba(139,92,246,0.2)'
                       }}
                     />
                     <Line 
                       type="monotone" 
                       dataKey="cpi" 
-                      stroke="hsl(var(--primary))" 
-                      strokeWidth={2}
-                      dot={{ fill: 'hsl(var(--primary))' }}
+                      stroke="#8b5cf6" 
+                      strokeWidth={3}
+                      dot={{ fill: '#8b5cf6', r: 4, strokeWidth: 2, stroke: '#fff' }}
                       name="CPI Score"
                     />
                   </LineChart>
@@ -287,10 +299,10 @@ export function WidgetCPIScore({ brandId }: WidgetCPIScoreProps) {
               </div>
             )}
 
-            <div className="pt-4 border-t text-xs text-muted-foreground">
-              <p className="font-semibold mb-1">O que é CPI?</p>
-              <p>
-                Métrica proprietária que mede o quanto as IAs são <strong>consistentes e previsíveis</strong> ao mencionar sua marca. 
+            <div className="pt-4 border-t border-primary/20 text-xs text-muted-foreground">
+              <p className="font-bold mb-2 text-primary/90">O que é CPI?</p>
+              <p className="leading-relaxed">
+                Métrica proprietária que mede o quanto as IAs são <strong className="text-primary">consistentes e previsíveis</strong> ao mencionar sua marca. 
                 Valores altos indicam respostas mais uniformes entre diferentes LLMs.
               </p>
             </div>
