@@ -628,8 +628,9 @@ const SeoMetrics = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">Evolução das Métricas (Últimos 30 dias)</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    📊 Dados reais da análise técnica SEO
+                  <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
+                    <BarChart3 className="h-4 w-4 text-blue-500" style={{ filter: 'drop-shadow(0 0 3px rgba(59, 130, 246, 0.5))' }} />
+                    Dados reais da análise técnica SEO
                   </p>
                 </div>
               </div>
@@ -649,7 +650,10 @@ const SeoMetrics = () => {
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5" />
                   <div className="flex-1 text-sm">
-                    <p className="font-medium text-foreground">📅 Acumulando histórico</p>
+                    <p className="font-medium text-foreground flex items-center gap-1.5">
+                      <Calendar className="h-4 w-4 text-blue-500" style={{ filter: 'drop-shadow(0 0 3px rgba(59, 130, 246, 0.5))' }} />
+                      Acumulando histórico
+                    </p>
                     <p className="text-muted-foreground mt-1">
                       Continue coletando métricas diariamente para visualizar a evolução completa. 
                       {chartData.length < 5 && ` Faltam ${5 - chartData.length} dias para um histórico semanal.`}
