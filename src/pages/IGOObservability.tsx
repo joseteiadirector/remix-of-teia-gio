@@ -251,6 +251,7 @@ export default function IGOObservability() {
 
   // Fetch métricas de todas as marcas DIRETO DO BANCO (evita rate limit)
   // ✅ Usa brands já filtradas pela configuração centralizada
+  // ✅ CPI vem de geo_scores (fonte oficial conforme artigo científico)
   const { data: allBrandsMetrics } = useQuery({
     queryKey: ["all-brands-igo-metrics-direct", USE_CODE_BASED_VISIBILITY, VISIBLE_BRAND_NAME],
     queryFn: async () => {
@@ -258,9 +259,9 @@ export default function IGOObservability() {
       
       logger.info('Buscando métricas IGO de todas as marcas do banco', { totalMarcas: brands.length });
       
-      // Buscar métricas mais recentes de cada marca em uma única query
       const brandIds = brands.map(b => b.id);
       
+      // 1. Buscar ICE, GAP, Stability de igo_metrics_history
       const { data: allMetrics, error } = await supabase
         .from("igo_metrics_history")
         .select("*")
@@ -272,6 +273,17 @@ export default function IGOObservability() {
         return [];
       }
       
+      // 2. Buscar CPI de geo_scores (FONTE OFICIAL - Artigo Científico)
+      const { data: allGeoScores, error: geoError } = await supabase
+        .from("geo_scores")
+        .select("brand_id, cpi, computed_at")
+        .in("brand_id", brandIds)
+        .order("computed_at", { ascending: false });
+      
+      if (geoError) {
+        logger.warn('Erro ao buscar geo_scores para CPI', { error: geoError });
+      }
+      
       // Agrupar por marca e pegar a mais recente de cada uma
       // MANTER estrutura compatível com IGOBrandsComparison
       const results = [];
@@ -279,13 +291,17 @@ export default function IGOObservability() {
         const brandMetrics = allMetrics?.filter(m => m.brand_id === brand.id);
         const latestMetric = brandMetrics?.[0];
         
+        // CPI: prioridade para geo_scores (fonte oficial), fallback para igo_metrics_history
+        const brandGeoScore = allGeoScores?.find(g => g.brand_id === brand.id);
+        const officialCPI = brandGeoScore?.cpi || latestMetric?.cpi || 0;
+        
         if (latestMetric) {
           results.push({
             brand: { id: brand.id, name: brand.name },
             metrics: {
               ice: latestMetric.ice || 0,
               gap: latestMetric.gap || 0,
-              cpi: latestMetric.cpi || 0,
+              cpi: officialCPI, // ✅ CPI de geo_scores (fonte oficial)
               cognitive_stability: latestMetric.cognitive_stability || 0
             }
           });
@@ -296,14 +312,14 @@ export default function IGOObservability() {
             metrics: {
               ice: 0,
               gap: 0,
-              cpi: 0,
+              cpi: officialCPI, // ✅ CPI de geo_scores mesmo sem métricas IGO
               cognitive_stability: 0
             }
           });
         }
       }
       
-      logger.info('Métricas IGO carregadas do banco', { 
+      logger.info('Métricas IGO carregadas do banco (CPI de geo_scores)', { 
         carregadas: results.length, 
         total: brands.length 
       });
