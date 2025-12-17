@@ -455,11 +455,17 @@ export default function IGODashboard() {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="convergence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-xl border-2 border-primary/40 p-2 rounded-2xl shadow-[0_0_30px_rgba(139,92,246,0.2)]">
-          <TabsTrigger value="convergence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-green-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(16,185,129,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-emerald-500/20">Convergência Cognitiva</TabsTrigger>
-          <TabsTrigger value="coherence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(168,85,247,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-purple-500/20">Matriz de Coerência</TabsTrigger>
-          <TabsTrigger value="consensus" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(6,182,212,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-cyan-500/20">Consenso Multi-LLM</TabsTrigger>
+      <Tabs defaultValue="convergence" className="space-y-8">
+        <TabsList className="grid w-full grid-cols-3 bg-slate-950 backdrop-blur-xl border-2 border-primary/50 p-3 rounded-2xl shadow-[0_0_40px_rgba(139,92,246,0.3)] gap-2">
+          <TabsTrigger value="convergence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-green-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_25px_rgba(16,185,129,0.6)] data-[state=inactive]:text-slate-300 data-[state=inactive]:bg-slate-800/80 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-4 px-6 font-black text-base transition-all duration-300 hover:bg-emerald-500/30 hover:text-emerald-200">
+            Convergência Cognitiva
+          </TabsTrigger>
+          <TabsTrigger value="coherence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_25px_rgba(168,85,247,0.6)] data-[state=inactive]:text-slate-300 data-[state=inactive]:bg-slate-800/80 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-4 px-6 font-black text-base transition-all duration-300 hover:bg-purple-500/30 hover:text-purple-200">
+            Matriz de Coerência
+          </TabsTrigger>
+          <TabsTrigger value="consensus" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_25px_rgba(6,182,212,0.6)] data-[state=inactive]:text-slate-300 data-[state=inactive]:bg-slate-800/80 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-4 px-6 font-black text-base transition-all duration-300 hover:bg-cyan-500/30 hover:text-cyan-200">
+            Consenso Multi-LLM
+          </TabsTrigger>
         </TabsList>
 
         {/* Convergence Tab */}
