@@ -1604,10 +1604,21 @@ export type Database = {
         Args: { frequency: string; last_run?: string; schedule_time: string }
         Returns: string
       }
+      can_analyze: { Args: { _user_id: string }; Returns: boolean }
+      can_edit: { Args: { _user_id: string }; Returns: boolean }
+      can_manage: { Args: { _user_id: string }; Returns: boolean }
+      can_view: { Args: { _user_id: string }; Returns: boolean }
       clean_expired_cache: { Args: never; Returns: undefined }
       clean_old_function_logs: { Args: never; Returns: undefined }
       cleanup_old_data: { Args: never; Returns: Json }
       get_platform_health: { Args: never; Returns: Json }
+      has_any_role: {
+        Args: {
+          _roles: Database["public"]["Enums"]["app_role"][]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1637,7 +1648,13 @@ export type Database = {
     }
     Enums: {
       alert_priority: "low" | "medium" | "high" | "critical"
-      app_role: "admin" | "user"
+      app_role:
+        | "admin"
+        | "user"
+        | "agency_manager"
+        | "editor"
+        | "analyst"
+        | "viewer"
       task_category: "geo" | "seo" | "technical" | "content" | "performance"
       task_priority: "high" | "medium" | "low"
       task_status: "pending" | "in_progress" | "completed"
@@ -1769,7 +1786,14 @@ export const Constants = {
   public: {
     Enums: {
       alert_priority: ["low", "medium", "high", "critical"],
-      app_role: ["admin", "user"],
+      app_role: [
+        "admin",
+        "user",
+        "agency_manager",
+        "editor",
+        "analyst",
+        "viewer",
+      ],
       task_category: ["geo", "seo", "technical", "content", "performance"],
       task_priority: ["high", "medium", "low"],
       task_status: ["pending", "in_progress", "completed"],
