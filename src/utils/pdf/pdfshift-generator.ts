@@ -528,7 +528,7 @@ export function generateSEOHTML(data: ExportDataSEO, charts: ChartCapture[]): st
           </div>
           <div class="metric-card">
             <div class="label">CTR Médio</div>
-            <div class="value">${data.metrics.ctr?.toFixed(2) || 0}%</div>
+            <div class="value">${((data.metrics.ctr || 0) * 100).toFixed(2)}%</div>
           </div>
           <div class="metric-card">
             <div class="label">Posição Média</div>
@@ -555,10 +555,10 @@ export function generateSEOHTML(data: ExportDataSEO, charts: ChartCapture[]): st
           <tbody>
             <tr>
               <td>CTR</td>
-              <td>${data.metrics.ctr?.toFixed(2)}%</td>
+              <td>${((data.metrics.ctr || 0) * 100).toFixed(2)}%</td>
               <td>
-                <span class="badge ${(data.metrics.ctr || 0) >= 5 ? 'success' : (data.metrics.ctr || 0) >= 2 ? 'warning' : 'danger'}">
-                  ${(data.metrics.ctr || 0) >= 5 ? 'Excelente' : (data.metrics.ctr || 0) >= 2 ? 'Bom' : 'Regular'}
+                <span class="badge ${((data.metrics.ctr || 0) * 100) >= 5 ? 'success' : ((data.metrics.ctr || 0) * 100) >= 2 ? 'warning' : 'danger'}">
+                  ${((data.metrics.ctr || 0) * 100) >= 5 ? 'Excelente' : ((data.metrics.ctr || 0) * 100) >= 2 ? 'Bom' : 'Regular'}
                 </span>
               </td>
             </tr>
@@ -611,7 +611,7 @@ export function generateSEOHTML(data: ExportDataSEO, charts: ChartCapture[]): st
               },
               { 
                 label: 'CTR', 
-                value: `${(data.metrics.ctr || 0).toFixed(2)}%`, 
+                value: `${((data.metrics.ctr || 0) * 100).toFixed(2)}%`, 
                 icon: '📈',
                 color: '#10b981',
                 bgColor: '#d1fae5'
@@ -665,9 +665,9 @@ export function generateSEOHTML(data: ExportDataSEO, charts: ChartCapture[]): st
               
               <!-- CTR Bar -->
               <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; z-index: 2;">
-                <div style="width: 100%; height: ${Math.min((data.metrics.ctr || 0) * 40, 200)}px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 8px 8px 0 0; box-shadow: 0 -4px 12px rgba(16, 185, 129, 0.3); position: relative;">
+                <div style="width: 100%; height: ${Math.min(((data.metrics.ctr || 0) * 100) * 40, 200)}px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 8px 8px 0 0; box-shadow: 0 -4px 12px rgba(16, 185, 129, 0.3); position: relative;">
                   <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #34d399;">
-                    ${(data.metrics.ctr || 0).toFixed(2)}%
+                    ${((data.metrics.ctr || 0) * 100).toFixed(2)}%
                   </div>
                 </div>
                 <div style="font-size: 10px; font-weight: 600; color: #94a3b8; text-align: center; line-height: 1.3;">
@@ -733,7 +733,7 @@ export function generateSEOHTML(data: ExportDataSEO, charts: ChartCapture[]): st
           <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
             <li style="color: #047857; font-weight: 500;">✓ Proposta de valor clara (branding + marketing integrados)</li>
             <li style="color: #047857; font-weight: 500;">✓ Menção de localização (RJ SP) na meta description, indicando foco geográfico</li>
-            <li style="color: #047857; font-weight: 500;">✓ CTR acima de ${(data.metrics.ctr || 0).toFixed(2)}% indica relevância nas SERPs</li>
+            <li style="color: #047857; font-weight: 500;">✓ CTR acima de ${((data.metrics.ctr || 0) * 100).toFixed(2)}% indica relevância nas SERPs</li>
             <li style="color: #047857; font-weight: 500;">✓ Presença orgânica estabelecida com ${data.metrics.organic_traffic || 0} visitas mensais</li>
           </ul>
         </div>
