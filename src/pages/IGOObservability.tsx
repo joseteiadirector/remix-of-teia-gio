@@ -394,148 +394,122 @@ export default function IGOObservability() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            IGO Observability
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Timeline multi-LLM, divergência semântica e governança contextual
-          </p>
-          <Badge variant="outline" className="mt-2">
-            <Brain className="w-3 h-3 mr-1" />
-            IA observando IA em tempo real
-          </Badge>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <Button
-            onClick={async () => {
-              try {
-                logger.info('Iniciando exportação IGO', { 
-                  metricsCount: allBrandsMetrics?.length || 0,
-                  brandsCount: brands?.length || 0
-                });
-                
-                // Validar dados antes de exportar
-                if (!allBrandsMetrics || allBrandsMetrics.length === 0) {
-                  toast({
-                    title: "Erro",
-                    description: "Nenhuma métrica disponível para exportar. Aguarde o carregamento dos dados.",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-                
-                toast({
-                  title: "Gerando relatório PDF...",
-                  description: "Aguarde enquanto capturamos os gráficos",
-                });
-                
-                // Aguardar um momento para garantir que os gráficos estejam renderizados
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                // Preparar dados com estrutura garantida
-                let metricsToExport = allBrandsMetrics
-                  .filter(bm => bm && bm.brand && bm.metrics)
-                  .map(bm => ({
-                    brand: {
-                      id: bm.brand.id,
-                      name: bm.brand.name
-                    },
-                    metrics: {
-                      ice: Number(bm.metrics.ice) || 0,
-                      gap: Number(bm.metrics.gap) || 0,
-                      cpi: Number(bm.metrics.cpi) || 0,
-                      cognitive_stability: Number(bm.metrics.cognitive_stability) || 0
-                    }
-                  }));
-                
-                // FILTRAR apenas a marca selecionada se houver
-                if (selectedBrandId) {
-                  metricsToExport = metricsToExport.filter(bm => bm.brand.id === selectedBrandId);
-                  logger.info('Exportando apenas marca selecionada', { 
-                    brandId: selectedBrandId,
-                    brandName: brands?.find(b => b.id === selectedBrandId)?.name
-                  });
-                } else {
-                  logger.info('Exportando todas as marcas', { count: metricsToExport.length });
-                }
-                
-                if (metricsToExport.length === 0) {
-                  toast({
-                    title: "Erro",
-                    description: "Nenhuma métrica válida encontrada para exportar",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-                
-                const brandName = brands?.find(b => b.id === selectedBrandId)?.name || 'Todas as marcas';
-                
-                await exportIGOReport({
-                  brandName,
-                  brands: metricsToExport.map(bm => ({
-                    name: bm.brand.name,
-                    metrics: {
-                      ice: bm.metrics.ice,
-                      gap: bm.metrics.gap,
-                      cpi: bm.metrics.cpi,
-                      stability: bm.metrics.cognitive_stability
-                    }
-                  })),
-                  period: 'Últimos 30 dias'
-                });
-                
-                toast({
-                  title: "Sucesso!",
-                  description: "Relatório exportado com sucesso",
-                });
-              } catch (error) {
-                logger.error('Erro ao exportar relatório IGO', { 
-                  error,
-                  stack: error instanceof Error ? error.stack : 'N/A'
-                });
-                toast({
-                  title: "Erro",
-                  description: error instanceof Error ? error.message : "Erro ao gerar relatório PDF",
-                  variant: "destructive",
-                });
-              }
-            }}
-            variant="outline"
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            Exportar PDF
-          </Button>
-
-          {selectedBrandId && (
-            <RealCollectionButton 
-              brandId={selectedBrandId}
-              brandName={brands?.find(b => b.id === selectedBrandId)?.name || ''}
-              onComplete={() => {
-                queryClient.invalidateQueries({ queryKey: ['llm-mentions', selectedBrandId] });
-                queryClient.invalidateQueries({ queryKey: ['igo-metrics', selectedBrandId] });
-                queryClient.invalidateQueries({ queryKey: ['all-brands-igo-metrics'] });
-              }}
-            />
-          )}
-
-          <select
-            className="px-4 py-2 rounded-lg border bg-background"
-            value={selectedBrandId || ""}
-            onChange={(e) => setSelectedBrandId(e.target.value || null)}
-          >
-            <option value="">Todas as marcas</option>
-            {brands?.map(b => (
-              <option key={b.id} value={b.id}>{b.name}</option>
-            ))}
-          </select>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
+
+      <div className="container mx-auto p-6 space-y-8">
+        {/* Premium Header */}
+        <div className="relative overflow-hidden rounded-3xl border-2 border-cyan-500/40 bg-gradient-to-r from-cyan-950/30 via-background to-cyan-900/20 backdrop-blur-xl p-8 shadow-[0_0_60px_rgba(6,182,212,0.2)] transition-all duration-500 hover:shadow-[0_0_80px_rgba(6,182,212,0.3)] hover:border-cyan-400/60 group">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 group-hover:bg-cyan-500/30 transition-all duration-700" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl translate-x-1/4 translate-y-1/4 group-hover:bg-blue-500/25 transition-all duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-blue-500/5" />
+          <div className="relative z-10 flex items-center justify-between flex-wrap gap-6">
+            <div>
+              <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg mb-3">
+                IGO Observability
+              </h1>
+              <p className="text-lg text-cyan-200/70 font-medium mb-3">
+                Timeline multi-LLM, divergência semântica e governança contextual
+              </p>
+              <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 px-4 py-1.5">
+                <Brain className="w-4 h-4 mr-2" />
+                IA observando IA em tempo real
+              </Badge>
+            </div>
+            
+            <div className="flex items-center gap-4 flex-wrap">
+              <Button
+                onClick={async () => {
+                  try {
+                    logger.info('Iniciando exportação IGO', { 
+                      metricsCount: allBrandsMetrics?.length || 0,
+                      brandsCount: brands?.length || 0
+                    });
+                    
+                    if (!allBrandsMetrics || allBrandsMetrics.length === 0) {
+                      toast({
+                        title: "Erro",
+                        description: "Nenhuma métrica disponível para exportar. Aguarde o carregamento dos dados.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    
+                    toast({
+                      title: "Gerando relatório PDF...",
+                      description: "Aguarde enquanto capturamos os gráficos",
+                    });
+                    
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    let metricsToExport = allBrandsMetrics
+                      .filter(bm => bm && bm.brand && bm.metrics)
+                      .map(bm => ({
+                        brand: {
+                          id: bm.brand.id,
+                          name: bm.brand.name
+                        },
+                        metrics: {
+                          ice: Number(bm.metrics.ice) || 0,
+                          gap: Number(bm.metrics.gap) || 0,
+                          cpi: Number(bm.metrics.cpi) || 0,
+                          cognitive_stability: Number(bm.metrics.cognitive_stability) || 0
+                        }
+                      }));
+
+                    await exportIGOReport({
+                      brandName: brands?.find(b => b.id === selectedBrandId)?.name || 'Todas as Marcas',
+                      brands: metricsToExport.map(bm => ({
+                        name: bm.brand.name,
+                        metrics: {
+                          ice: bm.metrics.ice,
+                          gap: bm.metrics.gap,
+                          cpi: bm.metrics.cpi,
+                          stability: bm.metrics.cognitive_stability
+                        }
+                      })),
+                      period: 'Últimos 30 dias'
+                    });
+                    
+                    toast({
+                      title: "Relatório exportado!",
+                      description: "O PDF foi baixado com sucesso.",
+                    });
+                  } catch (error) {
+                    logger.error('Erro ao exportar relatório IGO', { 
+                      error,
+                      stack: error instanceof Error ? error.stack : 'N/A'
+                    });
+                    toast({
+                      title: "Erro",
+                      description: error instanceof Error ? error.message : "Erro ao gerar relatório PDF",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:shadow-[0_0_35px_rgba(6,182,212,0.5)] border-0 px-6 py-5 font-bold"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Exportar PDF
+              </Button>
+
+              <select
+                className="px-5 py-3 border-2 border-cyan-500/40 rounded-xl bg-background/50 backdrop-blur-xl hover:border-cyan-400/60 transition-all focus:ring-2 focus:ring-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)] font-medium"
+                value={selectedBrandId || ""}
+                onChange={(e) => setSelectedBrandId(e.target.value || null)}
+              >
+                <option value="">Todas as marcas</option>
+                {brands?.map(b => (
+                  <option key={b.id} value={b.id}>{b.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
 
       {/* Brand Context Card */}
       {selectedBrandId && (
@@ -554,67 +528,79 @@ export default function IGOObservability() {
         </Card>
       )}
 
-      {/* Official IGO Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Target className="w-4 h-4 text-blue-500" />
+      {/* Official IGO Metrics - Premium Design */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <Card className="relative overflow-hidden border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/40 via-background to-cyan-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:shadow-[0_0_60px_rgba(6,182,212,0.25)] hover:border-cyan-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-cyan-100">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                <Target className="w-4 h-4 text-white" />
+              </div>
               ICE
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-blue-500">{igoMetrics?.ice || 0}</div>
-            <Progress value={igoMetrics?.ice || 0} className="mt-2 [&>div]:bg-blue-500" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg">{igoMetrics?.ice || 0}</div>
+            <Progress value={igoMetrics?.ice || 0} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-cyan-500 [&>div]:to-blue-500" />
+            <p className="text-xs text-cyan-300/60 mt-3">
               Index of Cognitive Efficiency
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Target className="w-4 h-4 text-accent" />
+        <Card className="relative overflow-hidden border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/40 via-background to-amber-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:shadow-[0_0_60px_rgba(245,158,11,0.25)] hover:border-amber-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-amber-500/20 rounded-full blur-3xl group-hover:bg-amber-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-amber-100">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                <Target className="w-4 h-4 text-white" />
+              </div>
               GAP
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-accent">{igoMetrics?.gap || 0}</div>
-            <Progress value={igoMetrics?.gap || 0} className="mt-2 [&>div]:bg-accent" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-amber-300 via-orange-200 to-amber-300 bg-clip-text text-transparent drop-shadow-lg">{igoMetrics?.gap || 0}</div>
+            <Progress value={igoMetrics?.gap || 0} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:to-orange-500" />
+            <p className="text-xs text-amber-300/60 mt-3">
               Governance Alignment Precision
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-primary" />
+        <Card className="relative overflow-hidden border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/40 via-background to-purple-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:shadow-[0_0_60px_rgba(168,85,247,0.25)] hover:border-purple-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-purple-100">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 border border-purple-400/50 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                <TrendingUp className="w-4 h-4 text-white" />
+              </div>
               CPI
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-primary">{igoMetrics?.cpi || 0}</div>
-            <Progress value={igoMetrics?.cpi || 0} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-purple-300 via-violet-200 to-purple-300 bg-clip-text text-transparent drop-shadow-lg">{igoMetrics?.cpi || 0}</div>
+            <Progress value={igoMetrics?.cpi || 0} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-purple-500 [&>div]:to-violet-500" />
+            <p className="text-xs text-purple-300/60 mt-3">
               Cognitive Predictive Index
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
+        <Card className="relative overflow-hidden border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 via-background to-emerald-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(16,185,129,0.15)] hover:shadow-[0_0_60px_rgba(16,185,129,0.25)] hover:border-emerald-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-emerald-100">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                <CheckCircle2 className="w-4 h-4 text-white" />
+              </div>
               Estabilidade
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-500">{igoMetrics?.cognitive_stability || 0}%</div>
-            <Progress value={igoMetrics?.cognitive_stability || 0} className="mt-2 [&>div]:bg-green-500" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-emerald-300 via-green-200 to-emerald-300 bg-clip-text text-transparent drop-shadow-lg">{igoMetrics?.cognitive_stability || 0}%</div>
+            <Progress value={igoMetrics?.cognitive_stability || 0} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:to-green-500" />
+            <p className="text-xs text-emerald-300/60 mt-3">
               Estabilidade Cognitiva
             </p>
           </CardContent>
@@ -660,73 +646,85 @@ export default function IGOObservability() {
         </Card>
       )}
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Target className="w-4 h-4 text-primary" />
+      {/* Key Metrics - Premium Design */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <Card className="relative overflow-hidden border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-background to-emerald-900/20 backdrop-blur-xl shadow-[0_0_35px_rgba(16,185,129,0.15)] hover:shadow-[0_0_50px_rgba(16,185,129,0.25)] hover:border-emerald-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-emerald-100">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                <Target className="w-4 h-4 text-white" />
+              </div>
               Convergência
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{convergenceScore.toFixed(1)}%</div>
-            <Progress value={convergenceScore} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">{convergenceScore.toFixed(1)}%</div>
+            <Progress value={convergenceScore} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:to-green-500" />
+            <p className="text-xs text-emerald-300/60 mt-2">
               {convergenceScore > 80 ? "Alta coerência" : convergenceScore > 50 ? "Moderada" : "Divergente"}
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-yellow-500" />
+        <Card className="relative overflow-hidden border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/30 via-background to-amber-900/20 backdrop-blur-xl shadow-[0_0_35px_rgba(245,158,11,0.15)] hover:shadow-[0_0_50px_rgba(245,158,11,0.25)] hover:border-amber-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/20 rounded-full blur-3xl group-hover:bg-amber-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-amber-100">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 shadow-[0_0_15px_rgba(245,158,11,0.4)]">
+                <AlertTriangle className="w-4 h-4 text-white" />
+              </div>
               Divergência Semântica
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{divergenceScore.toFixed(1)}%</div>
-            <Progress value={divergenceScore} className="mt-2 [&>div]:bg-yellow-500" />
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-transparent">{divergenceScore.toFixed(1)}%</div>
+            <Progress value={divergenceScore} className="mt-3 h-2 [&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:to-orange-500" />
+            <p className="text-xs text-amber-300/60 mt-2">
               Variação entre LLMs
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Brain className="w-4 h-4 text-accent" />
+        <Card className="relative overflow-hidden border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/30 via-background to-purple-900/20 backdrop-blur-xl shadow-[0_0_35px_rgba(168,85,247,0.15)] hover:shadow-[0_0_50px_rgba(168,85,247,0.25)] hover:border-purple-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-purple-100">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+                <Brain className="w-4 h-4 text-white" />
+              </div>
               LLMs Monitorados
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{providerData.length}</div>
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-purple-300 to-violet-300 bg-clip-text text-transparent">{providerData.length}</div>
+            <p className="text-xs text-purple-300/60 mt-3">
               Provedores ativos
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-500" />
+        <Card className="relative overflow-hidden border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/30 via-background to-cyan-900/20 backdrop-blur-xl shadow-[0_0_35px_rgba(6,182,212,0.15)] hover:shadow-[0_0_50px_rgba(6,182,212,0.25)] hover:border-cyan-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-cyan-100">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                <Clock className="w-4 h-4 text-white" />
+              </div>
               Execuções
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{executions?.length || 0}</div>
-            <p className="text-xs text-muted-foreground mt-2">
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-black bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">{executions?.length || 0}</div>
+            <p className="text-xs text-cyan-300/60 mt-2">
               {executions?.length > 0 
                 ? "Últimas 50 queries" 
                 : "Nenhuma execução registrada ainda"}
             </p>
             {(!executions || executions.length === 0) && (
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-cyan-400 mt-2">
                 Execute queries no{" "}
-                <a href="/nucleus-center" className="text-primary hover:underline font-medium">
+                <a href="/nucleus-center" className="text-cyan-300 hover:underline font-bold">
                   Nucleus Center
                 </a>
               </p>
@@ -735,19 +733,19 @@ export default function IGOObservability() {
         </Card>
       </div>
 
-      {/* Main Navigation Tabs - Separação clara de contextos */}
-      <Tabs defaultValue="individual" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="individual" className="flex items-center gap-2">
+      {/* Main Navigation Tabs - Premium Design */}
+      <Tabs defaultValue="individual" className="space-y-8">
+        <TabsList className="grid w-full grid-cols-2 !bg-transparent p-0 gap-3 h-auto">
+          <TabsTrigger value="individual" className="!bg-slate-800/90 data-[state=active]:!bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-[0_0_25px_rgba(6,182,212,0.5)] data-[state=inactive]:text-slate-300 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-4 px-6 font-black text-base transition-all duration-300 hover:!bg-cyan-500/30 flex items-center gap-2">
             <Target className="h-4 w-4" />
             Análise Individual
             {selectedBrandId && (
-              <Badge variant="secondary" className="ml-2 text-xs">
+              <Badge className="ml-2 text-xs bg-white/20 text-white border-0">
                 {brands?.find(b => b.id === selectedBrandId)?.name}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="comparison" className="flex items-center gap-2">
+          <TabsTrigger value="comparison" className="!bg-slate-800/90 data-[state=active]:!bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-500 data-[state=active]:text-white data-[state=active]:shadow-[0_0_25px_rgba(168,85,247,0.5)] data-[state=inactive]:text-slate-300 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-4 px-6 font-black text-base transition-all duration-300 hover:!bg-purple-500/30 flex items-center gap-2">
             <Brain className="h-4 w-4" />
             Comparação entre Marcas
           </TabsTrigger>
@@ -1097,6 +1095,7 @@ export default function IGOObservability() {
             </BarChart>
           </ResponsiveContainer>
         </div>
+      </div>
       </div>
     </div>
   );
