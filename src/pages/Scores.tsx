@@ -1,0 +1,578 @@
+import { useState, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2, TrendingUp, Target, Zap, Database, Brain, Home, Download, FileSpreadsheet } from "lucide-react";
+import { exportGEOReport } from "@/utils/pdf";
+import { LoadingSpinner, SkeletonChart } from "@/components/LoadingSpinner";
+import { useAudit } from "@/hooks/useAudit";
+import { AuditButton } from "@/components/audit/AuditButton";
+import { AuditBadge } from "@/components/audit/AuditBadge";
+import { ConsistencyIndicator } from "@/components/ConsistencyIndicator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { logger } from "@/utils/logger";
+
+interface GeoScore {
+  id: number;
+  brand_id: string;
+  score: number;
+  breakdown: {
+    base_tecnica: number;
+    estrutura_semantica: number;
+    relevancia_conversacional: number;
+    autoridade_cognitiva: number;
+    inteligencia_estrategica: number;
+  };
+  computed_at: string;
+  cpi: number;
+}
+
+interface Brand {
+  id: string;
+  name: string;
+  domain: string;
+}
+
+const Scores = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [scores, setScores] = useState<GeoScore[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  
+  // Sistema de auditoria centralizado
+  const { executeAudit, isAuditing, lastAuditResult } = useAudit({ autoGeneratePDF: true });
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedBrand]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      // Fetch brands - APENAS marcas visíveis
+      const { data: brandsData, error: brandsError } = await supabase
+        .from('brands')
+        .select('id, name, domain')
+        .eq('is_visible', true)
+        .order('created_at', { ascending: false });
+
+      if (brandsError) throw brandsError;
+
+      setBrands(brandsData || []);
+
+      if (brandsData && brandsData.length > 0) {
+        // Set selected brand if not already set
+        if (!selectedBrand) {
+          setSelectedBrand(brandsData[0].id);
+          return; // Will trigger useEffect again
+        }
+
+        // Fetch scores for selected brand
+        const { data: scoresData, error: scoresError } = await supabase
+          .from('geo_scores')
+          .select('id, brand_id, score, breakdown, computed_at, cpi')
+          .eq('brand_id', selectedBrand)
+          .order('computed_at', { ascending: true })
+          .limit(100);
+
+        if (scoresError) throw scoresError;
+
+        setScores(scoresData as GeoScore[] || []);
+      }
+    } catch (error) {
+      logger.error('Erro ao buscar scores', { error, brandId: selectedBrand });
+      toast({
+        title: "Erro ao carregar dados",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCalculateMetrics = async () => {
+    if (!selectedBrand || !user?.id) return;
+
+    setIsCalculating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('calculate-geo-metrics', {
+        body: { 
+          brandId: selectedBrand,
+          userId: user.id 
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Sucesso!",
+        description: "Métricas GEO atualizadas com sucesso",
+      });
+      
+      // Recarregar dados
+      await fetchData();
+    } catch (error) {
+      logger.error('Erro ao calcular métricas de scores', { error, brandId: selectedBrand });
+      toast({
+        title: "Erro ao atualizar dados",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <LoadingSpinner size="lg" text="Carregando scores..." fullScreen />
+        </div>
+      </div>
+    );
+  }
+
+  if (scores.length === 0) {
+    return (
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">GEO Escore</h1>
+            <p className="text-muted-foreground">
+              Visualize as pontuações de otimização para motores generativos
+            </p>
+          </div>
+
+          <Card className="p-12 text-center">
+            <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-semibold mb-2">Nenhum score calculado ainda</h3>
+            <p className="text-muted-foreground">
+              Execute a sincronização de analytics para começar a coletar dados e gerar GEO scores.
+            </p>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  const latestScore = scores[scores.length - 1];
+  const brand = brands.find(b => b.id === latestScore.brand_id);
+
+  const radarData = [
+    { subject: 'Base Técnica', value: latestScore.breakdown.base_tecnica, fullMark: 100 },
+    { subject: 'Estrutura Semântica', value: latestScore.breakdown.estrutura_semantica, fullMark: 100 },
+    { subject: 'Relevância Conversacional', value: latestScore.breakdown.relevancia_conversacional, fullMark: 100 },
+    { subject: 'Autoridade Cognitiva', value: latestScore.breakdown.autoridade_cognitiva, fullMark: 100 },
+    { subject: 'Inteligência Estratégica', value: latestScore.breakdown.inteligencia_estrategica, fullMark: 100 },
+  ];
+
+  // Componente customizado para labels do radar (quebra em 2 linhas)
+  const CustomRadarTick = ({ payload, x, y, textAnchor, cx }: any) => {
+    const words = payload.value.split(' ');
+    const midPoint = Math.ceil(words.length / 2);
+    const line1 = words.slice(0, midPoint).join(' ');
+    const line2 = words.slice(midPoint).join(' ');
+    
+    // Calcular se está no topo
+    const isTop = y < cx;
+    const offsetY = isTop ? -25 : 10;
+    
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={offsetY}
+          textAnchor={textAnchor}
+          fill="hsl(var(--foreground))"
+          fontSize={11}
+          fontWeight={500}
+        >
+          <tspan x={0} dy={0}>{line1}</tspan>
+          <tspan x={0} dy={12}>{line2}</tspan>
+        </text>
+      </g>
+    );
+  };
+
+  const timeSeriesData = scores.map(score => ({
+    date: new Date(score.computed_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+    score: Number(score.score.toFixed(2)),
+  }));
+
+  const pillars = [
+    {
+      name: 'Base Técnica',
+      value: latestScore.breakdown.base_tecnica,
+      icon: Database,
+      color: 'bg-blue-500',
+    },
+    {
+      name: 'Estrutura Semântica',
+      value: latestScore.breakdown.estrutura_semantica,
+      icon: Target,
+      color: 'bg-green-500',
+    },
+    {
+      name: 'Relevância Conversacional',
+      value: latestScore.breakdown.relevancia_conversacional,
+      icon: Zap,
+      color: 'bg-purple-500',
+    },
+    {
+      name: 'Autoridade Cognitiva',
+      value: latestScore.breakdown.autoridade_cognitiva,
+      icon: TrendingUp,
+      color: 'bg-orange-500',
+    },
+    {
+      name: 'Inteligência Estratégica',
+      value: latestScore.breakdown.inteligencia_estrategica,
+      icon: Brain,
+      color: 'bg-pink-500',
+    },
+  ];
+
+  const handleExport = async (format: 'pdf') => {
+    if (!scores || scores.length === 0) {
+      toast({
+        title: "Dados insuficientes",
+        description: "É necessário ter pelo menos um score calculado para exportar relatórios.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (format === 'pdf') {
+      setIsExporting(true);
+      toast({
+        title: "📊 Gerando PDF",
+        description: "Aguarde enquanto preparamos seu relatório GEO...",
+      });
+
+      try {
+        // Buscar menções LLM da marca
+        const { data: mentions, error: mentionsError } = await supabase
+          .from('mentions_llm')
+          .select('provider, query, mentioned, confidence, answer_excerpt')
+          .eq('brand_id', selectedBrand)
+          .order('collected_at', { ascending: false })
+          .limit(50);
+
+        if (mentionsError) throw mentionsError;
+
+        // Preparar dados completos para o PDF
+        const firstScore = scores[0];
+        await exportGEOReport({
+          brandName: brand?.name || '',
+          brandDomain: brand?.domain || '',
+          geoScore: latestScore.score,
+          pillars: pillars.map((p, index) => {
+            const pillarKey = ['base_tecnica', 'estrutura_semantica', 'relevancia_conversacional', 'autoridade_cognitiva', 'inteligencia_estrategica'][index] as keyof typeof firstScore.breakdown;
+            const initialValue = firstScore?.breakdown?.[pillarKey] || 0;
+            const finalValue = p.value;
+            const variation = initialValue > 0 ? ((finalValue - initialValue) / initialValue * 100) : 0;
+            
+            return {
+              name: p.name,
+              value: p.value,
+              variation
+            };
+          }),
+          mentions: mentions?.map(m => ({
+            provider: m.provider,
+            query: m.query,
+            mentioned: m.mentioned,
+            confidence: m.confidence,
+            answer_excerpt: m.answer_excerpt || undefined
+          })) || [],
+          period: `${new Date(scores[0]?.computed_at).toLocaleDateString('pt-BR')} - ${new Date(latestScore.computed_at).toLocaleDateString('pt-BR')}`
+        });
+
+        toast({
+          title: "✅ Exportação concluída!",
+          description: "Relatório GEO exportado com sucesso",
+        });
+      } catch (error) {
+        logger.error('Erro ao exportar PDF', { error });
+        toast({
+          title: "Erro na exportação",
+          description: error instanceof Error ? error.message : "Não foi possível gerar o PDF",
+          variant: "destructive",
+        });
+      } finally {
+        setIsExporting(false);
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Breadcrumbs */}
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard" className="flex items-center gap-2">
+                <Home className="h-4 w-4" />
+                Dashboard
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>GEO Escore</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <div className="flex justify-between items-start animate-fade-in">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-4xl font-bold gradient-text">GEO Escore</h1>
+              </div>
+              <p className="text-muted-foreground">
+                Framework IGO · Governança Semântica · Otimização para Motores Generativos
+              </p>
+              {/* Indicador de Consistência Matemática */}
+              <ConsistencyIndicator 
+                brandId={selectedBrand || undefined}
+                brandName={brand?.name}
+                autoValidate={false}
+                showDetails={true}
+              />
+            </div>
+            {lastAuditResult && (
+              <AuditBadge 
+                status={lastAuditResult.status}
+                maxDivergence={lastAuditResult.max_divergence_percentage}
+                inconsistencies={lastAuditResult.inconsistencies_found}
+              />
+            )}
+          </div>
+
+          <div className="flex gap-2 items-center flex-wrap">
+            {/* Brand Selector - PRIMEIRO */}
+            <div className="w-64">
+              <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione uma marca" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brands.map((brand) => (
+                    <SelectItem key={brand.id} value={brand.id}>
+                      {brand.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* EXPORTAR PDF GEO - DESTAQUE MÁXIMO */}
+            <Button 
+              onClick={() => handleExport('pdf')} 
+              size="lg"
+              disabled={isExporting}
+              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
+            >
+              {isExporting ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Gerando PDF...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-5 w-5" />
+                  📊 Exportar Relatório GEO com Gráficos
+                </>
+              )}
+            </Button>
+
+            {/* Calculate Button */}
+            <Button 
+              onClick={handleCalculateMetrics}
+              disabled={isCalculating}
+              size="default"
+              variant="outline"
+            >
+              {isCalculating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Calculando...
+                </>
+              ) : (
+                <>
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  Calcular Métricas
+                </>
+              )}
+            </Button>
+
+            {/* Audit Button - MENOR */}
+            <AuditButton 
+              onClick={async () => {
+                const brandName = brands.find(b => b.id === selectedBrand)?.name;
+                if (selectedBrand) {
+                  await executeAudit(selectedBrand, brandName);
+                }
+              }}
+              isAuditing={isAuditing}
+              disabled={!scores.length}
+            />
+          </div>
+        </div>
+
+
+        {/* Overall Score */}
+        <Card className="p-8 bg-gradient-to-br from-primary/10 to-primary/5 card-hover animate-scale-in">
+          <div className="text-center">
+            <div className="text-sm text-muted-foreground mb-4">
+              {brand?.name} - {brand?.domain}
+            </div>
+            <div className="text-6xl font-bold text-primary mb-2">
+              {latestScore.score.toFixed(1)}
+            </div>
+            <div className="text-muted-foreground">Score GEO Geral</div>
+            <div className="text-xs text-muted-foreground mt-2">
+              Última atualização: {new Date(latestScore.computed_at).toLocaleString('pt-BR')}
+            </div>
+          </div>
+        </Card>
+
+        {/* Pillars Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {pillars.map((pillar, index) => (
+            <Card 
+              key={pillar.name} 
+              className="p-4 card-hover animate-slide-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`${pillar.color} p-2 rounded-lg`}>
+                  <pillar.icon className="h-5 w-5 text-white" />
+                </div>
+              </div>
+              <div className="text-2xl font-bold mb-1">
+                {pillar.value.toFixed(1)}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {pillar.name}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {/* CPI Score Card - Proprietary Metric */}
+        <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 card-hover">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-lg">
+                <Brain className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-xl">CPI Score</h3>
+                <p className="text-sm text-muted-foreground">Cognitive Predictive Index</p>
+              </div>
+            </div>
+            <Badge variant="secondary" className="bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/30">
+              Métrica Proprietária
+            </Badge>
+          </div>
+
+          <div className="flex items-baseline gap-3 mb-4">
+            <div className="text-5xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+              {latestScore.cpi ? Number(latestScore.cpi).toFixed(1) : '0.0'}
+            </div>
+            <div className="text-muted-foreground">/100</div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm">
+              <strong>Consistência Preditiva Inter-IA:</strong> Mede o quanto diferentes LLMs são 
+              <strong className="text-purple-600 dark:text-purple-400"> previsíveis e consistentes</strong> ao mencionar sua marca.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              ✨ Valores altos (≥80) indicam respostas uniformes entre OpenAI, Claude, Gemini e Perplexity — 
+              sinal de forte governança semântica e posicionamento consolidado.
+            </p>
+          </div>
+        </Card>
+
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Radar Chart */}
+          <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '200ms' }}>
+            <h3 className="text-xl font-semibold mb-4">Visão Geral dos Pilares</h3>
+            <div id="geo-radar-chart" className="recharts-wrapper">
+              <ResponsiveContainer width="100%" height={400}>
+                <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
+                  <PolarGrid />
+                  <PolarAngleAxis 
+                    dataKey="subject" 
+                    tick={<CustomRadarTick cx={200} />}
+                  />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                  <Radar name="Score" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                  <Tooltip />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          {/* Line Chart */}
+          <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '300ms' }}>
+            <h3 className="text-xl font-semibold mb-4">Evolução do Score GEO</h3>
+            <div id="geo-evolution-chart" className="recharts-wrapper">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={timeSeriesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} name="Score GEO" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </div>
+
+        {/* Bar Chart */}
+        <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '400ms' }}>
+          <h3 className="text-xl font-semibold mb-4">Comparação de Pilares</h3>
+          <div id="geo-pillars-chart" className="recharts-wrapper">
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={radarData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="subject" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="hsl(var(--primary))" name="Pontuação" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default Scores;

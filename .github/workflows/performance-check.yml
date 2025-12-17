@@ -1,0 +1,52 @@
+name: Performance Check
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      env:
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        
+    - name: Serve build
+      run: |
+        npx serve dist -l 3000 &
+        sleep 5
+        
+    - name: Run Lighthouse CI
+      run: |
+        npm install -g @lhci/cli
+        lhci autorun || echo "⚠️ Lighthouse CI não configurado ainda"
+      continue-on-error: true
+      
+    - name: Bundle size check
+      run: |
+        echo "## 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Size" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total**: $(du -sh dist/ | cut -f1)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Assets**: $(du -sh dist/assets/ | cut -f1)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Largest Files" >> $GITHUB_STEP_SUMMARY
+        find dist/assets -type f -name "*.js" -o -name "*.css" | xargs ls -lh | sort -k5 -hr | head -10 | awk '{print "- "$9": "$5}' >> $GITHUB_STEP_SUMMARY

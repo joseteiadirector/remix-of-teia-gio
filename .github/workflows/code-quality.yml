@@ -1,0 +1,70 @@
+name: Code Quality Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * 1' # Toda segunda-feira às 02:00
+
+jobs:
+  analyze:
+    name: Code Quality Metrics
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Analyze code complexity
+      run: |
+        echo "📊 Análise de complexidade do código..."
+        echo "Total de arquivos TypeScript:"
+        find src -name "*.ts" -o -name "*.tsx" | wc -l
+        echo "Linhas de código:"
+        find src -name "*.ts" -o -name "*.tsx" | xargs wc -l | tail -1
+        
+    - name: Check for TODO/FIXME
+      run: |
+        echo "🔍 Procurando TODOs e FIXMEs..."
+        grep -r "TODO\|FIXME" src/ || echo "✅ Nenhum TODO/FIXME encontrado"
+        
+    - name: Check for console.logs
+      run: |
+        echo "🔍 Verificando console.logs..."
+        grep -r "console.log" src/ --exclude-dir=node_modules || echo "✅ Nenhum console.log encontrado"
+        
+    - name: Analyze dependencies
+      run: |
+        echo "📦 Análise de dependências..."
+        npm list --depth=0
+        
+    - name: Check for unused dependencies
+      run: |
+        echo "🔍 Verificando dependências não utilizadas..."
+        npx depcheck || echo "⚠️ Algumas dependências podem não estar sendo usadas"
+      continue-on-error: true
+      
+    - name: Generate quality report
+      run: |
+        echo "## 📊 Code Quality Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Métricas Gerais" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total de arquivos TS/TSX**: $(find src -name '*.ts' -o -name '*.tsx' | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Linhas de código**: $(find src -name '*.ts' -o -name '*.tsx' | xargs wc -l | tail -1 | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
+        echo "- **Componentes**: $(find src/components -name '*.tsx' | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Pages**: $(find src/pages -name '*.tsx' | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Hooks**: $(find src/hooks -name '*.ts' | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Utils**: $(find src/utils -name '*.ts' | wc -l)" >> $GITHUB_STEP_SUMMARY

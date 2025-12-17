@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "framework": "Framework",
+    "modules": "Modules",
+    "documentation": "Documentation",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "getStarted": "Get Started",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "title": "Teia GEO",
+    "subtitle": "Generative Engine Optimization Intelligence Platform",
+    "description": "Advanced monitoring and optimization system for brand presence in Generative AI (LLM) responses",
+    "getStarted": "Get Started Now",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "title": "Key Features",
+    "multiLLM": {
+      "title": "Multi-LLM Monitoring",
+      "description": "Track your presence across all major LLMs in the market"
+    },
+    "realtime": {
+      "title": "Real-time Analysis",
+      "description": "Live data updates with automatic synchronization"
+    },
+    "scientific": {
+      "title": "Scientific Methodology",
+      "description": "Based on academic research and industry standards"
+    }
+  },
+  "framework": {
+    "title": "GEO Framework",
+    "subtitle": "5 Core Pillars",
+    "pillars": {
+      "technical": "Technical Foundation",
+      "semantic": "Semantic Structure",
+      "authority": "Cognitive Authority",
+      "conversational": "Conversational Relevance",
+      "intelligence": "Strategic Intelligence"
+    }
+  },
+  "igo": {
+    "title": "IGO Framework",
+    "subtitle": "Intelligence-Grounded Optimization",
+    "description": "Proprietary conversational intelligence-based optimization system",
+    "metrics": {
+      "cpi": "CPI - Conversational Presence Index",
+      "ice": "ICE - Engagement Consistency Index",
+      "gap": "GAP - Positioning Gap Analysis",
+      "stability": "Cognitive Stability"
+    }
+  },
+  "cta": {
+    "title": "Ready to Optimize Your LLM Presence?",
+    "subtitle": "Start monitoring and improving your AI response visibility today",
+    "button": "Start Free Trial"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "managedBy": "Managed by",
+    "contact": "Contact"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import"
+  },
+  "dashboard": {
+    "welcome": "Welcome to Teia GEO",
+    "overview": "Overview",
+    "metrics": "Metrics",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "metrics": {
+    "geoScore": "GEO Score",
+    "cpi": "CPI",
+    "ice": "ICE",
+    "gap": "GAP",
+    "cognitiveStability": "Cognitive Stability",
+    "mentions": "Mentions",
+    "queries": "Queries",
+    "visibility": "Visibility"
+  }
+}

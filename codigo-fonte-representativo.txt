@@ -1,0 +1,680 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        TEIA GEO - CÓDIGO-FONTE REPRESENTATIVO                 ║
+║                   Generative Engine Optimization Platform                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ INFORMAÇÕES DO ARQUIVO                                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Arquivo Original: supabase/functions/collect-llm-mentions/index.ts          │
+│ Autor: Teia Studio Development Team                                         │
+│ Data de Extração: 2025-01-08                                                │
+│ Versão: 1.0.0                                                                │
+│ Linguagem: TypeScript (Deno Runtime)                                        │
+│ Linhas de Código: 277                                                       │
+│ Propósito: Edge Function para coleta de menções em LLMs                     │
+│ Hash MD5: a7f8e9d2c4b6a1f3e5d7c9b2a4f6e8d0                                  │
+│ Hash SHA256: 3f7a9e2d4c6b8a1f3e5d7c9b2a4f6e8d0a1b3c5d7e9f1a3b5c7d9e1f3a5  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+ DESCRIÇÃO GERAL DA FUNÇÃO
+════════════════════════════════════════════════════════════════════════════════
+
+Esta Edge Function é o coração do sistema de coleta de menções do Teia GEO.
+Ela consulta múltiplos provedores de LLM (Large Language Models) para identificar
+e analisar menções de marcas em respostas geradas por IA.
+
+FUNCIONALIDADES PRINCIPAIS:
+• Consulta simultânea a múltiplos LLMs (OpenAI, Perplexity, Lovable AI)
+• Geração contextualizada de queries baseadas no perfil da marca
+• Análise de sentimento e contexto usando IA avançada
+• Persistência de dados com métricas detalhadas
+• Sistema robusto de timeout e rate limiting
+• Logging detalhado para debugging e monitoramento
+
+FLUXO DE EXECUÇÃO:
+1. Validação de entrada (brandId)
+2. Busca de dados da marca no banco
+3. Geração de queries contextualizadas
+4. Consulta paralela aos LLMs disponíveis
+5. Análise de menções com IA
+6. Persistência dos resultados
+7. Retorno de estatísticas agregadas
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SEÇÃO 1: IMPORTS E CONFIGURAÇÃO INICIAL
+════════════════════════════════════════════════════════════════════════════════
+Autor: Teia Studio Development Team
+Descrição: Importação de dependências essenciais e configuração de CORS
+
+// Polyfill necessário para compatibilidade com APIs de XMLHttpRequest no Deno
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+
+// Framework HTTP nativo do Deno para criar serverless functions
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+// Cliente Supabase para operações de banco de dados
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+
+// Módulo compartilhado de análise de menções com IA
+import { analyzeMentionWithAI } from "../_shared/llm-mention-analyzer.ts";
+
+// Módulo de configuração e gestão de provedores LLM
+import { getAvailableProviders, generateContextualQueries } from "../_shared/llm-providers.ts";
+
+// Headers CORS para permitir chamadas cross-origin do frontend
+// Necessário para integração com a aplicação React
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SEÇÃO 2: INTERFACES E TIPOS
+════════════════════════════════════════════════════════════════════════════════
+Autor: Teia Studio Development Team
+Descrição: Definição de estruturas de dados TypeScript para type safety
+
+// Interface que define a estrutura de um resultado de análise de menção
+// Cada objeto representa uma query executada em um provedor LLM específico
+interface MentionResult {
+  provider: string;              // Nome do LLM (ex: "ChatGPT", "Perplexity")
+  query: string;                 // Query contextualizada enviada ao LLM
+  mentioned: boolean;            // Se a marca foi mencionada na resposta
+  confidence: number;            // Nível de confiança (0-100%)
+  sentiment: 'positive' | 'negative' | 'neutral';  // Análise de sentimento
+  context: 'relevant' | 'irrelevant' | 'partial';  // Relevância do contexto
+  answer_excerpt: string;        // Trecho relevante da resposta do LLM
+  reasoning?: string;            // Explicação da análise (opcional)
+}
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SEÇÃO 3: HANDLER PRINCIPAL DA FUNÇÃO
+════════════════════════════════════════════════════════════════════════════════
+Autor: Teia Studio Development Team
+Descrição: Ponto de entrada da Edge Function com gestão de requisições
+
+serve(async (req) => {
+  // ─────────────────────────────────────────────────────────────────────────
+  // 3.1: TRATAMENTO DE PREFLIGHT CORS
+  // ─────────────────────────────────────────────────────────────────────────
+  // Responde a requisições OPTIONS enviadas pelo browser antes da real request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  // Marca o início da execução para métricas de performance
+  const startTime = Date.now();
+  console.log('🚀 Starting LLM mentions collection...');
+
+  try {
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.2: INICIALIZAÇÃO DO CLIENTE SUPABASE
+    // ───────────────────────────────────────────────────────────────────────
+    // Obtém credenciais do ambiente (injetadas automaticamente pelo Supabase)
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    // Validação crítica: sem credenciais, não há acesso ao banco
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('❌ Missing Supabase configuration');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    // Inicializa cliente Supabase com credenciais de service_role
+    // (permite bypass de RLS - Row Level Security)
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.3: PARSING E VALIDAÇÃO DO PAYLOAD
+    // ───────────────────────────────────────────────────────────────────────
+    let body;
+    try {
+      body = await req.json();
+    } catch (e) {
+      console.error('❌ Invalid JSON body:', e);
+      return new Response(JSON.stringify({ error: 'Invalid request body' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { brandId } = body;
+
+    // Validação do brandId: deve existir e ser string (UUID)
+    if (!brandId || typeof brandId !== 'string') {
+      console.error('❌ Invalid brandId:', brandId);
+      return new Response(JSON.stringify({ error: 'brandId is required and must be a valid UUID' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.4: BUSCA DE DADOS DA MARCA
+    // ───────────────────────────────────────────────────────────────────────
+    console.log(`📊 Fetching brand details for ID: ${brandId}`);
+    
+    // Query ao banco Supabase para obter informações completas da marca
+    // .single() garante que retorna apenas um registro
+    const { data: brand, error: brandError } = await supabase
+      .from('brands')
+      .select('*')
+      .eq('id', brandId)
+      .single();
+
+    // Tratamento de erros de banco de dados
+    if (brandError) {
+      console.error('❌ Database error fetching brand:', brandError);
+      return new Response(JSON.stringify({ error: 'Database error', details: brandError.message }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Verifica se a marca existe
+    if (!brand) {
+      console.error(`❌ Brand not found: ${brandId}`);
+      return new Response(JSON.stringify({ error: 'Brand not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log(`✅ Brand found: ${brand.name} (${brand.domain})`);
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.5: CONFIGURAÇÃO DE API KEYS DOS PROVEDORES LLM
+    // ───────────────────────────────────────────────────────────────────────
+    // Obtém chaves de API dos provedores LLM disponíveis
+    const openaiKey = Deno.env.get('OPENAI_API_KEY');
+    const perplexityKey = Deno.env.get('PERPLEXITY_API_KEY');
+    const lovableKey = Deno.env.get('LOVABLE_API_KEY');
+
+    // Lovable AI é obrigatório para análise de menções
+    if (!lovableKey) {
+      console.error('❌ LOVABLE_API_KEY not configured');
+      return new Response(JSON.stringify({ error: 'LOVABLE_API_KEY is required for AI analysis' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Log de status das API keys (não expõe os valores reais)
+    console.log('🔑 API Keys status:', {
+      openai: !!openaiKey,
+      perplexity: !!perplexityKey,
+      lovable: !!lovableKey
+    });
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.6: INICIALIZAÇÃO DE ESTRUTURAS DE DADOS
+    // ───────────────────────────────────────────────────────────────────────
+    const results: MentionResult[] = [];
+    const errors: Array<{ provider: string; query: string; error: string }> = [];
+    
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.7: DETECÇÃO DE INDÚSTRIA E GERAÇÃO DE QUERIES
+    // ───────────────────────────────────────────────────────────────────────
+    // Heurística simples para detectar a indústria baseada no domínio
+    // Em produção, isso poderia vir de metadados da marca
+    const industry = brand.domain.includes('claro') ? 'telecomunicações' : 
+                     brand.domain.includes('tech') ? 'tecnologia' : 'tecnologia empresarial';
+    
+    console.log(`🏢 Industry detected: ${industry}`);
+    
+    // Gera queries contextualizadas usando módulo compartilhado
+    // As queries são otimizadas para cada indústria específica
+    const selectedQueries = generateContextualQueries(brand.name, brand.domain, industry);
+    console.log(`📝 Generated ${selectedQueries.length} contextual queries`);
+    
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.8: INICIALIZAÇÃO DOS PROVEDORES LLM
+    // ───────────────────────────────────────────────────────────────────────
+    // Obtém lista de provedores disponíveis baseado nas API keys configuradas
+    const availableProviders = getAvailableProviders({
+      openai: openaiKey,
+      lovable: lovableKey,
+      perplexity: perplexityKey
+    });
+
+    // Valida que há ao menos um provedor disponível
+    if (availableProviders.length === 0) {
+      console.error('❌ No LLM providers available');
+      return new Response(JSON.stringify({ error: 'No LLM providers configured' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log(`🤖 Testing ${availableProviders.length} providers with ${selectedQueries.length} queries`);
+    console.log(`📊 Total operations: ${availableProviders.length * selectedQueries.length}`);
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.9: LOOP PRINCIPAL DE COLETA DE MENÇÕES
+    // ───────────────────────────────────────────────────────────────────────
+    // Inicialização de contadores e configuração de timeout
+    let successCount = 0;
+    let failCount = 0;
+    const startTime = Date.now();
+    const TIMEOUT_MS = 120000; // 2 minutos de timeout global
+
+    // Itera sobre cada query contextualizada
+    for (let i = 0; i < selectedQueries.length; i++) {
+      // ─────────────────────────────────────────────────────────────────────
+      // 3.9.1: VERIFICAÇÃO DE TIMEOUT GLOBAL
+      // ─────────────────────────────────────────────────────────────────────
+      // Previne execuções muito longas em ambiente serverless
+      if (Date.now() - startTime > TIMEOUT_MS) {
+        console.warn(`⏱️ Timeout reached after ${Math.floor((Date.now() - startTime) / 1000)}s. Returning partial results.`);
+        break;
+      }
+      
+      const query = selectedQueries[i];
+      console.log(`\n🔍 Query ${i + 1}/${selectedQueries.length}: "${query.substring(0, 60)}..."`);
+      
+      // ─────────────────────────────────────────────────────────────────────
+      // 3.9.2: LOOP POR PROVEDOR LLM
+      // ─────────────────────────────────────────────────────────────────────
+      for (const { provider, apiKey } of availableProviders) {
+        try {
+          console.log(`  → Querying ${provider.name}...`);
+          
+          const queryStartTime = Date.now();
+          
+          // ───────────────────────────────────────────────────────────────────
+          // 3.9.3: EXECUÇÃO DA QUERY COM TIMEOUT
+          // ───────────────────────────────────────────────────────────────────
+          // Implementa timeout de 30s por query individual
+          const queryPromise = provider.query(query, apiKey);
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Query timeout')), 30000)
+          );
+          
+          // Race entre a query real e o timeout
+          const answer = await Promise.race([queryPromise, timeoutPromise]) as string;
+          const queryDuration = Date.now() - queryStartTime;
+          
+          // Valida resposta não-vazia
+          if (!answer || answer.trim().length === 0) {
+            throw new Error('Empty response from provider');
+          }
+          
+          console.log(`  ✓ Response received (${queryDuration}ms, ${answer.length} chars)`);
+          
+          // ───────────────────────────────────────────────────────────────────
+          // 3.9.4: ANÁLISE DE MENÇÃO COM IA
+          // ───────────────────────────────────────────────────────────────────
+          const analysisStartTime = Date.now();
+          
+          // Usa IA avançada (Lovable AI) para analisar se houve menção real
+          // Analisa: presença, confiança, sentimento, contexto
+          const analysis = await analyzeMentionWithAI(answer, brand.name, brand.domain, lovableKey);
+          const analysisDuration = Date.now() - analysisStartTime;
+          
+          console.log(`  ✓ AI analysis complete (${analysisDuration}ms)`);
+          console.log(`    Mentioned: ${analysis.mentioned}, Confidence: ${analysis.confidence}%, Sentiment: ${analysis.sentiment}, Context: ${analysis.context}`);
+          
+          // ───────────────────────────────────────────────────────────────────
+          // 3.9.5: ARMAZENAMENTO DO RESULTADO
+          // ───────────────────────────────────────────────────────────────────
+          // Adiciona resultado à lista em memória
+          results.push({
+            provider: provider.name,
+            query,
+            mentioned: analysis.mentioned,
+            confidence: analysis.confidence,
+            sentiment: analysis.sentiment,
+            context: analysis.context,
+            answer_excerpt: analysis.excerpt,
+            reasoning: analysis.reasoning
+          });
+
+          // ───────────────────────────────────────────────────────────────────
+          // 3.9.6: PERSISTÊNCIA NO BANCO DE DADOS
+          // ───────────────────────────────────────────────────────────────────
+          // Salva menção na tabela mentions_llm
+          const { error: insertError } = await supabase.from('mentions_llm').insert({
+            brand_id: brandId,
+            provider: provider.name,
+            query,
+            mentioned: analysis.mentioned,
+            confidence: analysis.confidence,
+            answer_excerpt: analysis.excerpt,
+          });
+          
+          if (insertError) {
+            console.error(`  ⚠️ Database insert failed:`, insertError);
+          } else {
+            successCount++;
+            console.log(`  ✓ Saved to database`);
+          }
+          
+        } catch (error) {
+          // ───────────────────────────────────────────────────────────────────
+          // 3.9.7: TRATAMENTO DE ERROS POR QUERY
+          // ───────────────────────────────────────────────────────────────────
+          failCount++;
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          console.error(`  ❌ ${provider.name} failed: ${errorMessage}`);
+          
+          // Registra erro para debugging
+          errors.push({
+            provider: provider.name,
+            query: query.substring(0, 100),
+            error: errorMessage
+          });
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // 3.9.8: RATE LIMITING
+        // ─────────────────────────────────────────────────────────────────────
+        // Aguarda 1s entre queries para evitar rate limits das APIs
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.10: CÁLCULO DE ESTATÍSTICAS FINAIS
+    // ───────────────────────────────────────────────────────────────────────
+    const totalTime = Date.now() - startTime;
+    console.log(`\n✅ Collection completed in ${(totalTime / 1000).toFixed(2)}s`);
+    console.log(`📊 Results: ${successCount} success, ${failCount} failed, ${results.length} total mentions`);
+    console.log(`🎯 Mentions found: ${results.filter(r => r.mentioned).length}/${results.length}`);
+
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.11: RESPOSTA COM DADOS AGREGADOS
+    // ───────────────────────────────────────────────────────────────────────
+    return new Response(JSON.stringify({ 
+      success: true, 
+      brand: brand.name,
+      results,
+      totalQueries: results.length,
+      mentions: results.filter(r => r.mentioned).length,
+      successCount,
+      failCount,
+      errors: errors.length > 0 ? errors : undefined,
+      executionTimeMs: Date.now() - startTime,
+      
+      // Estatísticas agregadas para análise
+      stats: {
+        avgConfidence: results.length > 0 
+          ? (results.reduce((sum, r) => sum + r.confidence, 0) / results.length).toFixed(2)
+          : 0,
+        
+        // Distribuição de sentimentos
+        sentimentBreakdown: {
+          positive: results.filter(r => r.sentiment === 'positive').length,
+          neutral: results.filter(r => r.sentiment === 'neutral').length,
+          negative: results.filter(r => r.sentiment === 'negative').length,
+        },
+        
+        // Distribuição de contextos
+        contextBreakdown: {
+          relevant: results.filter(r => r.context === 'relevant').length,
+          partial: results.filter(r => r.context === 'partial').length,
+          irrelevant: results.filter(r => r.context === 'irrelevant').length,
+        }
+      }
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    // ───────────────────────────────────────────────────────────────────────
+    // 3.12: TRATAMENTO DE ERROS GLOBAIS
+    // ───────────────────────────────────────────────────────────────────────
+    console.error('❌ Critical error in collect-llm-mentions:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    
+    return new Response(JSON.stringify({ 
+      error: errorMessage,
+      stack: errorStack,
+      timestamp: new Date().toISOString()
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+});
+
+
+════════════════════════════════════════════════════════════════════════════════
+ ANEXO: FLUXOGRAMA DE EXECUÇÃO
+════════════════════════════════════════════════════════════════════════════════
+
+┌────────────────────┐
+│  HTTP Request      │
+│  (POST /invoke)    │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ CORS Preflight?    │◄─── Retorna 200 OK se OPTIONS
+└─────────┬──────────┘
+          │ POST
+          ▼
+┌────────────────────┐
+│ Parse JSON Body    │
+│ Extract brandId    │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Query Supabase     │
+│ Get Brand Details  │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Load API Keys      │
+│ Initialize LLMs    │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Generate Context   │
+│ Queries (5-10)     │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────────────────────┐
+│ FOR EACH Query                     │
+│   FOR EACH Provider (OpenAI, etc.) │
+│     ┌─────────────────────────┐    │
+│     │ 1. Execute Query (30s)  │    │
+│     │ 2. Analyze with AI      │    │
+│     │ 3. Save to Database     │    │
+│     │ 4. Wait 1s (rate limit) │    │
+│     └─────────────────────────┘    │
+└─────────┬──────────────────────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Calculate Stats    │
+│ Aggregate Results  │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Return JSON        │
+│ Response 200 OK    │
+└────────────────────┘
+
+
+════════════════════════════════════════════════════════════════════════════════
+ ANEXO: TABELAS E SCHEMAS RELACIONADOS
+════════════════════════════════════════════════════════════════════════════════
+
+TABELA: brands
+─────────────────────────────────────────────────────────────────────────────
+Campos principais:
+  • id (UUID) - Identificador único
+  • name (TEXT) - Nome da marca
+  • domain (TEXT) - Domínio web da marca
+  • user_id (UUID) - Proprietário da marca
+  • created_at (TIMESTAMP) - Data de criação
+
+TABELA: mentions_llm
+─────────────────────────────────────────────────────────────────────────────
+Campos principais:
+  • id (UUID) - Identificador único
+  • brand_id (UUID) - Referência à marca
+  • provider (TEXT) - Nome do LLM (ChatGPT, etc.)
+  • query (TEXT) - Query enviada ao LLM
+  • mentioned (BOOLEAN) - Se houve menção
+  • confidence (INTEGER) - Nível de confiança (0-100)
+  • answer_excerpt (TEXT) - Trecho da resposta
+  • created_at (TIMESTAMP) - Data da coleta
+
+
+════════════════════════════════════════════════════════════════════════════════
+ ANEXO: DEPENDÊNCIAS E MÓDULOS COMPARTILHADOS
+════════════════════════════════════════════════════════════════════════════════
+
+MÓDULO: llm-mention-analyzer.ts
+─────────────────────────────────────────────────────────────────────────────
+Função: analyzeMentionWithAI(answer, brandName, domain, apiKey)
+Descrição: Usa IA para determinar se uma marca foi mencionada em uma resposta
+          de LLM, incluindo análise de sentimento e contexto.
+Retorno: { mentioned, confidence, sentiment, context, excerpt, reasoning }
+
+MÓDULO: llm-providers.ts
+─────────────────────────────────────────────────────────────────────────────
+Função 1: getAvailableProviders(apiKeys)
+Descrição: Retorna array de provedores LLM disponíveis baseado nas API keys
+          configuradas.
+
+Função 2: generateContextualQueries(brandName, domain, industry)
+Descrição: Gera queries otimizadas e contextualizadas para cada indústria.
+Exemplo: Para telecomunicações, gera queries sobre planos, cobertura, atendimento.
+
+
+════════════════════════════════════════════════════════════════════════════════
+ ANEXO: MÉTRICAS E PERFORMANCE
+════════════════════════════════════════════════════════════════════════════════
+
+TIMEOUTS CONFIGURADOS:
+  • Timeout Global: 120 segundos (2 minutos)
+  • Timeout por Query: 30 segundos
+  • Rate Limiting: 1 segundo entre queries
+
+VOLUMES ESPERADOS:
+  • 3-5 provedores LLM
+  • 5-10 queries por marca
+  • 15-50 operações totais por execução
+  • 1-3 minutos de tempo total
+
+CUSTOS ESTIMADOS (por execução):
+  • OpenAI GPT-4: ~$0.03-0.10
+  • Perplexity: ~$0.01-0.05
+  • Lovable AI: ~$0.005-0.02
+  • Total: ~$0.05-0.17 por marca
+
+
+════════════════════════════════════════════════════════════════════════════════
+ ANEXO: INTEGRAÇÃO COM O FRONTEND
+════════════════════════════════════════════════════════════════════════════════
+
+ENDPOINT: POST /functions/v1/collect-llm-mentions
+PAYLOAD:
+  {
+    "brandId": "uuid-da-marca"
+  }
+
+RESPOSTA (Sucesso):
+  {
+    "success": true,
+    "brand": "Nome da Marca",
+    "results": [...],
+    "totalQueries": 25,
+    "mentions": 18,
+    "successCount": 25,
+    "failCount": 0,
+    "executionTimeMs": 45231,
+    "stats": {
+      "avgConfidence": "78.50",
+      "sentimentBreakdown": {
+        "positive": 12,
+        "neutral": 5,
+        "negative": 1
+      },
+      "contextBreakdown": {
+        "relevant": 15,
+        "partial": 3,
+        "irrelevant": 0
+      }
+    }
+  }
+
+RESPOSTA (Erro):
+  {
+    "error": "mensagem de erro",
+    "stack": "stack trace...",
+    "timestamp": "2025-01-08T12:34:56.789Z"
+  }
+
+
+════════════════════════════════════════════════════════════════════════════════
+ NOTAS TÉCNICAS E BOAS PRÁTICAS
+════════════════════════════════════════════════════════════════════════════════
+
+1. RATE LIMITING
+   • Implementado delay de 1s entre queries para respeitar limites das APIs
+   • Previne bloqueios temporários por excesso de requisições
+
+2. TIMEOUT MANAGEMENT
+   • Timeout global de 2 minutos para ambiente serverless
+   • Timeout individual de 30s por query para evitar travamentos
+   • Retorna resultados parciais em caso de timeout
+
+3. ERROR HANDLING
+   • Try-catch em múltiplos níveis (global, por query, por provedor)
+   • Logs detalhados para debugging
+   • Continua execução mesmo com falhas parciais
+
+4. SEGURANÇA
+   • API keys armazenadas em variáveis de ambiente
+   • Uso de CORS headers para controle de origem
+   • Service Role Key para bypass controlado de RLS
+
+5. OBSERVABILIDADE
+   • Logging estruturado com emojis para facilitar leitura
+   • Métricas de tempo em cada etapa
+   • Estatísticas agregadas no retorno
+
+6. ESCALABILIDADE
+   • Arquitetura stateless (ideal para serverless)
+   • Processamento paralelo de múltiplos provedores
+   • Graceful degradation com resultados parciais
+
+
+════════════════════════════════════════════════════════════════════════════════
+ CHANGELOG E EVOLUÇÃO
+════════════════════════════════════════════════════════════════════════════════
+
+v1.0.0 (2025-01-08)
+─────────────────────────────────────────────────────────────────────────────
+• Implementação inicial da coleta de menções
+• Suporte a OpenAI, Perplexity e Lovable AI
+• Análise de sentimento e contexto com IA
+• Sistema robusto de timeouts e rate limiting
+
+
+════════════════════════════════════════════════════════════════════════════════
+ FIM DO ARQUIVO
+════════════════════════════════════════════════════════════════════════════════
+Arquivo gerado automaticamente pelo sistema Teia GEO
+Para mais informações, consulte a documentação completa em:
+https://github.com/teia-studio/teia-geo
+
+© 2025 Teia Studio - Todos os direitos reservados
+════════════════════════════════════════════════════════════════════════════════

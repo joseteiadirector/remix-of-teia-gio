@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "framework": "Framework",
+    "modules": "Módulos",
+    "documentation": "Documentação",
+    "dashboard": "Dashboard",
+    "login": "Entrar",
+    "getStarted": "Começar",
+    "signOut": "Sair"
+  },
+  "hero": {
+    "title": "Teia GEO",
+    "subtitle": "Plataforma de Inteligência em Generative Engine Optimization",
+    "description": "Sistema avançado de monitoramento e otimização da presença de marcas em respostas de Inteligências Artificiais Generativas (LLMs)",
+    "getStarted": "Começar Agora",
+    "learnMore": "Saiba Mais"
+  },
+  "features": {
+    "title": "Recursos Principais",
+    "multiLLM": {
+      "title": "Monitoramento Multi-LLM",
+      "description": "Acompanhe sua presença em todos os principais LLMs do mercado"
+    },
+    "realtime": {
+      "title": "Análise em Tempo Real",
+      "description": "Dados atualizados em tempo real com sincronização automática"
+    },
+    "scientific": {
+      "title": "Metodologia Científica",
+      "description": "Baseado em pesquisas acadêmicas e padrões da indústria"
+    }
+  },
+  "framework": {
+    "title": "Framework GEO",
+    "subtitle": "5 Pilares Fundamentais",
+    "pillars": {
+      "technical": "Base Técnica",
+      "semantic": "Estrutura Semântica",
+      "authority": "Autoridade Cognitiva",
+      "conversational": "Relevância Conversacional",
+      "intelligence": "Inteligência Estratégica"
+    }
+  },
+  "igo": {
+    "title": "IGO Framework",
+    "subtitle": "Intelligence-Grounded Optimization",
+    "description": "Sistema proprietário de otimização baseado em inteligência conversacional",
+    "metrics": {
+      "cpi": "CPI - Índice de Presença Conversacional",
+      "ice": "ICE - Índice de Consistência de Engajamento",
+      "gap": "GAP - Análise de Lacunas de Posicionamento",
+      "stability": "Estabilidade Cognitiva"
+    }
+  },
+  "cta": {
+    "title": "Pronto para Otimizar sua Presença em LLMs?",
+    "subtitle": "Comece a monitorar e melhorar sua visibilidade nas respostas de IA hoje mesmo",
+    "button": "Começar Gratuitamente"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados",
+    "managedBy": "Gerenciado por",
+    "contact": "Contato"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar"
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo ao Teia GEO",
+    "overview": "Visão Geral",
+    "metrics": "Métricas",
+    "reports": "Relatórios",
+    "settings": "Configurações"
+  },
+  "metrics": {
+    "geoScore": "Score GEO",
+    "cpi": "CPI",
+    "ice": "ICE",
+    "gap": "GAP",
+    "cognitiveStability": "Estabilidade Cognitiva",
+    "mentions": "Menções",
+    "queries": "Consultas",
+    "visibility": "Visibilidade"
+  }
+}

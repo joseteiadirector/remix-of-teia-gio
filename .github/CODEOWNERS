@@ -1,0 +1,25 @@
+# Code Owners para Teia GEO
+# Documentação: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Owner global - revisa tudo por padrão
+* @seu-usuario-github
+
+# Frontend Components
+/src/components/** @seu-usuario-github
+/src/pages/** @seu-usuario-github
+
+# Backend / Edge Functions
+/supabase/functions/** @seu-usuario-github
+
+# Configurações críticas
+/.github/** @seu-usuario-github
+/supabase/migrations/** @seu-usuario-github
+*.config.* @seu-usuario-github
+
+# Documentação
+*.md @seu-usuario-github
+/docs/** @seu-usuario-github
+
+# Segurança e CI/CD
+/.github/workflows/** @seu-usuario-github
+/SECURITY.md @seu-usuario-github
