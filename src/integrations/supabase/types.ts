@@ -623,7 +623,15 @@ export type Database = {
           total_mentions?: number | null
           total_queries?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "geo_pillars_monthly_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       geo_scores: {
         Row: {
