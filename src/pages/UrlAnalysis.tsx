@@ -783,12 +783,15 @@ export default function UrlAnalysis() {
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-4 md:space-y-6">
+      {/* Premium Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
-              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-primary" />
-              <span className="hidden sm:inline">Análise de URL em Tempo Real</span>
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-purple-600 shadow-lg" style={{ boxShadow: '0 0 20px rgba(147, 51, 234, 0.4)' }}>
+                <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              </div>
+              <span className="hidden sm:inline bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">Análise de URL em Tempo Real</span>
               <span className="sm:hidden">Análise de URL</span>
             </h1>
             <DataSourceBadge type="technical" />
@@ -800,7 +803,12 @@ export default function UrlAnalysis() {
         
         {user && (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => handleExportHistory()}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleExportHistory()}
+              className="border-primary/30 hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+            >
               <Download className="w-4 h-4 sm:mr-2" />
               <span className="hidden sm:inline">Exportar Histórico (PDF)</span>
               <span className="sm:hidden">PDF</span>
@@ -883,153 +891,203 @@ export default function UrlAnalysis() {
 
       {analysis && (
         <div className="space-y-4 md:space-y-6 animate-fade-in">
-          {/* Overall Score */}
-          <Card className="p-4 md:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl md:text-2xl font-bold">Score Geral</h2>
-              <div className={`text-3xl md:text-4xl font-bold ${getScoreColor(analysis.score)}`}>
-                {analysis.score}/100
+          {/* Overall Score - Premium */}
+          <Card className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur-xl border-primary/20" style={{ boxShadow: '0 0 40px rgba(147, 51, 234, 0.15)' }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
+            <div className="relative p-4 md:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl md:text-2xl font-bold">Score Geral</h2>
+                <div className={`text-3xl md:text-4xl font-bold ${getScoreColor(analysis.score)}`} style={{ textShadow: analysis.score >= 60 ? '0 0 20px rgba(34, 197, 94, 0.3)' : '0 0 20px rgba(239, 68, 68, 0.3)' }}>
+                  {analysis.score}/100
+                </div>
               </div>
+              <div className="relative h-3 bg-muted/50 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-1000 ${
+                    analysis.score >= 80 ? 'bg-gradient-to-r from-green-500 to-emerald-400' :
+                    analysis.score >= 60 ? 'bg-gradient-to-r from-yellow-500 to-amber-400' :
+                    'bg-gradient-to-r from-red-500 to-rose-400'
+                  }`}
+                  style={{ 
+                    width: `${analysis.score}%`,
+                    boxShadow: analysis.score >= 60 ? '0 0 15px rgba(34, 197, 94, 0.5)' : '0 0 15px rgba(239, 68, 68, 0.5)'
+                  }}
+                />
+              </div>
+              <p className="mt-4 text-muted-foreground">{analysis.summary}</p>
             </div>
-            <Progress value={analysis.score} className="h-3" />
-            <p className="mt-4 text-muted-foreground">{analysis.summary}</p>
           </Card>
 
-          {/* Visão 360° */}
-          <Card className="p-6 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="p-2 bg-primary/20 rounded-full">
-                <TrendingUp className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold">Visão 360° - Análise Completa</h2>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-6">
-              <div className="text-center">
-                <div className="text-sm text-muted-foreground mb-2">GEO Score</div>
-                <div className={`text-4xl font-bold ${getScoreColor(analysis.geoOptimization.score)}`}>
-                  {analysis.geoOptimization.score}
+          {/* Visão 360° - Premium */}
+          <Card className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur-xl border-primary/20" style={{ boxShadow: '0 0 40px rgba(147, 51, 234, 0.15)' }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/20 to-transparent rounded-bl-full" />
+            <div className="relative p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="p-2 bg-gradient-to-br from-primary to-purple-600 rounded-xl shadow-lg" style={{ boxShadow: '0 0 15px rgba(147, 51, 234, 0.4)' }}>
+                  <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">Otimização para IAs</div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">Visão 360° - Análise Completa</h2>
               </div>
 
-              <div className="text-center flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-sm text-muted-foreground mb-2">Gap</div>
-                  <div className={`text-3xl font-bold ${
-                    Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) > 20 
-                      ? 'text-red-600' 
-                      : Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) > 10
-                      ? 'text-yellow-600'
-                      : 'text-green-600'
-                  }`}>
-                    {Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score)}
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                <div className="text-center p-4 rounded-xl bg-background/50 border border-purple-500/20" style={{ boxShadow: '0 0 20px rgba(147, 51, 234, 0.1)' }}>
+                  <div className="text-sm text-muted-foreground mb-2">GEO Score</div>
+                  <div className={`text-4xl font-bold ${getScoreColor(analysis.geoOptimization.score)}`} style={{ textShadow: '0 0 15px currentColor' }}>
+                    {analysis.geoOptimization.score}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">Diferença</div>
+                  <div className="text-xs text-muted-foreground mt-1">Otimização para IAs</div>
+                </div>
+
+                <div className="text-center flex items-center justify-center">
+                  <div className="text-center p-4 rounded-xl bg-background/50 border border-yellow-500/20" style={{ boxShadow: '0 0 20px rgba(234, 179, 8, 0.1)' }}>
+                    <div className="text-sm text-muted-foreground mb-2">Gap</div>
+                    <div className={`text-3xl font-bold ${
+                      Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) > 20 
+                        ? 'text-red-500' 
+                        : Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) > 10
+                        ? 'text-yellow-500'
+                        : 'text-green-500'
+                    }`} style={{ textShadow: '0 0 15px currentColor' }}>
+                      {Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score)}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">Diferença</div>
+                  </div>
+                </div>
+
+                <div className="text-center p-4 rounded-xl bg-background/50 border border-orange-500/20" style={{ boxShadow: '0 0 20px rgba(249, 115, 22, 0.1)' }}>
+                  <div className="text-sm text-muted-foreground mb-2">SEO Score</div>
+                  <div className={`text-4xl font-bold ${getScoreColor(analysis.seoOptimization.score)}`} style={{ textShadow: '0 0 15px currentColor' }}>
+                    {analysis.seoOptimization.score}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">Otimização Tradicional</div>
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="text-sm text-muted-foreground mb-2">SEO Score</div>
-                <div className={`text-4xl font-bold ${getScoreColor(analysis.seoOptimization.score)}`}>
-                  {analysis.seoOptimization.score}
-                </div>
-                <div className="text-xs text-muted-foreground mt-1">Otimização Tradicional</div>
+              <div className="bg-background/50 backdrop-blur rounded-xl p-4 border border-border/30">
+                <h4 className="font-semibold mb-3 flex items-center gap-2">
+                  <Target className="w-4 h-4 text-primary" style={{ filter: 'drop-shadow(0 0 4px rgba(147, 51, 234, 0.5))' }} />
+                  Diagnóstico Estratégico
+                </h4>
+                {analysis.geoOptimization.score > analysis.seoOptimization.score + 15 ? (
+                  <p className="text-sm flex items-start gap-2">
+                    <Sparkles className="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(147, 51, 234, 0.5))' }} />
+                    <span><strong>Forte em GEO, fraco em SEO.</strong> Seu site está otimizado para IAs mas pode estar perdendo tráfego orgânico tradicional. 
+                    Priorize: melhorias técnicas de SEO (H1, meta tags, estrutura).</span>
+                  </p>
+                ) : analysis.seoOptimization.score > analysis.geoOptimization.score + 15 ? (
+                  <p className="text-sm flex items-start gap-2">
+                    <Search className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(59, 130, 246, 0.5))' }} />
+                    <span><strong>Forte em SEO, fraco em GEO.</strong> Você domina o Google mas IAs não estão citando seu conteúdo. 
+                    Priorize: autoridade, conteúdo semântico, estruturação para IA.</span>
+                  </p>
+                ) : Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) <= 10 && 
+                     analysis.score >= 70 ? (
+                  <p className="text-sm flex items-start gap-2">
+                    <Target className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 197, 94, 0.5))' }} />
+                    <span><strong>Equilíbrio excelente!</strong> Seu site está bem otimizado para ambos os canais. 
+                    Mantenha o foco em melhorias incrementais e monitore tendências.</span>
+                  </p>
+                ) : (
+                  <p className="text-sm flex items-start gap-2">
+                    <Zap className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />
+                    <span><strong>Equilibrado mas com espaço para crescer.</strong> Ambos os scores podem melhorar. 
+                    Use as recomendações abaixo para fortalecer tanto SEO quanto GEO simultaneamente.</span>
+                  </p>
+                )}
               </div>
-            </div>
-
-            <div className="bg-background/50 rounded-lg p-4">
-              <h4 className="font-semibold mb-3">Diagnóstico Estratégico</h4>
-              {analysis.geoOptimization.score > analysis.seoOptimization.score + 15 ? (
-                <p className="text-sm">
-                  ✨ <strong>Forte em GEO, fraco em SEO.</strong> Seu site está otimizado para IAs mas pode estar perdendo tráfego orgânico tradicional. 
-                  Priorize: melhorias técnicas de SEO (H1, meta tags, estrutura).
-                </p>
-              ) : analysis.seoOptimization.score > analysis.geoOptimization.score + 15 ? (
-                <p className="text-sm">
-                  🔍 <strong>Forte em SEO, fraco em GEO.</strong> Você domina o Google mas IAs não estão citando seu conteúdo. 
-                  Priorize: autoridade, conteúdo semântico, estruturação para IA.
-                </p>
-              ) : Math.abs(analysis.geoOptimization.score - analysis.seoOptimization.score) <= 10 && 
-                   analysis.score >= 70 ? (
-                <p className="text-sm">
-                  🎯 <strong>Equilíbrio excelente!</strong> Seu site está bem otimizado para ambos os canais. 
-                  Mantenha o foco em melhorias incrementais e monitore tendências.
-                </p>
-              ) : (
-                <p className="text-sm">
-                  ⚖️ <strong>Equilibrado mas com espaço para crescer.</strong> Ambos os scores podem melhorar. 
-                  Use as recomendações abaixo para fortalecer tanto SEO quanto GEO simultaneamente.
-                </p>
-              )}
             </div>
           </Card>
 
-          {/* GEO vs SEO Scores */}
+          {/* GEO vs SEO Scores - Premium */}
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <h3 className="text-xl font-bold">GEO Score</h3>
+            <Card className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur-xl border-purple-500/20 group hover:scale-[1.01] transition-all duration-300" style={{ boxShadow: '0 0 30px rgba(147, 51, 234, 0.15)' }}>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-500/20 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-32 group-hover:h-32" />
+              <div className="relative p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 shadow-lg" style={{ boxShadow: '0 0 15px rgba(147, 51, 234, 0.4)' }}>
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold">GEO Score</h3>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${getScoreColor(analysis.geoOptimization.score)}`} style={{ textShadow: '0 0 15px currentColor' }}>
+                  {analysis.geoOptimization.score}/100
+                </div>
+                <div className="relative h-2 bg-muted/50 rounded-full overflow-hidden mb-4">
+                  <div 
+                    className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-400 transition-all duration-1000"
+                    style={{ width: `${analysis.geoOptimization.score}%`, boxShadow: '0 0 10px rgba(147, 51, 234, 0.5)' }}
+                  />
+                </div>
+                <ul className="space-y-2">
+                  {analysis.geoOptimization.insights.map((insight, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm">
+                      <Target className="w-4 h-4 mt-0.5 text-purple-500 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 3px rgba(147, 51, 234, 0.5))' }} />
+                      <span>{insight}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className={`text-3xl font-bold mb-2 ${getScoreColor(analysis.geoOptimization.score)}`}>
-                {analysis.geoOptimization.score}/100
-              </div>
-              <Progress value={analysis.geoOptimization.score} className="h-2 mb-4" />
-              <ul className="space-y-2">
-                {analysis.geoOptimization.insights.map((insight, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm">
-                    <Target className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                    <span>{insight}</span>
-                  </li>
-                ))}
-              </ul>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                <h3 className="text-xl font-bold">SEO Score</h3>
+            <Card className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur-xl border-orange-500/20 group hover:scale-[1.01] transition-all duration-300" style={{ boxShadow: '0 0 30px rgba(249, 115, 22, 0.15)' }}>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-orange-500/20 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-32 group-hover:h-32" />
+              <div className="relative p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 shadow-lg" style={{ boxShadow: '0 0 15px rgba(249, 115, 22, 0.4)' }}>
+                    <BarChart3 className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold">SEO Score</h3>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${getScoreColor(analysis.seoOptimization.score)}`} style={{ textShadow: '0 0 15px currentColor' }}>
+                  {analysis.seoOptimization.score}/100
+                </div>
+                <div className="relative h-2 bg-muted/50 rounded-full overflow-hidden mb-4">
+                  <div 
+                    className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-1000"
+                    style={{ width: `${analysis.seoOptimization.score}%`, boxShadow: '0 0 10px rgba(249, 115, 22, 0.5)' }}
+                  />
+                </div>
+                <ul className="space-y-2">
+                  {analysis.seoOptimization.insights.map((insight, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm">
+                      <Zap className="w-4 h-4 mt-0.5 text-orange-500 flex-shrink-0" style={{ filter: 'drop-shadow(0 0 3px rgba(249, 115, 22, 0.5))' }} />
+                      <span>{insight}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className={`text-3xl font-bold mb-2 ${getScoreColor(analysis.seoOptimization.score)}`}>
-                {analysis.seoOptimization.score}/100
-              </div>
-              <Progress value={analysis.seoOptimization.score} className="h-2 mb-4" />
-              <ul className="space-y-2">
-                {analysis.seoOptimization.insights.map((insight, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm">
-                    <Zap className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                    <span>{insight}</span>
-                  </li>
-                ))}
-              </ul>
             </Card>
           </div>
 
-          {/* Strengths & Weaknesses */}
+          {/* Strengths & Weaknesses - Premium Tabs */}
           <Tabs defaultValue="recommendations" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="recommendations">Recomendações</TabsTrigger>
-              <TabsTrigger value="strengths">Pontos Fortes</TabsTrigger>
-              <TabsTrigger value="weaknesses">Pontos Fracos</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 bg-muted/50 backdrop-blur">
+              <TabsTrigger value="recommendations" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary">Recomendações</TabsTrigger>
+              <TabsTrigger value="strengths" className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-500">Pontos Fortes</TabsTrigger>
+              <TabsTrigger value="weaknesses" className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-500">Pontos Fracos</TabsTrigger>
             </TabsList>
 
             <TabsContent value="recommendations" className="space-y-4">
               {analysis.recommendations.map((rec, idx) => (
-                <Card key={idx} className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold">{rec.title}</h4>
-                        <Badge variant={getPriorityColor(rec.priority)}>
-                          {rec.priority === 'high' ? 'Alta' : rec.priority === 'medium' ? 'Média' : 'Baixa'}
-                        </Badge>
+                <Card key={idx} className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur border-primary/10 hover:border-primary/30 transition-all duration-300">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-purple-600" />
+                  <div className="p-4 pl-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold">{rec.title}</h4>
+                          <Badge variant={getPriorityColor(rec.priority)} className={rec.priority === 'high' ? 'bg-red-500/20 text-red-500 border-red-500/30' : rec.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-muted'}>
+                            {rec.priority === 'high' ? 'Alta' : rec.priority === 'medium' ? 'Média' : 'Baixa'}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">{rec.description}</p>
+                        <p className="text-sm flex items-center gap-1">
+                          <TrendingUp className="w-4 h-4 text-primary" style={{ filter: 'drop-shadow(0 0 3px rgba(147, 51, 234, 0.5))' }} />
+                          <span className="font-medium">Impacto:</span> {rec.impact}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{rec.description}</p>
-                      <p className="text-sm flex items-center gap-1">
-                        <TrendingUp className="w-4 h-4 text-primary" />
-                        <span className="font-medium">Impacto:</span> {rec.impact}
-                      </p>
                     </div>
                   </div>
                 </Card>
@@ -1038,10 +1096,13 @@ export default function UrlAnalysis() {
 
             <TabsContent value="strengths" className="space-y-2">
               {analysis.strengths.map((strength, idx) => (
-                <Card key={idx} className="p-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                    <p>{strength}</p>
+                <Card key={idx} className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur border-green-500/20 hover:border-green-500/40 transition-all duration-300">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-green-500 to-emerald-600" />
+                  <div className="p-4 pl-5">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 197, 94, 0.5))' }} />
+                      <p>{strength}</p>
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -1049,10 +1110,13 @@ export default function UrlAnalysis() {
 
             <TabsContent value="weaknesses" className="space-y-2">
               {analysis.weaknesses.map((weakness, idx) => (
-                <Card key={idx} className="p-4">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p>{weakness}</p>
+                <Card key={idx} className="relative overflow-hidden bg-gradient-to-br from-background/90 to-muted/30 backdrop-blur border-red-500/20 hover:border-red-500/40 transition-all duration-300">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-red-500 to-rose-600" />
+                  <div className="p-4 pl-5">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />
+                      <p>{weakness}</p>
+                    </div>
                   </div>
                 </Card>
               ))}
