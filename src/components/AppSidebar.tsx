@@ -1,4 +1,44 @@
-import { Home, Zap, Database, Activity, BarChart3, FileText, Bell, LogOut, GitCompare, Brain, Sparkles, MessageSquare, Key, CreditCard, BookOpen, Plug, TrendingUp, ChevronRight, Target, Settings, Search, Bot, Clock, Network, Shield, User } from "lucide-react";
+import { 
+  Building2, 
+  Zap, 
+  Database, 
+  Activity, 
+  BarChart3, 
+  FileText, 
+  Bell, 
+  LogOut, 
+  GitCompare, 
+  Brain, 
+  Sparkles, 
+  MessageSquare, 
+  CreditCard, 
+  BookOpen, 
+  TrendingUp, 
+  ChevronRight, 
+  Target, 
+  Settings, 
+  Search, 
+  Bot, 
+  Clock, 
+  Network, 
+  Shield, 
+  User,
+  Gem,
+  Globe,
+  LayoutDashboard,
+  LineChart,
+  Lightbulb,
+  Boxes,
+  Workflow,
+  Gauge,
+  Link2,
+  MessagesSquare,
+  Scale,
+  Building,
+  Wallet,
+  HeartPulse,
+  Plug2
+} from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -18,44 +58,42 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
-// Categorias organizadas logicamente
+// Categorias organizadas logicamente com ícones premium
 const analyticsItems = [
-  { title: "Dashboard", url: "/dashboard", icon: Activity },
-  { title: "KPIs", url: "/kpis", icon: Target },
-  { title: "Insights IA", url: "/insights", icon: Brain },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "KPIs", url: "/kpis", icon: Gauge },
+  { title: "Insights IA", url: "/insights", icon: Lightbulb },
   { title: "Alertas", url: "/alerts", icon: Bell },
-  { title: "Automações", url: "/automation", icon: Bot },
+  { title: "Automações", url: "/automation", icon: Workflow },
   { title: "Cron Jobs", url: "/cron-jobs", icon: Clock },
-  { title: "Analytics Sync", url: "/analytics", icon: Activity },
+  { title: "Analytics Sync", url: "/analytics", icon: LineChart },
 ];
 
 const seoGeoItems = [
   { title: "IGO Dashboard", url: "/igo-dashboard", icon: Network },
-  { title: "IGO Observability", url: "/igo-observability", icon: Brain },
-  { title: "Nucleus Center", url: "/nucleus", icon: Brain },
-  { title: "Governança Algorítmica", url: "/algorithmic-governance", icon: Shield },
+  { title: "IGO Observability", url: "/igo-observability", icon: Globe },
+  { title: "Nucleus Center", url: "/nucleus", icon: Boxes },
+  { title: "Governança Algorítmica", url: "/algorithmic-governance", icon: Scale },
   { title: "Relatórios Científicos", url: "/scientific-reports", icon: FileText },
   { title: "GEO Escore", url: "/scores", icon: BarChart3 },
-  { title: "SEO Escore", url: "/seo-scores", icon: Activity },
-  { title: "Métricas GEO", url: "/geo-metrics", icon: Brain },
-  { title: "Métricas SEO", url: "/seo-metrics", icon: TrendingUp },
-  { title: "Análise de URL", url: "/url-analysis", icon: Sparkles },
-  { title: "Menções LLM", url: "/llm-mentions", icon: MessageSquare },
+  { title: "SEO Escore", url: "/seo-scores", icon: TrendingUp },
+  { title: "Métricas GEO", url: "/geo-metrics", icon: Globe },
+  { title: "Métricas SEO", url: "/seo-metrics", icon: Activity },
+  { title: "Análise de URL", url: "/url-analysis", icon: Link2 },
+  { title: "Menções LLM", url: "/llm-mentions", icon: MessagesSquare },
   { title: "Comparação", url: "/comparison", icon: GitCompare },
 ];
 
 const settingsItems = [
-  { title: "Marcas", url: "/brands", icon: Database },
-  { title: "Assinatura", url: "/subscription", icon: CreditCard },
-  { title: "System Health", url: "/system-health", icon: Activity },
-  { title: "Teste de Conexões LLM", url: "/connections-test", icon: Zap },
-  { title: "⚙️ Painel Admin", url: "/admin", icon: Shield },
+  { title: "Marcas", url: "/brands", icon: Building },
+  { title: "Assinatura", url: "/subscription", icon: Wallet },
+  { title: "System Health", url: "/system-health", icon: HeartPulse },
+  { title: "Teste de Conexões LLM", url: "/connections-test", icon: Plug2 },
+  { title: "Painel Admin", url: "/admin", icon: Shield },
 ];
 
 export function AppSidebar() {
@@ -89,20 +127,47 @@ export function AppSidebar() {
   );
 
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-primary/10 text-primary font-medium" : "hover:bg-muted/50";
+    cn(
+      "group/item relative transition-all duration-300",
+      isActive 
+        ? "bg-gradient-to-r from-primary/20 to-primary/5 text-primary font-medium border-l-2 border-primary" 
+        : "hover:bg-gradient-to-r hover:from-muted/80 hover:to-transparent text-muted-foreground hover:text-foreground"
+    );
 
   return (
-    <Sidebar>
-      <SidebarContent>
-        {/* Início - Sempre visível */}
+    <Sidebar className="border-r border-border/50 bg-gradient-to-b from-background via-background to-muted/20">
+      <SidebarContent className="px-2">
+        {/* Header Premium */}
+        <div className="px-4 py-6 mb-2">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-xl blur-sm opacity-75" />
+              <div className="relative p-2.5 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-xl border border-primary/30">
+                <Building2 className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+            <div>
+              <h2 className="font-bold text-lg bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                Teia GEO
+              </h2>
+              <p className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">
+                Enterprise Platform
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Início - Premium */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/" end className={getNavCls}>
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>🏠 Início</span>
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 group-hover/item:from-amber-500/30 group-hover/item:to-orange-500/30 transition-all">
+                      <Building2 className="h-4 w-4 text-amber-500" />
+                    </div>
+                    <span className="font-medium">Início</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -110,23 +175,29 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* 📊 Analytics */}
+        {/* Analytics */}
         <Collapsible open={analyticsOpen} onOpenChange={setAnalyticsOpen}>
           <SidebarGroup>
             <CollapsibleTrigger asChild>
-              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-md px-2 py-1 flex items-center">
-                📊 Analytics
-                <ChevronRight className={`ml-auto h-4 w-4 transition-transform ${analyticsOpen ? 'rotate-90' : ''}`} />
+              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group/label">
+                <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 group-hover/label:from-blue-500/30 group-hover/label:to-cyan-500/30 transition-all">
+                  <LineChart className="h-4 w-4 text-blue-400" />
+                </div>
+                <span className="font-semibold text-foreground/80">Analytics</span>
+                <ChevronRight className={cn(
+                  "ml-auto h-4 w-4 text-muted-foreground transition-transform duration-300",
+                  analyticsOpen && "rotate-90"
+                )} />
               </SidebarGroupLabel>
             </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
+            <CollapsibleContent className="animate-accordion-down">
+              <SidebarGroupContent className="pl-2 mt-1">
+                <SidebarMenu className="space-y-0.5">
                   {analyticsItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <NavLink to={item.url} className={getNavCls}>
-                          <item.icon className="mr-2 h-4 w-4" />
+                          <item.icon className="h-4 w-4 opacity-70 group-hover/item:opacity-100 transition-opacity" />
                           <span>{item.title}</span>
                         </NavLink>
                       </SidebarMenuButton>
@@ -138,24 +209,29 @@ export function AppSidebar() {
           </SidebarGroup>
         </Collapsible>
 
-        {/* 🔍 SEO & GEO */}
+        {/* SEO & GEO */}
         <Collapsible open={seoGeoOpen} onOpenChange={setSeoGeoOpen}>
           <SidebarGroup>
             <CollapsibleTrigger asChild>
-              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-md px-2 py-1 flex items-center">
-                <Search className="mr-2 h-4 w-4" />
-                SEO & GEO
-                <ChevronRight className={`ml-auto h-4 w-4 transition-transform ${seoGeoOpen ? 'rotate-90' : ''}`} />
+              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group/label">
+                <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 group-hover/label:from-emerald-500/30 group-hover/label:to-teal-500/30 transition-all">
+                  <Search className="h-4 w-4 text-emerald-400" />
+                </div>
+                <span className="font-semibold text-foreground/80">SEO & GEO</span>
+                <ChevronRight className={cn(
+                  "ml-auto h-4 w-4 text-muted-foreground transition-transform duration-300",
+                  seoGeoOpen && "rotate-90"
+                )} />
               </SidebarGroupLabel>
             </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
+            <CollapsibleContent className="animate-accordion-down">
+              <SidebarGroupContent className="pl-2 mt-1">
+                <SidebarMenu className="space-y-0.5">
                   {seoGeoItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <NavLink to={item.url} className={getNavCls}>
-                          <item.icon className="mr-2 h-4 w-4" />
+                          <item.icon className="h-4 w-4 opacity-70 group-hover/item:opacity-100 transition-opacity" />
                           <span>{item.title}</span>
                         </NavLink>
                       </SidebarMenuButton>
@@ -167,24 +243,29 @@ export function AppSidebar() {
           </SidebarGroup>
         </Collapsible>
 
-        {/* ⚙️ Configurações */}
+        {/* Configurações */}
         <Collapsible open={settingsOpen} onOpenChange={setSettingsOpen}>
           <SidebarGroup>
             <CollapsibleTrigger asChild>
-              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-md px-2 py-1 flex items-center">
-                <Settings className="mr-2 h-4 w-4" />
-                Configurações
-                <ChevronRight className={`ml-auto h-4 w-4 transition-transform ${settingsOpen ? 'rotate-90' : ''}`} />
+              <SidebarGroupLabel className="cursor-pointer hover:bg-muted/50 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group/label">
+                <div className="p-1.5 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 group-hover/label:from-purple-500/30 group-hover/label:to-pink-500/30 transition-all">
+                  <Settings className="h-4 w-4 text-purple-400" />
+                </div>
+                <span className="font-semibold text-foreground/80">Configurações</span>
+                <ChevronRight className={cn(
+                  "ml-auto h-4 w-4 text-muted-foreground transition-transform duration-300",
+                  settingsOpen && "rotate-90"
+                )} />
               </SidebarGroupLabel>
             </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
+            <CollapsibleContent className="animate-accordion-down">
+              <SidebarGroupContent className="pl-2 mt-1">
+                <SidebarMenu className="space-y-0.5">
                   {settingsItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <NavLink to={item.url} className={getNavCls}>
-                          <item.icon className="mr-2 h-4 w-4" />
+                          <item.icon className="h-4 w-4 opacity-70 group-hover/item:opacity-100 transition-opacity" />
                           <span>{item.title}</span>
                         </NavLink>
                       </SidebarMenuButton>
@@ -196,15 +277,17 @@ export function AppSidebar() {
           </SidebarGroup>
         </Collapsible>
 
-        {/* Documentação - Sempre visível */}
+        {/* Documentação */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/documentation" className={getNavCls}>
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>📚 Documentação</span>
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-indigo-500/20 to-blue-500/20 group-hover/item:from-indigo-500/30 group-hover/item:to-blue-500/30 transition-all">
+                      <BookOpen className="h-4 w-4 text-indigo-400" />
+                    </div>
+                    <span className="font-medium">Documentação</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -214,19 +297,28 @@ export function AppSidebar() {
       </SidebarContent>
       
       {user && (
-        <SidebarFooter className="p-4 border-t space-y-2">
+        <SidebarFooter className="p-4 border-t border-border/50 bg-gradient-to-t from-muted/30 to-transparent">
           <NavLink 
             to="/profile" 
             className={({ isActive }) => 
-              `flex items-center gap-2 text-sm p-2 rounded-md transition-colors ${
-                isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted/50 text-muted-foreground'
-              }`
+              cn(
+                "flex items-center gap-3 text-sm p-3 rounded-xl transition-all",
+                isActive 
+                  ? "bg-gradient-to-r from-primary/20 to-primary/5 text-primary border border-primary/30" 
+                  : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
+              )
             }
           >
-            <User className="h-4 w-4" />
-            <span className="truncate">{user.email}</span>
+            <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20">
+              <User className="h-4 w-4 text-primary" />
+            </div>
+            <span className="truncate font-medium">{user.email}</span>
           </NavLink>
-          <Button variant="outline" onClick={signOut} className="w-full">
+          <Button 
+            variant="outline" 
+            onClick={signOut} 
+            className="w-full mt-2 border-border/50 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all"
+          >
             <LogOut className="mr-2 h-4 w-4" />
             Sair
           </Button>
