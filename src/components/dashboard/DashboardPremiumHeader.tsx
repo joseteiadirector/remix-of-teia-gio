@@ -36,14 +36,14 @@ export function DashboardPremiumHeader({ className }: DashboardPremiumHeaderProp
               onValueChange={setSelectedBrandId}
               disabled={isLoading}
             >
-              <SelectTrigger className="relative w-[280px] h-12 bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all">
+              <SelectTrigger className="relative min-w-[320px] h-14 bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all">
                 <div className="flex items-center gap-3">
-                  <div className="p-1.5 rounded-lg bg-primary/10">
-                    <Building2 className="h-4 w-4 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Building2 className="h-5 w-5 text-primary" />
                   </div>
-                  <div className="flex flex-col items-start">
+                  <div className="flex flex-col items-start text-left">
                     <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Marca</span>
-                    <SelectValue placeholder="Selecionar marca" />
+                    <SelectValue placeholder="Selecionar marca" className="text-base font-semibold" />
                   </div>
                 </div>
               </SelectTrigger>
