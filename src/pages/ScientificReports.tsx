@@ -5,11 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Download, TrendingUp, BarChart3, CheckCircle } from "lucide-react";
+import { FileText, Download, TrendingUp, BarChart3, CheckCircle, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logger } from "@/utils/logger";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { USE_CODE_BASED_VISIBILITY, VISIBLE_BRAND_NAME } from "@/config/brandVisibility";
 
 export default function ScientificReports() {
@@ -68,6 +69,57 @@ export default function ScientificReports() {
     onError: (error) => {
       toast({
         title: "Erro ao Gerar Relatório",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteReportMutation = useMutation({
+    mutationFn: async (reportId: string) => {
+      const { error } = await supabase
+        .from("scientific_reports")
+        .delete()
+        .eq("id", reportId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Relatório Excluído",
+        description: "O relatório foi excluído com sucesso.",
+      });
+      refetchReports();
+      setSelectedReport(null);
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao Excluir",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteAllReportsMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedBrand) throw new Error("Nenhuma marca selecionada");
+      const { error } = await supabase
+        .from("scientific_reports")
+        .delete()
+        .eq("brand_id", selectedBrand);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Relatórios Excluídos",
+        description: "Todos os relatórios foram excluídos com sucesso.",
+      });
+      refetchReports();
+      setSelectedReport(null);
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao Excluir",
         description: error.message,
         variant: "destructive",
       });
@@ -645,9 +697,36 @@ export default function ScientificReports() {
 
       {reports && reports.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle>Relatórios Disponíveis</CardTitle>
-            <CardDescription>Histórico de relatórios científicos gerados</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Relatórios Disponíveis</CardTitle>
+              <CardDescription>Histórico de relatórios científicos gerados</CardDescription>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Excluir Todos
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Excluir todos os relatórios?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta ação não pode ser desfeita. Todos os {reports.length} relatório(s) serão permanentemente excluídos.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteAllReportsMutation.mutate()}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Excluir Todos
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -668,23 +747,44 @@ export default function ScientificReports() {
                       </p>
                     </div>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={(e) => handleDownloadPDF(report, e)}>
-                        <FileText className="h-4 w-4 mr-2" />
-                        Download PDF
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={(e) => handleDownloadPDF(report, e)}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Excluir relatório?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta ação não pode ser desfeita. O relatório será permanentemente excluído.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteReportMutation.mutate(report.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Excluir
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               ))}
             </div>
