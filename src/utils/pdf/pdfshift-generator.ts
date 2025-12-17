@@ -2245,10 +2245,10 @@ export function generateGovernanceHTML(data: ExportDataGovernance): string {
           <div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
               <span style="font-size: 11px; color: #64748b;">Confiança Média</span>
-              <span style="font-size: 13px; font-weight: 700; color: ${color};">${(p.avgConfidence * 100).toFixed(1)}%</span>
+              <span style="font-size: 13px; font-weight: 700; color: ${color};">${p.avgConfidence.toFixed(1)}%</span>
             </div>
             <div style="width: 100%; height: 10px; background: #f1f5f9; border-radius: 5px; overflow: hidden;">
-              <div style="width: ${p.avgConfidence * 100}%; height: 100%; background: linear-gradient(90deg, ${color}99 0%, ${color}66 100%); border-radius: 5px;"></div>
+              <div style="width: ${Math.min(p.avgConfidence, 100)}%; height: 100%; background: linear-gradient(90deg, ${color}99 0%, ${color}66 100%); border-radius: 5px;"></div>
             </div>
           </div>
         </div>
