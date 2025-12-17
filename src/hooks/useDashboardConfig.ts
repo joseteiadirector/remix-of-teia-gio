@@ -32,8 +32,10 @@ export function useDashboardConfig() {
   useEffect(() => {
     if (user) {
       loadConfig();
+    } else {
+      setLoading(false);
     }
-  }, [user]);
+  }, [user?.id]); // Use user.id to prevent unnecessary re-runs
 
   const loadConfig = async () => {
     if (!user) return;
@@ -50,8 +52,13 @@ export function useDashboardConfig() {
       if (data && data.widgets && Array.isArray(data.widgets)) {
         setWidgets(data.widgets as unknown as Widget[]);
       } else {
-        // Initialize with default widgets
-        await saveConfig(defaultWidgets);
+        // Initialize with default widgets without triggering toast
+        setWidgets(defaultWidgets);
+        // Save in background without toast
+        supabase
+          .from('dashboard_configs')
+          .upsert({ user_id: user.id, widgets: defaultWidgets as any })
+          .then(() => logger.info('Dashboard config initialized'));
       }
     } catch (error) {
       logger.error('Erro ao carregar configuração do dashboard', { error, userId: user?.id });
