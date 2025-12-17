@@ -443,16 +443,18 @@ const Scores = () => {
 
 
         {/* Overall Score - Premium Card */}
-        <Card className="p-8 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/80 to-slate-950/80 shadow-[0_0_40px_rgba(139,92,246,0.2)] card-hover animate-scale-in">
-          <div className="text-center">
-            <div className="text-sm text-slate-400 mb-4">
-              {brand?.name} - {brand?.domain}
+        <Card className="relative overflow-hidden p-8 border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/60 via-slate-900/90 to-slate-950/90 animate-scale-in" style={{ boxShadow: '0 0 60px rgba(139,92,246,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-pink-500/5" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+          <div className="relative text-center">
+            <div className="text-sm text-slate-300 mb-4 font-medium">
+              {brand?.name} · {brand?.domain}
             </div>
-            <div className="text-7xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent mb-2">
+            <div className="text-8xl font-bold bg-gradient-to-r from-purple-300 via-violet-400 to-purple-400 bg-clip-text text-transparent mb-3 drop-shadow-lg">
               {latestScore.score.toFixed(1)}
             </div>
-            <div className="text-slate-400">Score GEO Geral</div>
-            <div className="text-xs text-slate-500 mt-2">
+            <div className="text-lg text-slate-300 font-medium">Score GEO Geral</div>
+            <div className="text-xs text-slate-500 mt-3">
               Última atualização: {new Date(latestScore.computed_at).toLocaleString('pt-BR')}
             </div>
           </div>
@@ -460,78 +462,127 @@ const Scores = () => {
 
         {/* Pillars Cards - Premium Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {pillars.map((pillar, index) => {
-            const colors = [
-              { border: 'border-blue-500/30', bg: 'from-blue-950/50', shadow: 'rgba(59,130,246,0.15)', text: 'text-blue-400', iconBg: 'from-blue-500 to-cyan-500' },
-              { border: 'border-emerald-500/30', bg: 'from-emerald-950/50', shadow: 'rgba(16,185,129,0.15)', text: 'text-emerald-400', iconBg: 'from-emerald-500 to-green-500' },
-              { border: 'border-purple-500/30', bg: 'from-purple-950/50', shadow: 'rgba(139,92,246,0.15)', text: 'text-purple-400', iconBg: 'from-purple-500 to-violet-500' },
-              { border: 'border-amber-500/30', bg: 'from-amber-950/50', shadow: 'rgba(245,158,11,0.15)', text: 'text-amber-400', iconBg: 'from-amber-500 to-orange-500' },
-              { border: 'border-pink-500/30', bg: 'from-pink-950/50', shadow: 'rgba(236,72,153,0.15)', text: 'text-pink-400', iconBg: 'from-pink-500 to-rose-500' },
-            ];
-            const color = colors[index];
-            
-            return (
-              <Card 
-                key={pillar.name} 
-                className={`p-4 border-2 ${color.border} bg-gradient-to-br ${color.bg} via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_${color.shadow}] card-hover animate-slide-up hover:scale-[1.02] transition-all duration-300`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`bg-gradient-to-br ${color.iconBg} p-2 rounded-lg shadow-lg`}>
-                    <pillar.icon className="h-5 w-5 text-white" />
-                  </div>
-                </div>
-                <div className={`text-2xl font-bold mb-1 ${color.text}`}>
-                  {pillar.value.toFixed(1)}
-                </div>
-                <div className="text-sm text-slate-400">
-                  {pillar.name}
-                </div>
-              </Card>
-            );
-          })}
+          {/* Base Técnica */}
+          <Card 
+            className="relative overflow-hidden p-5 border-2 border-blue-500/40 bg-gradient-to-br from-blue-950/60 via-slate-900/80 to-slate-950/80 hover:scale-[1.03] transition-all duration-300 animate-slide-up"
+            style={{ boxShadow: '0 0 30px rgba(59,130,246,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', animationDelay: '0ms' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-2.5 rounded-xl" style={{ boxShadow: '0 0 20px rgba(59,130,246,0.5)' }}>
+                <Database className="h-5 w-5 text-white" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold mb-1 text-blue-400">{pillars[0].value.toFixed(1)}</div>
+            <div className="text-sm text-slate-300">{pillars[0].name}</div>
+          </Card>
+
+          {/* Estrutura Semântica */}
+          <Card 
+            className="relative overflow-hidden p-5 border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-slate-950/80 hover:scale-[1.03] transition-all duration-300 animate-slide-up"
+            style={{ boxShadow: '0 0 30px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', animationDelay: '100ms' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-gradient-to-br from-emerald-500 to-green-500 p-2.5 rounded-xl" style={{ boxShadow: '0 0 20px rgba(16,185,129,0.5)' }}>
+                <Target className="h-5 w-5 text-white" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold mb-1 text-emerald-400">{pillars[1].value.toFixed(1)}</div>
+            <div className="text-sm text-slate-300">{pillars[1].name}</div>
+          </Card>
+
+          {/* Relevância Conversacional */}
+          <Card 
+            className="relative overflow-hidden p-5 border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-slate-950/80 hover:scale-[1.03] transition-all duration-300 animate-slide-up"
+            style={{ boxShadow: '0 0 30px rgba(139,92,246,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', animationDelay: '200ms' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-gradient-to-br from-purple-500 to-violet-500 p-2.5 rounded-xl" style={{ boxShadow: '0 0 20px rgba(139,92,246,0.5)' }}>
+                <Zap className="h-5 w-5 text-white" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold mb-1 text-purple-400">{pillars[2].value.toFixed(1)}</div>
+            <div className="text-sm text-slate-300">{pillars[2].name}</div>
+          </Card>
+
+          {/* Autoridade Cognitiva */}
+          <Card 
+            className="relative overflow-hidden p-5 border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-slate-950/80 hover:scale-[1.03] transition-all duration-300 animate-slide-up"
+            style={{ boxShadow: '0 0 30px rgba(245,158,11,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', animationDelay: '300ms' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-gradient-to-br from-amber-500 to-orange-500 p-2.5 rounded-xl" style={{ boxShadow: '0 0 20px rgba(245,158,11,0.5)' }}>
+                <TrendingUp className="h-5 w-5 text-white" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold mb-1 text-amber-400">{pillars[3].value.toFixed(1)}</div>
+            <div className="text-sm text-slate-300">{pillars[3].name}</div>
+          </Card>
+
+          {/* Inteligência Estratégica */}
+          <Card 
+            className="relative overflow-hidden p-5 border-2 border-pink-500/40 bg-gradient-to-br from-pink-950/60 via-slate-900/80 to-slate-950/80 hover:scale-[1.03] transition-all duration-300 animate-slide-up"
+            style={{ boxShadow: '0 0 30px rgba(236,72,153,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', animationDelay: '400ms' }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-pink-400/50 to-transparent" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-2.5 rounded-xl" style={{ boxShadow: '0 0 20px rgba(236,72,153,0.5)' }}>
+                <Brain className="h-5 w-5 text-white" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold mb-1 text-pink-400">{pillars[4].value.toFixed(1)}</div>
+            <div className="text-sm text-slate-300">{pillars[4].name}</div>
+          </Card>
         </div>
 
         {/* CPI Score Card - Premium */}
-        <Card className="p-6 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/40 via-slate-900/80 to-pink-950/30 shadow-[0_0_35px_rgba(139,92,246,0.2)] card-hover">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.5)]">
-                <Brain className="h-6 w-6 text-white" />
+        <Card className="relative overflow-hidden p-6 border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-pink-950/40" style={{ boxShadow: '0 0 50px rgba(139,92,246,0.25), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-pink-500/5" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+          <div className="relative">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-xl" style={{ boxShadow: '0 0 25px rgba(139,92,246,0.6)' }}>
+                  <Brain className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-xl bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">CPI Score</h3>
+                  <p className="text-sm text-slate-400">Cognitive Predictive Index</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">CPI Score</h3>
-                <p className="text-sm text-slate-400">Cognitive Predictive Index</p>
+              <Badge className="bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white border-purple-400/40" style={{ boxShadow: '0 0 20px rgba(139,92,246,0.4)' }}>
+                Métrica Proprietária
+              </Badge>
+            </div>
+
+            <div className="flex items-baseline gap-3 mb-4">
+              <div className="text-6xl font-bold bg-gradient-to-r from-purple-300 via-violet-400 to-pink-400 bg-clip-text text-transparent">
+                {latestScore.cpi ? Number(latestScore.cpi).toFixed(1) : '0.0'}
               </div>
+              <div className="text-slate-400 text-lg">/100</div>
             </div>
-            <Badge className="bg-gradient-to-r from-purple-600/80 to-pink-600/80 text-white border-purple-500/30 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
-              Métrica Proprietária
-            </Badge>
-          </div>
 
-          <div className="flex items-baseline gap-3 mb-4">
-            <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {latestScore.cpi ? Number(latestScore.cpi).toFixed(1) : '0.0'}
+            <div className="space-y-2">
+              <p className="text-sm text-slate-200">
+                <strong>Consistência Preditiva Inter-IA:</strong> Mede o quanto diferentes LLMs são 
+                <strong className="text-purple-300"> previsíveis e consistentes</strong> ao mencionar sua marca.
+              </p>
+              <p className="text-xs text-slate-400">
+                ✨ Valores altos (≥80) indicam respostas uniformes entre OpenAI, Claude, Gemini e Perplexity — 
+                sinal de forte governança semântica e posicionamento consolidado.
+              </p>
             </div>
-            <div className="text-slate-400">/100</div>
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm text-slate-300">
-              <strong>Consistência Preditiva Inter-IA:</strong> Mede o quanto diferentes LLMs são 
-              <strong className="text-purple-400"> previsíveis e consistentes</strong> ao mencionar sua marca.
-            </p>
-            <p className="text-xs text-slate-500">
-              ✨ Valores altos (≥80) indicam respostas uniformes entre OpenAI, Claude, Gemini e Perplexity — 
-              sinal de forte governança semântica e posicionamento consolidado.
-            </p>
           </div>
         </Card>
 
         {/* Charts - Premium Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Radar Chart */}
-          <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '200ms' }}>
+          <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '200ms' }}>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
             <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Visão Geral dos Pilares</h3>
             <div id="geo-radar-chart" className="recharts-wrapper">
               <ResponsiveContainer width="100%" height={400}>
@@ -550,7 +601,8 @@ const Scores = () => {
           </Card>
 
           {/* Line Chart */}
-          <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '300ms' }}>
+          <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '300ms' }}>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
             <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</h3>
             <div id="geo-evolution-chart" className="recharts-wrapper">
               <ResponsiveContainer width="100%" height={300}>
@@ -568,7 +620,8 @@ const Scores = () => {
         </div>
 
         {/* Bar Chart - Premium */}
-        <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '400ms' }}>
+        <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '400ms' }}>
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
           <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Comparação de Pilares</h3>
           <div id="geo-pillars-chart" className="recharts-wrapper">
             <ResponsiveContainer width="100%" height={400}>
