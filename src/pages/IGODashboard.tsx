@@ -342,25 +342,27 @@ export default function IGODashboard() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      <div className="container mx-auto p-6 space-y-6">
+      <div className="container mx-auto p-6 space-y-8">
         {/* Premium Header */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-          <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
+        <div className="relative overflow-hidden rounded-3xl border-2 border-primary/40 bg-gradient-to-r from-primary/20 via-violet-900/30 to-primary/20 backdrop-blur-xl p-8 shadow-[0_0_60px_rgba(139,92,246,0.2)] transition-all duration-500 hover:shadow-[0_0_80px_rgba(139,92,246,0.3)] hover:border-primary/60 group">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 group-hover:bg-primary/30 transition-all duration-700" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-violet-500/15 rounded-full blur-3xl translate-x-1/4 translate-y-1/4 group-hover:bg-violet-500/25 transition-all duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-violet-500/5" />
+          <div className="relative z-10 flex items-center justify-between flex-wrap gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-                  <Brain className="h-8 w-8 text-primary" />
+              <div className="flex items-center gap-4 mb-3">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-primary to-violet-600 border border-primary/50 shadow-[0_0_40px_rgba(139,92,246,0.5)]">
+                  <Brain className="h-10 w-10 text-white" />
                 </div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                  IGO Framework Dashboard
+                <h1 className="text-4xl font-black bg-gradient-to-r from-white via-primary-foreground to-primary bg-clip-text text-transparent drop-shadow-lg">
+                  IGO <span className="text-primary">Framework</span> Dashboard
                 </h1>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-lg text-primary/70 font-medium">
                 Inteligência Generativa Observacional — IA observando IA
               </p>
             </div>
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-4 flex-wrap">
               {selectedBrandId && (
                 <RealCollectionButton 
                   brandId={selectedBrandId}
@@ -370,15 +372,15 @@ export default function IGODashboard() {
                   }}
                 />
               )}
-              <Button onClick={handleExportPDF} disabled={isExporting || !selectedBrandId} className="bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 transition-all shadow-lg hover:shadow-primary/25">
-                <Download className="h-4 w-4 mr-2" />
+              <Button onClick={handleExportPDF} disabled={isExporting || !selectedBrandId} className="bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-600/90 text-white transition-all shadow-[0_0_25px_rgba(139,92,246,0.4)] hover:shadow-[0_0_35px_rgba(139,92,246,0.5)] border-0 px-6 py-5 font-bold">
+                <Download className="h-5 w-5 mr-2" />
                 Exportar PDF
               </Button>
-              <Button onClick={recalculateMetrics} disabled={isRecalculating || !selectedBrandId} variant="outline" className="border-primary/30 hover:border-primary/50 hover:bg-primary/5 transition-all">
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRecalculating ? 'animate-spin' : ''}`} />
+              <Button onClick={recalculateMetrics} disabled={isRecalculating || !selectedBrandId} variant="outline" className="border-2 border-primary/40 hover:border-primary/60 hover:bg-primary/10 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)] px-6 py-5 font-bold">
+                <RefreshCw className={`h-5 w-5 mr-2 ${isRecalculating ? 'animate-spin' : ''}`} />
                 Recalcular CPI
               </Button>
-              <select value={selectedBrandId || ""} onChange={(e) => setSelectedBrandId(e.target.value)} className="px-4 py-2 border border-primary/30 rounded-lg bg-background/50 backdrop-blur-sm hover:border-primary/50 transition-all focus:ring-2 focus:ring-primary/20">
+              <select value={selectedBrandId || ""} onChange={(e) => setSelectedBrandId(e.target.value)} className="px-5 py-3 border-2 border-primary/40 rounded-xl bg-background/50 backdrop-blur-xl hover:border-primary/60 transition-all focus:ring-2 focus:ring-primary/30 shadow-[0_0_15px_rgba(139,92,246,0.15)] font-medium">
                 {globalBrands?.map(b => (
                   <option key={b.id} value={b.id}>{b.name}</option>
                 ))}
