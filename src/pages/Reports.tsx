@@ -599,22 +599,6 @@ const Reports = () => {
                 <Download className="w-4 h-4 mr-2" />
                 PDF
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => exportReport("excel")}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Excel
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => exportReport("csv")}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                CSV
-              </Button>
             </div>
           </div>
 

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Download, TrendingUp, BarChart3, CheckCircle, FileSpreadsheet } from "lucide-react";
+import { FileText, Download, TrendingUp, BarChart3, CheckCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -680,10 +680,6 @@ export default function ScientificReports() {
                       <DropdownMenuItem onClick={(e) => handleDownloadPDF(report, e)}>
                         <FileText className="h-4 w-4 mr-2" />
                         Download PDF
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => handleDownloadExcel(report, e)}>
-                        <FileSpreadsheet className="h-4 w-4 mr-2" />
-                        Download Excel
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

@@ -9,7 +9,7 @@ import { Plus, Loader2, Globe, Trash2, Home, Download, Settings, Pencil } from "
 import { usePagination } from "@/hooks/usePagination";
 import { DataImport } from "@/components/DataImport";
 import { BrandBackup } from "@/components/BrandBackup";
-import { exportToCSV } from "@/utils/legacyExports";
+
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 import { useNavigate, Link } from "react-router-dom";
@@ -210,21 +210,6 @@ const Brands = () => {
     }
   };
 
-  const handleExportBrands = () => {
-    const exportData = {
-      period: 'Todas as marcas',
-      brand: 'Exportação de Marcas',
-      metrics: brands.map(b => ({
-        label: b.name,
-        value: b.domain,
-        change: new Date(b.created_at).toLocaleDateString('pt-BR'),
-      })),
-      scoreInicial: '',
-      scoreFinal: '',
-      growth: '',
-    };
-    exportToCSV(exportData);
-  };
 
   const { currentData, currentPage, totalPages, nextPage, previousPage, hasPreviousPage, hasNextPage } = 
     usePagination({ data: brands, itemsPerPage: 9 });
@@ -275,10 +260,6 @@ const Brands = () => {
                 <Settings className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">Configurar Google</span>
               </Link>
-            </Button>
-            <Button variant="outline" size="sm" className="md:size-default" onClick={handleExportBrands} disabled={brands.length === 0}>
-              <Download className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Exportar CSV</span>
             </Button>
             <DataImport onImportComplete={() => queryClient.invalidateQueries({ queryKey: ['brands'] })} />
             <BrandBackup 

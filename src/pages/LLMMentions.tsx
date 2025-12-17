@@ -34,7 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Home, MessageSquare, RefreshCw, CheckCircle2, XCircle, Loader2, AlertCircle, Filter, Download, FileSpreadsheet, Brain } from "lucide-react";
+import { Home, MessageSquare, RefreshCw, CheckCircle2, XCircle, Loader2, AlertCircle, Filter, Download, Brain } from "lucide-react";
 import { RealCollectionButton } from "@/components/llm/RealCollectionButton";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
@@ -365,15 +365,6 @@ export default function LLMMentions() {
 
           <div className="flex gap-2 flex-wrap">
             <ConsolidatedPDFExport />
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => handleExport('excel')}
-              disabled={!filteredMentions || filteredMentions.length === 0}
-            >
-              <FileSpreadsheet className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Excel</span>
-            </Button>
             <Button 
               variant="outline" 
               size="sm" 

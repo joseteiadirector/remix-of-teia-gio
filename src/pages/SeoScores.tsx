@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, Home, Download, FileSpreadsheet, Search, Target, Zap, Link2, CheckCircle2, AlertCircle, Settings } from "lucide-react";
+import { TrendingUp, Home, Download, Search, Target, Zap, Link2, CheckCircle2, AlertCircle, Settings } from "lucide-react";
 import { exportSEOReport } from "@/utils/pdf";
-import { exportToCSV, exportToExcel } from "@/utils/legacyExports";
 import { useAudit } from "@/hooks/useAudit";
 import { AuditButton } from "@/components/audit/AuditButton";
 import { AuditBadge } from "@/components/audit/AuditBadge";
@@ -578,12 +577,6 @@ const SeoScores = () => {
         }
         break;
       }
-      case 'excel':
-        await exportToExcel(exportData);
-        break;
-      case 'csv':
-        exportToCSV(exportData);
-        break;
     }
 
     toast({
@@ -688,15 +681,7 @@ const SeoScores = () => {
               disabled={!analyses.length}
             />
 
-            {/* Export Buttons */}
-            <Button variant="outline" size="sm" onClick={() => handleExport('csv')} className="hidden md:flex">
-              <Download className="mr-2 h-4 w-4" />
-              CSV
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => handleExport('excel')} className="hidden md:flex">
-              <FileSpreadsheet className="mr-2 h-4 w-4" />
-              Excel
-            </Button>
+            {/* Export Button - PDF Only */}
             <Button variant="outline" size="sm" onClick={() => handleExport('pdf')}>
               <Download className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">PDF</span>
