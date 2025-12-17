@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { exportLLMMentionsReport } from '@/utils/pdf';
+import { ConsolidatedPDFExport } from "@/components/ConsolidatedPDFExport";
 import { exportMentionsToExcel } from "@/utils/legacyExports";
 import { getSentimentConfig, getContextConfig, getConfidenceLevel, getConfidenceDescription } from "@/utils/mentionHelpers";
 import {
@@ -362,18 +363,27 @@ export default function LLMMentions() {
             </p>
           </div>
 
-          {filteredMentions && filteredMentions.length > 0 && (
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => handleExport('excel')}>
-                <FileSpreadsheet className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Excel</span>
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => handleExport('pdf')}>
-                <Download className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">PDF</span>
-              </Button>
-            </div>
-          )}
+          <div className="flex gap-2 flex-wrap">
+            <ConsolidatedPDFExport />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleExport('excel')}
+              disabled={!filteredMentions || filteredMentions.length === 0}
+            >
+              <FileSpreadsheet className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Excel</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleExport('pdf')}
+              disabled={!filteredMentions || filteredMentions.length === 0}
+            >
+              <Download className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">PDF</span>
+            </Button>
+          </div>
         </div>
 
         {/* Controls */}
