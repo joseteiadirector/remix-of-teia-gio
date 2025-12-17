@@ -345,7 +345,8 @@ serve(async (req) => {
     // Salvar no histórico se for de uma brand específica
     if (brandId) {
       try {
-        const { error: insertError } = await supabaseClient
+        // Usar service role para garantir insert (RLS pode bloquear)
+        const { error: insertError } = await supabaseService
           .from('igo_metrics_history')
           .insert({
             brand_id: brandId,
