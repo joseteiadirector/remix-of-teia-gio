@@ -2084,54 +2084,89 @@ const Insights = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard" className="flex items-center gap-2">
-                <Home className="h-4 w-4" />
-                Dashboard
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Insights IA</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Premium Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-background" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-primary/10 via-purple-500/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-to-tl from-cyan-500/10 via-blue-500/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-purple-500/5 via-transparent to-cyan-500/5 rounded-full blur-3xl" />
+      </div>
 
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-              Insights Híbridos de IA (SEO + GEO)
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Análises preditivas, sugestões e relatórios gerados por IA baseados em dados de SEO (Google Analytics, Search Console) e GEO (Menções em LLMs)
-            </p>
-            <div className="flex gap-2 mt-3">
-              <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+      <div className="max-w-7xl mx-auto space-y-8 p-6 md:p-8 relative z-10">
+        {/* Premium Breadcrumb */}
+        <div className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl p-4 shadow-lg">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20">
+                    <Home className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-medium">Dashboard</span>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="text-primary/40" />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="flex items-center gap-2 font-semibold text-foreground">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  Insights IA
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+
+        {/* Premium Header Section */}
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-cyan-500 rounded-2xl blur-lg opacity-50 animate-pulse" style={{ animationDuration: '3s' }} />
+                <div className="relative p-4 rounded-2xl bg-gradient-to-br from-primary/20 via-purple-500/20 to-cyan-500/20 border border-white/10 backdrop-blur-sm">
+                  <Sparkles className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold">
+                  <span className="bg-gradient-to-r from-primary via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                    Insights Híbridos de IA
+                  </span>
+                  <span className="text-muted-foreground text-xl md:text-2xl ml-2">(SEO + GEO)</span>
+                </h1>
+                <p className="text-muted-foreground mt-2 max-w-2xl text-sm md:text-base">
+                  Análises preditivas, sugestões e relatórios gerados por IA baseados em dados de SEO (Google Analytics, Search Console) e GEO (Menções em LLMs)
+                </p>
+              </div>
+            </div>
+            
+            {/* Premium Badges */}
+            <div className="flex flex-wrap gap-2">
+              <Badge className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-400 border border-blue-500/30 hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 px-4 py-1.5">
+                <div className="w-2 h-2 rounded-full bg-blue-400 mr-2 animate-pulse" />
                 Dados SEO
               </Badge>
-              <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
+              <Badge className="bg-gradient-to-r from-purple-500/20 to-purple-600/20 text-purple-400 border border-purple-500/30 hover:from-purple-500/30 hover:to-purple-600/30 transition-all duration-300 px-4 py-1.5">
+                <div className="w-2 h-2 rounded-full bg-purple-400 mr-2 animate-pulse" />
                 Dados GEO
               </Badge>
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge className="bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:from-emerald-500/30 hover:to-emerald-600/30 transition-all duration-300 px-4 py-1.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse" />
                 Análise Híbrida
               </Badge>
             </div>
           </div>
           
-          {/* Brand Selector */}
+          {/* Premium Brand Selector */}
           {brands && brands.length > 0 && (
-            <div className="flex items-center gap-3">
+            <div className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl p-4 shadow-lg">
               <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[220px] bg-background/50 border-white/10 hover:bg-background/80 transition-all duration-300">
                   <SelectValue placeholder="Selecione uma marca" />
                 </SelectTrigger>
-                <SelectContent className="bg-background">
+                <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
                   {brands.map(b => (
-                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                    <SelectItem key={b.id} value={b.id} className="hover:bg-primary/10 transition-colors">{b.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -2139,15 +2174,22 @@ const Insights = () => {
           )}
         </div>
 
+        {/* Premium Tabs */}
         <Tabs defaultValue="insights" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="insights">
-              <Brain className="w-4 h-4 mr-2" />
-              Insights Salvos
+          <TabsList className="grid w-full grid-cols-2 bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-1.5 h-auto">
+            <TabsTrigger 
+              value="insights" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-purple-500/20 data-[state=active]:text-primary data-[state=active]:border-primary/30 rounded-xl py-3 transition-all duration-300"
+            >
+              <Brain className="w-5 h-5 mr-2" />
+              <span className="font-medium">Insights Salvos</span>
             </TabsTrigger>
-            <TabsTrigger value="schedule">
-              <Calendar className="w-4 h-4 mr-2" />
-              Agendamentos
+            <TabsTrigger 
+              value="schedule"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-500/30 rounded-xl py-3 transition-all duration-300"
+            >
+              <Calendar className="w-5 h-5 mr-2" />
+              <span className="font-medium">Agendamentos</span>
             </TabsTrigger>
           </TabsList>
 
@@ -2156,16 +2198,22 @@ const Insights = () => {
             {brandsLoading ? (
               <LoadingState />
             ) : !brands || brands.length === 0 ? (
-              <Card className="p-12 text-center">
-                <Brain className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-semibold mb-2">Nenhuma marca cadastrada</h3>
+              <Card className="p-12 text-center backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl">
+                <div className="relative mx-auto w-20 h-20 mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-50" />
+                  <div className="relative w-full h-full flex items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10">
+                    <Brain className="w-10 h-10 text-purple-400" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">Nenhuma marca cadastrada</h3>
                 <p className="text-muted-foreground mb-6">
                   Você precisa cadastrar ao menos uma marca antes de gerar insights de IA
                 </p>
                 <Button 
                   onClick={() => window.location.href = '/brands'}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg shadow-purple-500/25 transition-all duration-300"
                 >
+                  <Plus className="w-4 h-4 mr-2" />
                   Cadastrar Marca
                 </Button>
               </Card>
@@ -2185,28 +2233,28 @@ const Insights = () => {
               />
             )}
 
-            <div className="flex items-center justify-between">
+            {/* Premium Filter Bar */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl p-4 shadow-lg">
               <div className="flex gap-3">
-                {/* Seletor de marca removido - usar o global do sidebar */}
-
                 <Select value={selectedType} onValueChange={setSelectedType}>
-                  <SelectTrigger className="w-48">
+                  <SelectTrigger className="w-56 bg-background/50 border-white/10 hover:bg-background/80 transition-all duration-300">
                     <SelectValue placeholder="Filtrar por tipo" />
                   </SelectTrigger>
-                  <SelectContent className="bg-background z-50">
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="prediction">Predições e Sugestões</SelectItem>
-                    <SelectItem value="report">Relatórios</SelectItem>
+                  <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10 z-50">
+                    <SelectItem value="all" className="hover:bg-primary/10">Todos</SelectItem>
+                    <SelectItem value="prediction" className="hover:bg-primary/10">Predições e Sugestões</SelectItem>
+                    <SelectItem value="report" className="hover:bg-primary/10">Relatórios</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {/* Botões contextuais baseados no tipo selecionado */}
                 {selectedType === "report" ? (
                   <Button 
                     onClick={() => generateReport('individual')} 
                     disabled={isGenerating || selectedBrandId === "all"}
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 shadow-lg shadow-primary/25 transition-all duration-300"
                   >
                     {isGenerating ? (
                       <>
@@ -2221,8 +2269,11 @@ const Insights = () => {
                     )}
                   </Button>
                 ) : (
-                  // Predições e Todos
-                  <Button onClick={generatePrediction} disabled={isGenerating}>
+                  <Button 
+                    onClick={generatePrediction} 
+                    disabled={isGenerating}
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 shadow-lg shadow-primary/25 transition-all duration-300"
+                  >
                     {isGenerating ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -2247,13 +2298,14 @@ const Insights = () => {
                   variant="outline"
                   size="icon"
                   title="Limpar todos os insights"
+                  className="border-destructive/30 hover:bg-destructive/10 hover:border-destructive/50 transition-all duration-300"
                 >
                   <Trash2 className="w-4 h-4 text-destructive" />
                 </Button>
                 
                 {/* Botões de relatório */}
                 {selectedBrandId !== "all" && (
-                  <Button onClick={() => generateReport('individual')} disabled={isGenerating} variant="outline">
+                  <Button onClick={() => generateReport('individual')} disabled={isGenerating} variant="outline" className="border-white/10 hover:bg-white/5 transition-all duration-300">
                     {isGenerating ? (
                       <>
                         <Clock className="w-4 h-4 mr-2 animate-spin" />
@@ -2268,7 +2320,7 @@ const Insights = () => {
                   </Button>
                 )}
                 {selectedBrandId === "all" && (
-                  <Button onClick={() => generateReport('comparative')} disabled={isGenerating} variant="outline">
+                  <Button onClick={() => generateReport('comparative')} disabled={isGenerating} variant="outline" className="border-white/10 hover:bg-white/5 transition-all duration-300">
                     {isGenerating ? (
                       <>
                         <Clock className="w-4 h-4 mr-2 animate-spin" />
@@ -2356,32 +2408,42 @@ const Insights = () => {
                 );
               })()
             ) : (
-              <div className="space-y-6">
-                {/* Análises Preditivas */}
+              <div className="space-y-8">
+                {/* Análises Preditivas - Premium Card */}
                 {(debouncedType === "all" || debouncedType === "prediction") && filteredInsights.filter(i => i.type === "prediction").length > 0 && (
-                  <Card className="p-6 border-l-4 border-l-blue-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <TrendingUp className="w-6 h-6 text-blue-500" />
-                        <div>
-                          <h3 className="text-xl font-semibold">Análises Preditivas Híbridas</h3>
-                          <p className="text-xs text-muted-foreground">Baseadas em dados SEO + GEO</p>
+                  <Card className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+                    {/* Premium Header with Gradient Border */}
+                    <div className="p-6 border-b border-white/10 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl blur-md opacity-50" />
+                            <div className="relative p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10">
+                              <TrendingUp className="w-6 h-6 text-blue-400" />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-foreground">Análises Preditivas Híbridas</h3>
+                            <p className="text-sm text-muted-foreground">Baseadas em dados SEO + GEO</p>
+                          </div>
+                          <Badge className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400 border border-blue-500/30 px-3 py-1">
+                            {insights.filter(i => i.type === "prediction").length}
+                          </Badge>
                         </div>
-                        <Badge variant="secondary">{insights.filter(i => i.type === "prediction").length}</Badge>
-                      </div>
-                      <div className="flex gap-2">
-                        <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-500">SEO</Badge>
-                        <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500">GEO</Badge>
+                        <div className="flex gap-2">
+                          <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/30 px-3">SEO</Badge>
+                          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/30 px-3">GEO</Badge>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-4">
+                    
+                    <div className="p-6 space-y-4">
                       {insights.filter(i => i.type === "prediction").map((insight) => {
-                        // Buscar métricas KAPI da marca deste insight
                         const insightBrandId = insight.brand_id;
                         const brandName = insight.brands?.name || brands?.find(b => b.id === insightBrandId)?.name;
                         
                         return (
-                        <Card key={insight.id} className="p-5 bg-muted/30 border-l-4 border-l-blue-500">
+                        <Card key={insight.id} className="p-5 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 border border-white/10 rounded-xl hover:border-blue-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
                               <h4 className="font-semibold text-base mb-1">{insight.title}</h4>
@@ -2577,35 +2639,44 @@ const Insights = () => {
                   </Card>
                 )}
 
-                {/* Sugestões (extraídas das análises preditivas) */}
+                {/* Sugestões Inteligentes - Premium Card */}
                 {(selectedType === "all" || selectedType === "suggestion") && 
                   insights.filter(i => i.type === "prediction" && (i.content as any)?.suggestions?.length > 0).length > 0 && (
-                  <Card className="p-6 border-l-4 border-l-yellow-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <Lightbulb className="w-6 h-6 text-yellow-500" />
-                        <div>
-                          <h3 className="text-xl font-semibold">Sugestões Inteligentes</h3>
-                          <p className="text-xs text-muted-foreground">Recomendações baseadas em análise híbrida SEO + GEO</p>
+                  <Card className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+                    {/* Premium Header with Gradient Border */}
+                    <div className="p-6 border-b border-white/10 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl blur-md opacity-50" />
+                            <div className="relative p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-white/10">
+                              <Lightbulb className="w-6 h-6 text-amber-400" />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-foreground">Sugestões Inteligentes</h3>
+                            <p className="text-sm text-muted-foreground">Recomendações baseadas em análise híbrida SEO + GEO</p>
+                          </div>
+                          <Badge className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30 px-3 py-1">
+                            {insights.filter(i => i.type === "prediction" && (i.content as any)?.suggestions?.length > 0)
+                              .reduce((acc, i) => acc + ((i.content as any)?.suggestions?.length || 0), 0)}
+                          </Badge>
                         </div>
-                        <Badge variant="secondary">
-                          {insights.filter(i => i.type === "prediction" && (i.content as any)?.suggestions?.length > 0)
-                            .reduce((acc, i) => acc + ((i.content as any)?.suggestions?.length || 0), 0)}
-                        </Badge>
-                      </div>
-                      <div className="flex gap-2">
-                        <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-500">SEO</Badge>
-                        <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500">GEO</Badge>
+                        <div className="flex gap-2">
+                          <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/30 px-3">SEO</Badge>
+                          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/30 px-3">GEO</Badge>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-4">
+                    
+                    <div className="p-6 space-y-4">
                       {insights
                         .filter(i => i.type === "prediction" && (i.content as any)?.suggestions?.length > 0)
                         .map((insight) => (
-                        <Card key={insight.id} className="p-5 bg-muted/30 border-l-4 border-l-yellow-500">
+                        <Card key={insight.id} className="p-5 bg-gradient-to-r from-amber-500/5 via-transparent to-orange-500/5 border border-white/10 rounded-xl hover:border-amber-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/10">
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                              <h4 className="font-semibold text-base mb-1">{insight.title}</h4>
+                              <h4 className="font-semibold text-base mb-1 text-foreground">{insight.title}</h4>
                               <p className="text-xs text-muted-foreground">
                                 {new Date(insight.created_at).toLocaleDateString("pt-BR", {
                                   day: "2-digit",
@@ -2617,25 +2688,25 @@ const Insights = () => {
                               </p>
                             </div>
                             <div className="flex gap-1">
-                              <Button variant="ghost" size="icon" onClick={async () => await downloadInsightPDF(insight, true)} title="Baixar PDF">
+                              <Button variant="ghost" size="icon" onClick={async () => await downloadInsightPDF(insight, true)} title="Baixar PDF" className="hover:bg-amber-500/10 hover:text-amber-400 transition-colors">
                                 <Download className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => shareInsight(insight)} title="Compartilhar">
+                              <Button variant="ghost" size="icon" onClick={() => shareInsight(insight)} title="Compartilhar" className="hover:bg-blue-500/10 hover:text-blue-400 transition-colors">
                                 <Share2 className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => deleteInsight(insight.id)} title="Excluir">
+                              <Button variant="ghost" size="icon" onClick={() => deleteInsight(insight.id)} title="Excluir" className="hover:bg-destructive/10 hover:text-destructive transition-colors">
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
                           </div>
                           
                           <div>
-                            <p className="font-semibold text-sm mb-3 flex items-center gap-2">
+                            <p className="font-semibold text-sm mb-3 flex items-center gap-2 text-amber-400">
                               <Lightbulb className="w-4 h-4" />
                               Sugestões ({(insight.content as any).suggestions.length})
                             </p>
                             {(insight.content as any).suggestions.map((sugg: any, idx: number) => (
-                              <div key={idx} className="mb-4 p-4 bg-background rounded-lg border">
+                              <div key={idx} className="mb-4 p-4 bg-card/50 rounded-xl border border-white/10 hover:border-amber-500/20 transition-all duration-300">
                                 <div className="flex items-start justify-between mb-2">
                                   <h5 className="font-semibold text-sm flex-1">{sugg.title}</h5>
                                   <Badge variant="outline" className="ml-2">
@@ -2742,34 +2813,44 @@ const Insights = () => {
                   </Card>
                 )}
 
-                {/* Relatórios */}
+                {/* Relatórios Completos - Premium Card */}
                 {(selectedType === "all" || selectedType === "report") && insights.filter(i => i.type === "report").length > 0 && (
-                  <Card className="p-6 border-l-4 border-l-green-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-6 h-6 text-green-500" />
-                        <div>
-                          <h3 className="text-xl font-semibold">Relatórios Completos</h3>
-                          <p className="text-xs text-muted-foreground">Análise abrangente com dados SEO + GEO</p>
+                  <Card className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+                    {/* Premium Header with Gradient Border */}
+                    <div className="p-6 border-b border-white/10 bg-gradient-to-r from-emerald-500/10 via-transparent to-cyan-500/10">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl blur-md opacity-50" />
+                            <div className="relative p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-white/10">
+                              <FileText className="w-6 h-6 text-emerald-400" />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-foreground">Relatórios Completos</h3>
+                            <p className="text-sm text-muted-foreground">Análise abrangente com dados SEO + GEO</p>
+                          </div>
+                          <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1">
+                            {insights.filter(i => i.type === "report").length}
+                          </Badge>
                         </div>
-                        <Badge variant="secondary">{insights.filter(i => i.type === "report").length}</Badge>
-                      </div>
-                      <div className="flex gap-2">
-                        <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-500">SEO</Badge>
-                        <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500">GEO</Badge>
+                        <div className="flex gap-2">
+                          <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/30 px-3">SEO</Badge>
+                          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/30 px-3">GEO</Badge>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-4">
+                    
+                    <div className="p-6 space-y-4">
                       {insights.filter(i => i.type === "report").map((insight) => {
-                        // Buscar métricas KAPI da marca deste insight
                         const insightBrandId = insight.brand_id;
                         const brandName = insight.brands?.name || brands?.find(b => b.id === insightBrandId)?.name;
                         
                         return (
-                        <Card key={insight.id} className="p-5 bg-muted/30 border-l-4 border-l-green-500">
+                        <Card key={insight.id} className="p-5 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 border border-white/10 rounded-xl hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10">
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                              <h4 className="font-semibold text-base mb-1">{insight.title}</h4>
+                              <h4 className="font-semibold text-base mb-1 text-foreground">{insight.title}</h4>
                               <p className="text-xs text-muted-foreground">
                                 {new Date(insight.created_at).toLocaleDateString("pt-BR", {
                                   day: "2-digit",
@@ -2781,13 +2862,13 @@ const Insights = () => {
                               </p>
                             </div>
                             <div className="flex gap-1">
-                              <Button variant="ghost" size="icon" onClick={async () => await downloadInsightPDF(insight)} title="Baixar PDF">
+                              <Button variant="ghost" size="icon" onClick={async () => await downloadInsightPDF(insight)} title="Baixar PDF" className="hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">
                                 <Download className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => shareInsight(insight)} title="Compartilhar">
+                              <Button variant="ghost" size="icon" onClick={() => shareInsight(insight)} title="Compartilhar" className="hover:bg-blue-500/10 hover:text-blue-400 transition-colors">
                                 <Share2 className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => deleteInsight(insight.id)} title="Excluir">
+                              <Button variant="ghost" size="icon" onClick={() => deleteInsight(insight.id)} title="Excluir" className="hover:bg-destructive/10 hover:text-destructive transition-colors">
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
@@ -2799,8 +2880,8 @@ const Insights = () => {
                           )}
                           
                           {(insight.content as any)?.executiveSummary && (
-                            <div className="mt-4 p-4 bg-background rounded-lg border">
-                              <p className="text-sm whitespace-pre-wrap">{(insight.content as any).executiveSummary}</p>
+                            <div className="mt-4 p-4 bg-card/50 rounded-xl border border-white/10">
+                              <p className="text-sm whitespace-pre-wrap leading-relaxed">{(insight.content as any).executiveSummary}</p>
                             </div>
                           )}
                         </Card>
@@ -2810,24 +2891,35 @@ const Insights = () => {
                   </Card>
                 )}
 
-                {/* Resumos */}
+                {/* Resumos de URLs - Premium Card */}
                 {(selectedType === "all" || selectedType === "summary") && insights.filter(i => i.type === "summary").length > 0 && (
-                  <Card className="p-6 border-l-4 border-l-purple-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <Brain className="w-6 h-6 text-purple-500" />
-                        <div>
-                          <h3 className="text-xl font-semibold">Resumos de URLs</h3>
-                          <p className="text-xs text-muted-foreground">Análise detalhada com scores SEO + GEO</p>
+                  <Card className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+                    {/* Premium Header with Gradient Border */}
+                    <div className="p-6 border-b border-white/10 bg-gradient-to-r from-violet-500/10 via-transparent to-fuchsia-500/10">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-xl blur-md opacity-50" />
+                            <div className="relative p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-white/10">
+                              <Brain className="w-6 h-6 text-violet-400" />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-foreground">Resumos de URLs</h3>
+                            <p className="text-sm text-muted-foreground">Análise detalhada com scores SEO + GEO</p>
+                          </div>
+                          <Badge className="bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 text-violet-400 border border-violet-500/30 px-3 py-1">
+                            {insights.filter(i => i.type === "summary").length}
+                          </Badge>
                         </div>
-                        <Badge variant="secondary">{insights.filter(i => i.type === "summary").length}</Badge>
-                      </div>
-                      <div className="flex gap-2">
-                        <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-500">SEO</Badge>
-                        <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500">GEO</Badge>
+                        <div className="flex gap-2">
+                          <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/30 px-3">SEO</Badge>
+                          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/30 px-3">GEO</Badge>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-4">
+                    
+                    <div className="p-6 space-y-4">
                       {insights.filter(i => i.type === "summary").map((insight) => {
                         // Parse seguro do conteúdo do resumo
                         let reportContent = insight.content;
@@ -2879,10 +2971,10 @@ const Insights = () => {
                         }
 
                         return (
-                        <Card key={insight.id} className="p-5 bg-muted/30 border-l-4 border-l-purple-500">
+                        <Card key={insight.id} className="p-5 bg-gradient-to-r from-violet-500/5 via-transparent to-fuchsia-500/5 border border-white/10 rounded-xl hover:border-violet-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/10">
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                              <h4 className="font-semibold text-base mb-1">
+                              <h4 className="font-semibold text-base mb-1 text-foreground">
                                 {displayContent?.title || insight.title}
                               </h4>
                               <p className="text-xs text-muted-foreground">
@@ -2996,39 +3088,53 @@ const Insights = () => {
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-6 mt-6">
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <Calendar className="w-5 h-5" />
-                    Agendamentos Automáticos
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Crie agendamentos para receber relatórios automáticos por email periodicamente
-                  </p>
+            <Card className="backdrop-blur-xl bg-card/40 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+              {/* Premium Header */}
+              <div className="p-6 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 via-transparent to-blue-500/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl blur-md opacity-50" />
+                      <div className="relative p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10">
+                        <Calendar className="w-6 h-6 text-cyan-400" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-foreground">Agendamentos Automáticos</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Crie agendamentos para receber relatórios automáticos por email periodicamente
+                      </p>
+                    </div>
+                  </div>
+                  {!showNew && (
+                    <Button 
+                      onClick={() => {
+                        setShowNew(true);
+                        setEmailForSchedule(userEmail || "");
+                      }}
+                      className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-lg shadow-cyan-500/25 transition-all duration-300"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Novo Agendamento
+                    </Button>
+                  )}
                 </div>
-                {!showNew && (
-                  <Button onClick={() => {
-                    setShowNew(true);
-                    setEmailForSchedule(userEmail || "");
-                  }}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Novo Agendamento
-                  </Button>
-                )}
               </div>
 
+              <div className="p-6">
               {showNew && (
-                <div className="space-y-4 mt-6 p-4 border rounded-lg bg-muted/20">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="space-y-4 p-5 border border-white/10 rounded-xl bg-card/50 mb-6">
+                  <div className="p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
                     <div className="flex items-start gap-3">
-                      <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                      <div className="p-2 rounded-lg bg-blue-500/20">
+                        <Mail className="w-5 h-5 text-blue-400" />
+                      </div>
                       <div>
-                        <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                        <p className="text-sm font-medium text-foreground mb-1">
                           Como funcionam os Agendamentos Automáticos?
                         </p>
-                        <p className="text-xs text-blue-800 dark:text-blue-200">
-                          Ao criar um agendamento, o sistema irá gerar e enviar relatórios automaticamente por email na periodicidade escolhida. Você receberá análises completas das suas marcas sem precisar fazer nada!
+                        <p className="text-xs text-muted-foreground">
+                          Ao criar um agendamento, o sistema irá gerar e enviar relatórios automaticamente por email na periodicidade escolhida.
                         </p>
                       </div>
                     </div>
@@ -3042,21 +3148,18 @@ const Insights = () => {
                       value={emailForSchedule}
                       onChange={(e) => setEmailForSchedule(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full"
+                      className="w-full bg-background/50 border-white/10"
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Os relatórios automáticos serão enviados para este email
-                    </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="report-type">Tipo de Relatório *</Label>
                       <Select value={reportType} onValueChange={setReportType}>
-                        <SelectTrigger id="report-type">
+                        <SelectTrigger id="report-type" className="bg-background/50 border-white/10">
                           <SelectValue placeholder="Selecione o tipo..." />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
                           <SelectItem value="weekly">Relatório Semanal</SelectItem>
                           <SelectItem value="monthly">Relatório Mensal</SelectItem>
                           <SelectItem value="daily">Relatório Diário</SelectItem>
@@ -3067,10 +3170,10 @@ const Insights = () => {
                     <div className="space-y-2">
                       <Label htmlFor="frequency">Frequência de Envio *</Label>
                       <Select value={frequency} onValueChange={setFrequency}>
-                        <SelectTrigger id="frequency">
+                        <SelectTrigger id="frequency" className="bg-background/50 border-white/10">
                           <SelectValue placeholder="Selecione a frequência..." />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-background/95 backdrop-blur-xl border-white/10">
                           <SelectItem value="daily">Diária (todo dia)</SelectItem>
                           <SelectItem value="weekly">Semanal (toda semana)</SelectItem>
                           <SelectItem value="monthly">Mensal (todo mês)</SelectItem>
@@ -3083,6 +3186,7 @@ const Insights = () => {
                     <Button 
                       onClick={() => createSchedule.mutate()} 
                       disabled={!frequency || !reportType || !emailForSchedule || createSchedule.isPending}
+                      className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500"
                     >
                       {createSchedule.isPending ? "Criando..." : "Criar Agendamento"}
                     </Button>
@@ -3091,12 +3195,13 @@ const Insights = () => {
                       setEmailForSchedule("");
                       setFrequency("");
                       setReportType("");
-                    }}>
+                    }} className="border-white/10 hover:bg-white/5">
                       Cancelar
                     </Button>
                   </div>
                 </div>
               )}
+              </div>
             </Card>
 
             {schedules && schedules.length > 0 ? (
