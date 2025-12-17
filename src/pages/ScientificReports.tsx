@@ -644,27 +644,33 @@ export default function ScientificReports() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header Premium */}
+      <div className="flex items-center justify-between p-6 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-2 border-purple-500/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <FileText className="h-8 w-8 text-primary" />
-            Relatórios Científicos
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+              <FileText className="h-8 w-8 text-white" />
+            </div>
+            <span className="bg-gradient-to-r from-purple-400 via-violet-400 to-purple-500 bg-clip-text text-transparent">
+              Relatórios Científicos
+            </span>
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-slate-400 mt-2">
             Geração automática de relatórios acadêmicos baseados em métricas IGO
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
+        {/* Selecionar Marca Card */}
+        <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(139,92,246,0.15)] transition-all duration-300">
           <CardHeader>
-            <CardTitle>Selecionar Marca</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Selecionar Marca</CardTitle>
             <CardDescription>Escolha a marca para análise científica</CardDescription>
           </CardHeader>
           <CardContent>
             <Select value={selectedBrand} onValueChange={setSelectedBrand}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-slate-800/60 border-slate-600/50 hover:border-purple-500/50 transition-colors">
                 <SelectValue placeholder="Selecione uma marca" />
               </SelectTrigger>
               <SelectContent>
@@ -678,16 +684,17 @@ export default function ScientificReports() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* Gerar Relatório Card */}
+        <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(139,92,246,0.15)] transition-all duration-300">
           <CardHeader>
-            <CardTitle>Gerar Novo Relatório</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Gerar Novo Relatório</CardTitle>
             <CardDescription>Análise completa dos últimos 30 dias</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={handleGenerateReport}
               disabled={!selectedBrand || generateReportMutation.isPending}
-              className="w-full"
+              className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] transition-all duration-300"
             >
               {generateReportMutation.isPending ? "Gerando..." : "Gerar Relatório Científico"}
             </Button>
@@ -696,20 +703,20 @@ export default function ScientificReports() {
       </div>
 
       {reports && reports.length > 0 && (
-        <Card>
+        <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Relatórios Disponíveis</CardTitle>
+              <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Relatórios Disponíveis</CardTitle>
               <CardDescription>Histórico de relatórios científicos gerados</CardDescription>
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
+                <Button variant="destructive" size="sm" className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]">
                   <Trash2 className="h-4 w-4 mr-2" />
                   Excluir Todos
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className="bg-slate-900 border-slate-700">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Excluir todos os relatórios?</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -733,16 +740,18 @@ export default function ScientificReports() {
               {reports.map((report: any) => (
                 <div
                   key={report.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted cursor-pointer"
+                  className="flex items-center justify-between p-4 border-2 border-slate-700/50 rounded-xl bg-slate-800/30 hover:bg-slate-800/50 hover:border-purple-500/30 cursor-pointer transition-all duration-300 shadow-[0_0_15px_rgba(100,116,139,0.05)] hover:shadow-[0_0_25px_rgba(139,92,246,0.1)]"
                   onClick={() => setSelectedReport(report)}
                 >
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-primary" />
+                    <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-violet-600/20">
+                      <FileText className="h-5 w-5 text-purple-400" />
+                    </div>
                     <div>
-                      <p className="font-medium">
+                      <p className="font-medium text-white">
                         Relatório {report.report_type} - {report.period_days} dias
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-slate-400">
                         Gerado em {new Date(report.generated_at).toLocaleString("pt-BR")}
                       </p>
                     </div>
@@ -752,6 +761,7 @@ export default function ScientificReports() {
                       variant="ghost" 
                       size="sm"
                       onClick={(e) => handleDownloadPDF(report, e)}
+                      className="hover:bg-purple-500/20 hover:text-purple-400"
                     >
                       <Download className="h-4 w-4" />
                     </Button>
@@ -761,12 +771,12 @@ export default function ScientificReports() {
                           variant="ghost" 
                           size="sm"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          className="text-red-400 hover:text-red-300 hover:bg-red-500/20"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent>
+                      <AlertDialogContent className="bg-slate-900 border-slate-700">
                         <AlertDialogHeader>
                           <AlertDialogTitle>Excluir relatório?</AlertDialogTitle>
                           <AlertDialogDescription>
@@ -793,76 +803,80 @@ export default function ScientificReports() {
       )}
 
       {selectedReport && (
-        <Card>
+        <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
           <CardHeader>
-            <CardTitle>Visualização do Relatório</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Visualização do Relatório</CardTitle>
             <CardDescription>
               Análise científica completa com métricas IGO e validação de hipóteses
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="summary">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="summary">Sumário</TabsTrigger>
-                <TabsTrigger value="metrics">Métricas</TabsTrigger>
-                <TabsTrigger value="validation">Validação</TabsTrigger>
-                <TabsTrigger value="recommendations">Recomendações</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4 bg-slate-900/80 border border-slate-700/50 p-1 rounded-xl">
+                <TabsTrigger value="summary" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Sumário</TabsTrigger>
+                <TabsTrigger value="metrics" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Métricas</TabsTrigger>
+                <TabsTrigger value="validation" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Validação</TabsTrigger>
+                <TabsTrigger value="recommendations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Recomendações</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="summary" className="space-y-4">
+              <TabsContent value="summary" className="space-y-4 mt-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Card>
+                  <Card className="border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(16,185,129,0.15)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">ICE Médio</CardTitle>
+                      <CardTitle className="text-sm bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">ICE Médio</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold text-emerald-400">
                         {selectedReport.report_data?.executive_summary?.avgICE?.toFixed(2) || "N/A"}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(59,130,246,0.15)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">GAP Médio</CardTitle>
+                      <CardTitle className="text-sm bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">GAP Médio</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold text-blue-400">
                         {selectedReport.report_data?.executive_summary?.avgGAP?.toFixed(2) || "N/A"}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(139,92,246,0.15)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">CPI Médio</CardTitle>
+                      <CardTitle className="text-sm bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">CPI Médio</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold text-purple-400">
                         {selectedReport.report_data?.executive_summary?.avgCPI?.toFixed(2) || "N/A"}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(245,158,11,0.15)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">Consenso Multi-LLM</CardTitle>
+                      <CardTitle className="text-sm bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Consenso Multi-LLM</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold text-amber-400">
                         {selectedReport.report_data?.executive_summary?.multiLLMConsensus?.toFixed(1) || "N/A"}%
                       </div>
                     </CardContent>
                   </Card>
                 </div>
 
-                <Card>
+                <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
                   <CardHeader>
-                    <CardTitle className="text-base">Tendência</CardTitle>
+                    <CardTitle className="text-base bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Tendência</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Badge variant={
-                      selectedReport.report_data?.executive_summary?.trend === 'ascending' ? 'default' : 'secondary'
+                    <Badge className={
+                      selectedReport.report_data?.executive_summary?.trend === 'ascending' 
+                        ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                        : selectedReport.report_data?.executive_summary?.trend === 'descending'
+                        ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]'
+                        : 'bg-gradient-to-r from-slate-600 to-slate-700 text-white'
                     }>
                       {selectedReport.report_data?.executive_summary?.trend === 'ascending' ? '↑ Ascendente' : 
                        selectedReport.report_data?.executive_summary?.trend === 'descending' ? '↓ Descendente' : 
@@ -872,25 +886,27 @@ export default function ScientificReports() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="metrics" className="space-y-4">
-                <Card>
+              <TabsContent value="metrics" className="space-y-4 mt-6">
+                <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5" />
-                      Análise Multi-LLM
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-600/20">
+                        <BarChart3 className="h-5 w-5 text-blue-400" />
+                      </div>
+                      <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Análise Multi-LLM</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {selectedReport.report_data?.multi_llm_analysis?.provider_comparison?.map((provider: any) => (
-                        <div key={provider.provider} className="flex justify-between items-center p-3 border rounded">
-                          <span className="font-medium">{provider.provider}</span>
+                        <div key={provider.provider} className="flex justify-between items-center p-4 border-2 border-slate-700/50 rounded-xl bg-slate-800/30 hover:bg-slate-800/50 transition-all">
+                          <span className="font-medium text-white">{provider.provider}</span>
                           <div className="flex gap-4">
-                            <span className="text-sm text-muted-foreground">
-                              Confiança: {provider.avgConfidence?.toFixed(1)}%
+                            <span className="text-sm text-slate-400">
+                              Confiança: <span className="text-purple-400 font-medium">{provider.avgConfidence?.toFixed(1)}%</span>
                             </span>
-                            <span className="text-sm text-muted-foreground">
-                              Taxa: {(provider.mentionRate * 100)?.toFixed(1)}%
+                            <span className="text-sm text-slate-400">
+                              Taxa: <span className="text-emerald-400 font-medium">{(provider.mentionRate * 100)?.toFixed(1)}%</span>
                             </span>
                           </div>
                         </div>
@@ -900,30 +916,42 @@ export default function ScientificReports() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="validation" className="space-y-4">
-                <Card>
+              <TabsContent value="validation" className="space-y-4 mt-6">
+                <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
                   <CardHeader>
-                    <CardTitle>Validação de Hipóteses Científicas</CardTitle>
+                    <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Validação de Hipóteses Científicas</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {Object.entries(selectedReport.report_data?.scientific_validation?.hypothesis_testing || {}).map(([key, hypothesis]: [string, any]) => (
-                      <div key={key} className="p-4 border rounded-lg">
+                      <div key={key} className={`p-4 border-2 rounded-xl transition-all ${
+                        hypothesis.status === 'validated' 
+                          ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-950/30 via-slate-900/50 to-slate-950/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]' 
+                          : 'border-amber-500/30 bg-gradient-to-br from-amber-950/30 via-slate-900/50 to-slate-950/50 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                      }`}>
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {hypothesis.status === 'validated' ? (
-                              <CheckCircle className="h-5 w-5 text-green-600" />
+                              <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-green-600/20">
+                                <CheckCircle className="h-5 w-5 text-emerald-400" />
+                              </div>
                             ) : (
-                              <TrendingUp className="h-5 w-5 text-yellow-600" />
+                              <div className="p-1.5 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-600/20">
+                                <TrendingUp className="h-5 w-5 text-amber-400" />
+                              </div>
                             )}
-                            <span className="font-medium">{key}</span>
+                            <span className="font-medium text-white">{key}</span>
                           </div>
-                          <Badge variant={hypothesis.status === 'validated' ? 'default' : 'secondary'}>
+                          <Badge className={
+                            hypothesis.status === 'validated' 
+                              ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white' 
+                              : 'bg-gradient-to-r from-amber-600 to-orange-600 text-white'
+                          }>
                             {hypothesis.confidence}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{hypothesis.hypothesis}</p>
-                        <p className="text-sm mt-2">
-                          Status: <span className="font-medium">{hypothesis.status}</span>
+                        <p className="text-sm text-slate-400">{hypothesis.hypothesis}</p>
+                        <p className="text-sm mt-2 text-slate-300">
+                          Status: <span className={`font-medium ${hypothesis.status === 'validated' ? 'text-emerald-400' : 'text-amber-400'}`}>{hypothesis.status}</span>
                         </p>
                       </div>
                     ))}
@@ -931,21 +959,29 @@ export default function ScientificReports() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="recommendations" className="space-y-4">
-                <Card>
+              <TabsContent value="recommendations" className="space-y-4 mt-6">
+                <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
                   <CardHeader>
-                    <CardTitle>Recomendações Científicas</CardTitle>
+                    <CardTitle className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Recomendações Científicas</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {selectedReport.report_data?.recommendations?.map((rec: any, idx: number) => (
-                      <div key={idx} className="p-4 border-l-4 border-primary rounded-lg bg-muted/50">
+                      <div key={idx} className={`p-4 rounded-xl border-l-4 transition-all ${
+                        rec.priority === 'high' 
+                          ? 'border-l-red-500 bg-gradient-to-r from-red-950/30 via-slate-900/50 to-slate-950/50 border-2 border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]' 
+                          : 'border-l-amber-500 bg-gradient-to-r from-amber-950/30 via-slate-900/50 to-slate-950/50 border-2 border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                      }`}>
                         <div className="flex items-center justify-between mb-2">
-                          <Badge variant={rec.priority === 'high' ? 'destructive' : 'secondary'}>
+                          <Badge className={
+                            rec.priority === 'high' 
+                              ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.4)]' 
+                              : 'bg-gradient-to-r from-amber-600 to-orange-600 text-white'
+                          }>
                             {rec.priority === 'high' ? 'Alta Prioridade' : 'Média Prioridade'}
                           </Badge>
-                          <span className="text-sm text-muted-foreground">{rec.category}</span>
+                          <span className="text-sm text-slate-400">{rec.category}</span>
                         </div>
-                        <p className="text-sm font-medium">{rec.action}</p>
+                        <p className="text-sm font-medium text-white">{rec.action}</p>
                       </div>
                     ))}
                   </CardContent>
