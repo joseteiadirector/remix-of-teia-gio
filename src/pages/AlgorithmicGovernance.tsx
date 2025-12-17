@@ -64,7 +64,12 @@ export default function AlgorithmicGovernance() {
 
       if (mentionsError) throw mentionsError;
 
-      // Calcular métricas de governança (incluindo ICE) - CPI de geo_scores
+      // ============================================================================
+      // FONTES OFICIAIS DE MÉTRICAS KAPI (NÃO MODIFICAR SEM ATUALIZAR DOCUMENTAÇÃO)
+      // ============================================================================
+      // - ICE, GAP, Stability: igo_metrics_history (calculate-igo-metrics)
+      // - CPI: geo_scores (calculate-geo-metrics) - FONTE OFICIAL para Compliance
+      // ============================================================================
       const avgStability = igoData?.reduce((sum, d) => sum + d.cognitive_stability, 0) / (igoData?.length || 1);
       const avgCPI = geoData?.cpi || igoData?.reduce((sum, d) => sum + d.cpi, 0) / (igoData?.length || 1);
       const avgGAP = igoData?.reduce((sum, d) => sum + d.gap, 0) / (igoData?.length || 1);
@@ -77,11 +82,22 @@ export default function AlgorithmicGovernance() {
         return acc;
       }, {});
 
-      const providerConsensus = Object.entries(byProvider || {}).map(([provider, data]: [string, any]) => ({
-        provider,
-        avgConfidence: data.reduce((sum: number, m: any) => sum + m.confidence, 0) / data.length,
-        mentionRate: (data.filter((m: any) => m.mentioned).length / data.length) * 100
-      }));
+      // ============================================================================
+      // NORMALIZAÇÃO DE CONFIANÇA - CRÍTICO PARA CONSISTÊNCIA PDF
+      // ============================================================================
+      // confidence no banco pode estar em escala 0-1 ou 0-100
+      // Normalizamos para escala 0-100 para exibição consistente
+      // ============================================================================
+      const providerConsensus = Object.entries(byProvider || {}).map(([provider, data]: [string, any]) => {
+        const rawAvgConfidence = data.reduce((sum: number, m: any) => sum + m.confidence, 0) / data.length;
+        // Normalizar: se média <= 1, assume escala 0-1 e converte
+        const normalizedAvgConfidence = rawAvgConfidence <= 1 ? rawAvgConfidence * 100 : rawAvgConfidence;
+        return {
+          provider,
+          avgConfidence: normalizedAvgConfidence,
+          mentionRate: (data.filter((m: any) => m.mentioned).length / data.length) * 100
+        };
+      });
 
       // Compliance score (baseado em ICE, estabilidade, CPI e GAP - todos maior = melhor)
       const complianceScore = (avgICE + avgStability + avgCPI + avgGAP) / 4;
