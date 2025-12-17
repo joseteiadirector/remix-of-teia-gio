@@ -309,7 +309,7 @@ export default function AlgorithmicGovernance() {
 
     setIsCollecting(true);
     
-    // Timeout de segurança de 2 minutos
+    // Timeout de segurança de 4 minutos (coletas podem levar até 3 minutos com múltiplos LLMs)
     const timeoutId = setTimeout(() => {
       setIsCollecting(false);
       toast({
@@ -317,7 +317,7 @@ export default function AlgorithmicGovernance() {
         description: "A coleta está demorando mais que o esperado. Tente novamente.",
         variant: "destructive"
       });
-    }, 120000); // 2 minutos
+    }, 240000); // 4 minutos
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
