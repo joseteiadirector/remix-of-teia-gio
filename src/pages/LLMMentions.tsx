@@ -34,7 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Home, MessageSquare, RefreshCw, CheckCircle2, XCircle, Loader2, AlertCircle, Filter, Download, Brain } from "lucide-react";
+import { Home, MessageSquare, RefreshCw, CheckCircle2, XCircle, Loader2, AlertCircle, Filter, Download, Brain, Eye, HelpCircle, Bot, Sparkles, TrendingUp, Circle } from "lucide-react";
 import { RealCollectionButton } from "@/components/llm/RealCollectionButton";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
@@ -426,9 +426,24 @@ export default function LLMMentions() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas as confianças</SelectItem>
-              <SelectItem value="high">🟢 Alta (≥80%)</SelectItem>
-              <SelectItem value="medium">🟡 Média (50-79%)</SelectItem>
-              <SelectItem value="low">🔴 Baixa (&lt;50%)</SelectItem>
+              <SelectItem value="high">
+                <span className="flex items-center gap-2">
+                  <Circle className="w-3 h-3 fill-green-500 text-green-500" />
+                  Alta (≥80%)
+                </span>
+              </SelectItem>
+              <SelectItem value="medium">
+                <span className="flex items-center gap-2">
+                  <Circle className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                  Média (50-79%)
+                </span>
+              </SelectItem>
+              <SelectItem value="low">
+                <span className="flex items-center gap-2">
+                  <Circle className="w-3 h-3 fill-red-500 text-red-500" />
+                  Baixa (&lt;50%)
+                </span>
+              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -472,52 +487,93 @@ export default function LLMMentions() {
           </Button>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats Cards - Premium Design */}
         {stats && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            <Card className="p-6">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Score de Visibilidade</p>
-                <p className="text-3xl font-bold text-primary">{visibilityScore}%</p>
-                <Progress value={visibilityScore} className="h-2" />
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Total de Consultas</p>
-                <p className="text-3xl font-bold">{stats.total}</p>
-                <p className="text-xs text-muted-foreground">{stats.mentioned} menções positivas</p>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Por Provider</p>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span>ChatGPT:</span>
-                    <span className="font-semibold">{stats.chatgpt}</span>
+            {/* Score de Visibilidade */}
+            <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background backdrop-blur-xl p-6 group hover:shadow-lg hover:shadow-primary/20 hover:border-primary/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                    <Eye className="h-5 w-5 text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
                   </div>
-                  <div className="flex justify-between">
-                    <span>Perplexity:</span>
-                    <span className="font-semibold">{stats.perplexity}</span>
+                  <TrendingUp className="h-4 w-4 text-green-500" />
+                </div>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Score de Visibilidade</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">{visibilityScore}%</p>
+                <div className="relative h-2 bg-muted/30 rounded-full overflow-hidden">
+                  <div 
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-700"
+                    style={{ width: `${visibilityScore}%` }}
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* Total de Consultas */}
+            <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-background to-background backdrop-blur-xl p-6 group hover:shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30">
+                    <HelpCircle className="h-5 w-5 text-cyan-500 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
+                  </div>
+                </div>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total de Consultas</p>
+                <p className="text-4xl font-bold text-foreground">{stats.total}</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
+                  {stats.mentioned} menções positivas
+                </p>
+              </div>
+            </Card>
+
+            {/* Por Provider - ChatGPT & Perplexity */}
+            <Card className="relative overflow-hidden border-green-500/20 bg-gradient-to-br from-green-500/10 via-background to-background backdrop-blur-xl p-6 group hover:shadow-lg hover:shadow-green-500/20 hover:border-green-500/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/30">
+                    <Bot className="h-5 w-5 text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                  </div>
+                </div>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Por Provider</p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">ChatGPT:</span>
+                    <span className="font-bold text-green-400">{stats.chatgpt}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Perplexity:</span>
+                    <span className="font-bold text-cyan-400">{stats.perplexity}</span>
                   </div>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Outros Providers</p>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span>Gemini:</span>
-                    <span className="font-semibold">{stats.gemini}</span>
+            {/* Outros Providers - Gemini & Claude */}
+            <Card className="relative overflow-hidden border-orange-500/20 bg-gradient-to-br from-orange-500/10 via-background to-background backdrop-blur-xl p-6 group hover:shadow-lg hover:shadow-orange-500/20 hover:border-orange-500/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 border border-orange-500/30">
+                    <Sparkles className="h-5 w-5 text-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
                   </div>
-                  <div className="flex justify-between">
-                    <span>Claude:</span>
-                    <span className="font-semibold">{stats.claude}</span>
+                </div>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Outros Providers</p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Gemini:</span>
+                    <span className="font-bold text-blue-400">{stats.gemini}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Claude:</span>
+                    <span className="font-bold text-orange-400">{stats.claude}</span>
                   </div>
                 </div>
               </div>
