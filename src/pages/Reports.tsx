@@ -447,8 +447,9 @@ const Reports = () => {
                 </p>
               </div>
             </div>
+          </div>
           
-            <div className="flex gap-3 items-center flex-wrap">
+          <div className="flex gap-3 items-center flex-wrap">
             {/* Brand Multi-Selector */}
             <Popover>
               <PopoverTrigger asChild>
@@ -527,9 +528,9 @@ const Reports = () => {
               <Share2 className="w-4 h-4 mr-2" />
               Compartilhar
             </Button>
-            </div>
           </div>
         </div>
+
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {selectedBrands.length === 0 ? (
@@ -694,7 +695,6 @@ const Reports = () => {
             </div>
           </div>
         </Card>
-        </div>
       </div>
     </div>
   );
