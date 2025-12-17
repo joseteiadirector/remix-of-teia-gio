@@ -274,11 +274,21 @@ serve(async (req) => {
     const cpi = Math.round(Math.max(0, 100 - (temporalStdDev * 2)));
 
     // ============================================================================
-    // 4. ESTABILIDADE COGNITIVA - CAPÍTULO 3
+    // 4. ESTABILIDADE COGNITIVA - CAPÍTULO 3 (Artigo Científico)
     // ============================================================================
-    // Fórmula Científica: Estabilidade = max(0, 100 - (σ × 150))
-    // Onde: σ = desvio padrão das confianças dos LLMs
-    // Interpretação: Mede a consistência estatística das respostas dos LLMs ao longo do tempo
+    // Fórmula Científica Original: Estabilidade = max(0, 100 - (σ_normalizado × 150))
+    // Onde: σ_normalizado = desvio padrão das confianças normalizado (escala 0-1)
+    // 
+    // EQUIVALÊNCIA MATEMÁTICA:
+    // - Artigo usa σ normalizado (0-1) × 150
+    // - Implementação usa σ bruto (0-100) × 1.5
+    // - Prova: σ_bruto × 1.5 = (σ_bruto/100) × 150 = σ_normalizado × 150 ✓
+    // 
+    // Exemplo: Se σ_bruto = 10 (desvio de 10 pontos percentuais)
+    // - Artigo: 100 - (0.10 × 150) = 100 - 15 = 85%
+    // - Implementação: 100 - (10 × 1.5) = 100 - 15 = 85% ✓
+    // 
+    // Interpretação: Mede a consistência estatística das respostas dos LLMs
     // Quanto menor o desvio padrão, maior a estabilidade cognitiva
     // Base teórica: Montgomery et al. (2012)
     
@@ -291,15 +301,15 @@ serve(async (req) => {
     let confidenceStdDev = 0;
     
     if (allMentionConfidences.length > 1) {
-      // Calcular desvio padrão das confianças
+      // Calcular desvio padrão das confianças (escala 0-100)
       const meanConf = allMentionConfidences.reduce((a: number, b: number) => a + b, 0) / allMentionConfidences.length;
       const varianceConf = allMentionConfidences.reduce((acc: number, val: number) => 
         acc + Math.pow(val - meanConf, 2), 0
       ) / allMentionConfidences.length;
       confidenceStdDev = Math.sqrt(varianceConf);
       
-      // Estabilidade = max(0, 100 - (σ × 150))
-      // Fator 150 amplifica o impacto do desvio padrão (normalizado para escala 0-100)
+      // Estabilidade = max(0, 100 - (σ_bruto × 1.5))
+      // Equivalente à fórmula do artigo: max(0, 100 - (σ_normalizado × 150))
       stability = Math.round(Math.max(0, 100 - (confidenceStdDev * 1.5)));
     } else if (allMentionConfidences.length === 1) {
       // Com apenas 1 confiança, estabilidade é alta mas não perfeita
