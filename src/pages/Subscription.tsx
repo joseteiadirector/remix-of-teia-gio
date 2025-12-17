@@ -85,7 +85,7 @@ const TIERS: Record<string, TierData> = {
     productId: "prod_TaYJVPctHiC4XA",
     features: [
       "Queries ilimitadas",
-      "Marcas ilimitadas",
+      "Até 7 marcas monitoradas",
       "Relatórios científicos",
       "IA avançada + Automações",
       "Detecção de alucinações",
