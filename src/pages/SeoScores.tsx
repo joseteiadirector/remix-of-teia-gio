@@ -615,184 +615,252 @@ const SeoScores = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Premium Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-background via-background to-muted/20 -z-10" />
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-green-500/5 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 md:space-y-10 relative">
         {/* Breadcrumbs */}
         <Breadcrumb className="hidden sm:block">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard" className="flex items-center gap-2">
+              <BreadcrumbLink href="/dashboard" className="flex items-center gap-2 text-white/60 hover:text-white">
                 <Home className="h-4 w-4" />
                 Dashboard
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator className="text-white/30" />
             <BreadcrumbItem>
-              <BreadcrumbPage>SEO Escore</BreadcrumbPage>
+              <BreadcrumbPage className="text-white/90">SEO Escore</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 animate-fade-in">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text mb-2">SEO Escore</h1>
-            <p className="text-sm sm:text-base text-muted-foreground">
-              Métricas calculadas com base em análise técnica e dados disponíveis
-            </p>
-            {/* Indicador de Consistência Matemática */}
-            <ConsistencyIndicator 
-              brandId={selectedBrand || undefined}
-              brandName={brand?.name}
-              autoValidate={false}
-              showDetails={true}
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-2 items-center">
-            {/* Brand Selector - First on mobile */}
-            <div className="w-full sm:w-48 lg:w-64 order-first lg:order-last">
-              <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione uma marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {brands.map((brand) => (
-                    <SelectItem key={brand.id} value={brand.id}>
-                      {brand.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        {/* Premium Header */}
+        <div className="relative rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-xl overflow-hidden"
+             style={{
+               background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+               boxShadow: '0 0 60px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+             }}>
+          {/* Glass Reflection */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+          {/* Animated Corner Gradient */}
+          <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl opacity-30 bg-gradient-to-br from-green-500 to-emerald-600" />
+          
+          <div className="relative z-10 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 via-emerald-300 to-green-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                SEO Escore
+              </h1>
+              <p className="text-sm sm:text-base text-white/60">
+                Métricas calculadas com base em análise técnica e dados disponíveis
+              </p>
+              <ConsistencyIndicator 
+                brandId={selectedBrand || undefined}
+                brandName={brand?.name}
+                autoValidate={false}
+                showDetails={true}
+              />
             </div>
 
-            {/* Google Setup Button */}
-            <Button 
-              onClick={() => navigate('/google-setup')}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Configurar Google</span>
-            </Button>
-            
-            {/* Update Analysis Button */}
-            <Button 
-              onClick={handleUpdateAnalysis}
-              disabled={isAnalyzing}
-              size="sm"
-              variant="outline"
-            >
-              {isAnalyzing ? (
-                <>
-                  <TrendingUp className="mr-1 sm:mr-2 h-4 w-4 animate-pulse" />
-                  <span className="hidden sm:inline">Calculando...</span>
-                </>
-              ) : (
-                <>
-                  <TrendingUp className="mr-1 sm:mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">Calcular Métricas</span>
-                </>
-              )}
-            </Button>
+            <div className="flex flex-wrap gap-3 items-center">
+              {/* Brand Selector */}
+              <div className="w-full sm:w-48 lg:w-64 order-first lg:order-last">
+                <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
+                  <SelectTrigger className="bg-white/5 border-white/20 text-white hover:bg-white/10">
+                    <SelectValue placeholder="Selecione uma marca" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {brands.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id}>
+                        {brand.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Audit Button */}
-            <AuditButton 
-              onClick={handleAuditReports}
-              isAuditing={isAuditing}
-              disabled={!analyses.length}
-            />
+              {/* Premium Buttons */}
+              <Button 
+                onClick={() => navigate('/google-setup')}
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white/5 border-white/20 text-white/80 hover:bg-white/10 hover:text-white"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Configurar Google</span>
+              </Button>
+              
+              <Button 
+                onClick={handleUpdateAnalysis}
+                disabled={isAnalyzing}
+                size="sm"
+                className="gap-2 bg-white/5 border-white/20 text-white/80 hover:bg-white/10 hover:text-white"
+                variant="outline"
+              >
+                <TrendingUp className={`h-4 w-4 ${isAnalyzing ? 'animate-pulse' : ''}`} />
+                <span className="hidden sm:inline">{isAnalyzing ? 'Calculando...' : 'Calcular Métricas'}</span>
+              </Button>
 
-            {/* Export Button - PDF Only */}
-            <Button variant="outline" size="sm" onClick={() => handleExport('pdf')}>
-              <Download className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">PDF</span>
-            </Button>
+              <AuditButton 
+                onClick={handleAuditReports}
+                isAuditing={isAuditing}
+                disabled={!analyses.length}
+              />
+
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => handleExport('pdf')}
+                className="gap-2 bg-white/5 border-white/20 text-white/80 hover:bg-white/10 hover:text-white"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">PDF</span>
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Score Cards - SEO, GAP, and GEO */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        {/* Premium Score Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {/* SEO Score */}
-          <Card className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-green-500/10 to-green-500/5 border-2 border-green-500/20 shadow-xl hover:shadow-green-500/30 transition-all duration-300 card-hover animate-scale-in">
-            <div className="text-center">
-              <div className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-4">SEO Score</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-green-600 mb-1 sm:mb-2 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+          <div className="group relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/20"
+               style={{
+                 background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05))',
+                 boxShadow: '0 0 40px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-700 bg-gradient-to-br from-green-400 to-emerald-600" />
+            <div className="relative z-10 text-center">
+              <div className="text-xs sm:text-sm text-white/60 mb-4 font-medium tracking-wide uppercase">SEO Score</div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent mb-2"
+                   style={{ textShadow: '0 0 40px rgba(16, 185, 129, 0.5)' }}>
                 {latestAnalysis.seo_score.toFixed(0)}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Otimização Tradicional</div>
+              <div className="text-xs sm:text-sm text-white/50">Otimização Tradicional</div>
             </div>
-          </Card>
+            <div className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-green-500 to-emerald-500" />
+          </div>
 
           {/* GAP */}
-          <Card className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border-2 border-yellow-500/20 shadow-xl hover:shadow-yellow-500/30 transition-all duration-300 card-hover animate-scale-in" style={{ animationDelay: '100ms' }}>
-            <div className="text-center">
-              <div className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-4">Gap</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-yellow-600 mb-1 sm:mb-2 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]">
+          <div className="group relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/20"
+               style={{
+                 background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.05))',
+                 boxShadow: '0 0 40px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-700 bg-gradient-to-br from-yellow-400 to-amber-600" />
+            <div className="relative z-10 text-center">
+              <div className="text-xs sm:text-sm text-white/60 mb-4 font-medium tracking-wide uppercase">Gap</div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent mb-2"
+                   style={{ textShadow: '0 0 40px rgba(234, 179, 8, 0.5)' }}>
                 {gap.toFixed(0)}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
+              <div className="text-xs sm:text-sm text-white/50">
                 Diferença {gapDirection === 'seo' ? 'SEO > GEO' : 'GEO > SEO'}
               </div>
             </div>
-          </Card>
+            <div className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-yellow-500 to-amber-500" />
+          </div>
 
           {/* GEO Score */}
-          <Card className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 shadow-xl hover:shadow-purple-500/30 transition-all duration-300 card-hover animate-scale-in" style={{ animationDelay: '200ms' }}>
-            <div className="text-center">
-              <div className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-4">GEO Score</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-1 sm:mb-2 drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+          <div className="group relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20"
+               style={{
+                 background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05))',
+                 boxShadow: '0 0 40px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-700 bg-gradient-to-br from-purple-400 to-violet-600" />
+            <div className="relative z-10 text-center">
+              <div className="text-xs sm:text-sm text-white/60 mb-4 font-medium tracking-wide uppercase">GEO Score</div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black bg-gradient-to-r from-purple-400 to-violet-300 bg-clip-text text-transparent mb-2"
+                   style={{ textShadow: '0 0 40px rgba(139, 92, 246, 0.5)' }}>
                 {latestAnalysis.geo_score.toFixed(0)}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Otimização para IAs</div>
+              <div className="text-xs sm:text-sm text-white/50">Otimização para IAs</div>
             </div>
-          </Card>
+            <div className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-purple-500 to-violet-500" />
+          </div>
         </div>
 
-        {/* Brand Info */}
-        <Card className="p-3 sm:p-4 bg-muted/50">
-          <div className="text-center">
-            <div className="font-semibold text-sm sm:text-base">{brand?.name}</div>
-            <div className="text-xs sm:text-sm text-muted-foreground truncate">{latestAnalysis.url}</div>
-            <div className="text-xs text-muted-foreground mt-1">
+        {/* Premium Brand Info */}
+        <div className="relative rounded-2xl border border-white/10 p-4 sm:p-5 backdrop-blur-xl overflow-hidden"
+             style={{
+               background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.8), rgba(15, 15, 25, 0.9))',
+               boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+             }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+          <div className="relative z-10 text-center">
+            <div className="font-semibold text-base sm:text-lg text-white">{brand?.name}</div>
+            <div className="text-sm text-white/50 truncate">{latestAnalysis.url}</div>
+            <div className="text-xs text-white/40 mt-1">
               Última análise: {new Date(latestAnalysis.created_at).toLocaleString('pt-BR')}
             </div>
           </div>
-        </Card>
+        </div>
 
-        {/* Real Analysis Data */}
+        {/* Premium Strength/Weakness Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Strengths */}
-          <Card className="p-4 sm:p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-300 card-hover animate-slide-up">
-            <div className="flex items-center gap-2 mb-3 sm:mb-4">
-              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
-              <h3 className="text-base sm:text-lg font-semibold">Pontos Fortes (SEO)</h3>
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 p-5 sm:p-6 backdrop-blur-xl"
+               style={{
+                 background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(20, 20, 30, 0.95))',
+                 boxShadow: '0 0 30px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-to-br from-green-500 to-emerald-600" />
+                  <div className="relative p-2.5 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/20 border border-white/10">
+                    <CheckCircle2 className="h-5 w-5 text-green-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-white">Pontos Fortes (SEO)</h3>
+              </div>
+              <ul className="space-y-3">
+                {strengths.slice(0, 5).map((strength: string, index: number) => (
+                  <li key={index} className="flex items-start gap-3 text-sm text-white/80">
+                    <span className="text-green-400 mt-0.5">✓</span>
+                    <span>{strength}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2">
-              {strengths.slice(0, 5).map((strength: string, index: number) => (
-                <li key={index} className="flex items-start gap-2 text-xs sm:text-sm">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>{strength}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+          </div>
 
           {/* Weaknesses */}
-          <Card className="p-4 sm:p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-300 card-hover animate-slide-up" style={{ animationDelay: '100ms' }}>
-            <div className="flex items-center gap-2 mb-3 sm:mb-4">
-              <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600 drop-shadow-[0_0_6px_rgba(234,179,8,0.6)]" />
-              <h3 className="text-base sm:text-lg font-semibold">Pontos Fracos (SEO)</h3>
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 p-5 sm:p-6 backdrop-blur-xl"
+               style={{
+                 background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(20, 20, 30, 0.95))',
+                 boxShadow: '0 0 30px rgba(234, 179, 8, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-to-br from-yellow-500 to-amber-600" />
+                  <div className="relative p-2.5 rounded-xl bg-gradient-to-br from-yellow-500/30 to-amber-500/20 border border-white/10">
+                    <AlertCircle className="h-5 w-5 text-yellow-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-white">Pontos Fracos (SEO)</h3>
+              </div>
+              <ul className="space-y-3">
+                {weaknesses.slice(0, 5).map((weakness: string, index: number) => (
+                  <li key={index} className="flex items-start gap-3 text-sm text-white/80">
+                    <span className="text-yellow-400 mt-0.5">⚠</span>
+                    <span>{weakness}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2">
-              {weaknesses.slice(0, 5).map((weakness: string, index: number) => (
-                <li key={index} className="flex items-start gap-2 text-xs sm:text-sm">
-                  <span className="text-yellow-600 mt-1">⚠</span>
-                  <span>{weakness}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+          </div>
         </div>
 
         {/* Charts - Evolution of Scores */}
