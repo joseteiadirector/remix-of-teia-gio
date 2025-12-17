@@ -1663,6 +1663,9 @@ export type Database = {
         | "editor"
         | "analyst"
         | "viewer"
+      document_status: "processing" | "completed" | "failed"
+      job_status: "pending" | "running" | "completed" | "failed"
+      report_status: "pending" | "generating" | "completed" | "failed"
       task_category: "geo" | "seo" | "technical" | "content" | "performance"
       task_priority: "high" | "medium" | "low"
       task_status: "pending" | "in_progress" | "completed"
@@ -1802,6 +1805,9 @@ export const Constants = {
         "analyst",
         "viewer",
       ],
+      document_status: ["processing", "completed", "failed"],
+      job_status: ["pending", "running", "completed", "failed"],
+      report_status: ["pending", "generating", "completed", "failed"],
       task_category: ["geo", "seo", "technical", "content", "performance"],
       task_priority: ["high", "medium", "low"],
       task_status: ["pending", "in_progress", "completed"],
