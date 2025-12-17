@@ -505,24 +505,35 @@ export default function AlgorithmicGovernance() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Shield className="h-8 w-8 text-primary" />
-            Governança Algorítmica
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Auditoria e compliance de comportamento de LLMs baseado em métricas IGO
-          </p>
+      {/* Premium Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-purple-950/50 to-slate-900 border-2 border-purple-500/30 p-8 shadow-[0_0_50px_rgba(139,92,246,0.15)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(168,85,247,0.15),transparent_50%)]" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-500/10 to-transparent blur-3xl" />
+        
+        <div className="relative flex items-center gap-4">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center shadow-[0_0_25px_rgba(139,92,246,0.5)]">
+            <Shield className="h-7 w-7 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-violet-300 bg-clip-text text-transparent">
+              Governança Algorítmica
+            </h1>
+            <p className="text-purple-200/80 mt-1">
+              Auditoria e compliance de comportamento de LLMs baseado em métricas IGO
+            </p>
+          </div>
         </div>
       </div>
 
-      <Card>
+      {/* Brand Selection Card - Premium */}
+      <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Selecionar Marca para Auditoria</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                Selecionar Marca para Auditoria
+              </CardTitle>
+              <CardDescription className="text-slate-400">
                 Escolha uma marca para análise de governança algorítmica
               </CardDescription>
             </div>
@@ -530,7 +541,7 @@ export default function AlgorithmicGovernance() {
               <Button 
                 onClick={handleDownloadPDF}
                 variant="outline"
-                className="gap-2"
+                className="gap-2 border-purple-500/50 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400"
               >
                 <Download className="h-4 w-4" />
                 Exportar PDF Completo
@@ -540,8 +551,8 @@ export default function AlgorithmicGovernance() {
           <div className="flex items-center justify-between mt-4">
             <div className="flex-1"></div>
             {selectedBrandId && governanceMetrics && (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Database className="h-4 w-4" />
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <Database className="h-4 w-4 text-purple-400" />
                 <span>
                   Última atualização: {governanceMetrics.lastUpdate 
                     ? formatDistanceToNow(new Date(governanceMetrics.lastUpdate), { 
@@ -556,7 +567,7 @@ export default function AlgorithmicGovernance() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Select value={selectedBrandId || ""} onValueChange={handleBrandChange}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full bg-slate-800/50 border-slate-600/50 text-slate-200">
               <SelectValue placeholder="Selecione uma marca" />
             </SelectTrigger>
             <SelectContent>
@@ -573,8 +584,7 @@ export default function AlgorithmicGovernance() {
               <Button 
                 onClick={collectLLMData}
                 disabled={isCollecting}
-                className="flex-1"
-                variant="default"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]"
               >
                 {isCollecting ? (
                   <>
@@ -590,7 +600,7 @@ export default function AlgorithmicGovernance() {
               </Button>
               
               {governanceMetrics && (
-                <Badge variant="outline" className="whitespace-nowrap">
+                <Badge variant="outline" className="whitespace-nowrap border-slate-600 text-slate-300">
                   {governanceMetrics.totalDataPoints} pontos de dados
                 </Badge>
               )}
@@ -609,211 +619,277 @@ export default function AlgorithmicGovernance() {
 
       {governanceMetrics && (
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-7">
-            <TabsTrigger value="overview" className="text-xs sm:text-sm">Visão Geral</TabsTrigger>
-            <TabsTrigger value="compliance" className="text-xs sm:text-sm">Compliance</TabsTrigger>
-            <TabsTrigger value="risks" className="text-xs sm:text-sm">Riscos</TabsTrigger>
-            <TabsTrigger value="recommendations" className="text-xs sm:text-sm">Recomendações</TabsTrigger>
-            <TabsTrigger value="checklist" className="text-xs sm:text-sm">Checklist</TabsTrigger>
-            <TabsTrigger value="impact" className="text-xs sm:text-sm">Impacto</TabsTrigger>
-            <TabsTrigger value="multi-llm" className="text-xs sm:text-sm">Multi-LLM</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-7 bg-slate-900/80 border border-slate-700/50 p-1 rounded-xl">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Visão Geral</TabsTrigger>
+            <TabsTrigger value="compliance" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Compliance</TabsTrigger>
+            <TabsTrigger value="risks" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Riscos</TabsTrigger>
+            <TabsTrigger value="recommendations" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Recomendações</TabsTrigger>
+            <TabsTrigger value="checklist" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Checklist</TabsTrigger>
+            <TabsTrigger value="impact" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Impacto</TabsTrigger>
+            <TabsTrigger value="multi-llm" className="text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-violet-600 data-[state=active]:text-white data-[state=active]:shadow-[0_0_15px_rgba(139,92,246,0.4)] rounded-lg transition-all">Multi-LLM</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            {/* Score de Compliance */}
-            <Card>
+            {/* Score de Compliance - Premium */}
+            <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <Scale className="h-5 w-5" />
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                    <Scale className="h-5 w-5 text-white" />
+                  </div>
                   <div className="flex flex-col gap-1">
-                    <span>Score de Compliance Algorítmico</span>
+                    <span className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Score de Compliance Algorítmico</span>
                     {selectedBrand && (
-                      <span className="text-sm font-normal text-muted-foreground">
+                      <span className="text-sm font-normal text-slate-400">
                         {selectedBrand.name}
                       </span>
                     )}
                   </div>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-400">
                   Índice geral baseado em IGO (ICE, Estabilidade, CPI, GAP)
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between mb-4">
-                  <span className={`text-5xl font-bold ${getComplianceLevel(governanceMetrics.complianceScore).color}`}>
+                  <span className={`text-5xl font-bold ${
+                    governanceMetrics.complianceScore >= 85 ? 'bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent' :
+                    governanceMetrics.complianceScore >= 70 ? 'bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent' :
+                    governanceMetrics.complianceScore >= 60 ? 'bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent' :
+                    'bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent'
+                  }`}>
                     {Math.round(governanceMetrics.complianceScore)}
                   </span>
-                  <Badge variant={getComplianceLevel(governanceMetrics.complianceScore).variant} className="text-lg px-4 py-2">
+                  <Badge className={`text-lg px-4 py-2 ${
+                    governanceMetrics.complianceScore >= 85 ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' :
+                    governanceMetrics.complianceScore >= 70 ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]' :
+                    governanceMetrics.complianceScore >= 60 ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.4)]' :
+                    'bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]'
+                  }`}>
                     {getComplianceLevel(governanceMetrics.complianceScore).label}
                   </Badge>
                 </div>
-                <Progress value={governanceMetrics.complianceScore} className="h-3" />
-                <p className="text-sm text-muted-foreground mt-2">
+                <div className="h-3 rounded-full bg-slate-800/80 overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      governanceMetrics.complianceScore >= 85 ? 'bg-gradient-to-r from-emerald-500 to-green-400' :
+                      governanceMetrics.complianceScore >= 70 ? 'bg-gradient-to-r from-blue-500 to-cyan-400' :
+                      governanceMetrics.complianceScore >= 60 ? 'bg-gradient-to-r from-yellow-500 to-orange-400' :
+                      'bg-gradient-to-r from-red-500 to-pink-400'
+                    }`}
+                    style={{ width: `${governanceMetrics.complianceScore}%` }}
+                  />
+                </div>
+                <p className="text-sm text-slate-400 mt-2">
                   Baseado em {governanceMetrics.totalDataPoints} pontos de dados
                 </p>
               </CardContent>
             </Card>
 
-            {/* Métricas Principais KAPI */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base flex flex-col gap-1">
-                    <span>ICE (Cognitive Efficiency)</span>
+            {/* Métricas Principais KAPI - Premium Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* ICE Card */}
+              <Card className="border-2 border-emerald-500/30 bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.15)] hover:shadow-[0_0_35px_rgba(16,185,129,0.25)] transition-all">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex flex-col gap-1">
+                    <span className="text-emerald-300">ICE (Cognitive Efficiency)</span>
                     {selectedBrand && (
-                      <span className="text-xs font-normal text-muted-foreground">
+                      <span className="text-xs font-normal text-slate-500">
                         {selectedBrand.name}
                       </span>
                     )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-3xl font-bold mb-3 bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">
                     {Math.round(governanceMetrics.avgICE)}%
                   </div>
-                  <Progress value={governanceMetrics.avgICE} className="h-2" />
+                  <div className="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all" style={{ width: `${governanceMetrics.avgICE}%` }} />
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base flex flex-col gap-1">
-                    <span>Estabilidade Cognitiva</span>
+              {/* Estabilidade Card */}
+              <Card className="border-2 border-blue-500/30 bg-gradient-to-br from-slate-900 via-blue-950/20 to-slate-900 shadow-[0_0_25px_rgba(59,130,246,0.15)] hover:shadow-[0_0_35px_rgba(59,130,246,0.25)] transition-all">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex flex-col gap-1">
+                    <span className="text-blue-300">Estabilidade Cognitiva</span>
                     {selectedBrand && (
-                      <span className="text-xs font-normal text-muted-foreground">
+                      <span className="text-xs font-normal text-slate-500">
                         {selectedBrand.name}
                       </span>
                     )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-3xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">
                     {Math.round(governanceMetrics.avgStability)}%
                   </div>
-                  <Progress value={governanceMetrics.avgStability} className="h-2" />
+                  <div className="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all" style={{ width: `${governanceMetrics.avgStability}%` }} />
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base flex flex-col gap-1">
-                    <span>CPI (Cognitive Index)</span>
+              {/* CPI Card */}
+              <Card className="border-2 border-orange-500/30 bg-gradient-to-br from-slate-900 via-orange-950/20 to-slate-900 shadow-[0_0_25px_rgba(249,115,22,0.15)] hover:shadow-[0_0_35px_rgba(249,115,22,0.25)] transition-all">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex flex-col gap-1">
+                    <span className="text-orange-300">CPI (Cognitive Index)</span>
                     {selectedBrand && (
-                      <span className="text-xs font-normal text-muted-foreground">
+                      <span className="text-xs font-normal text-slate-500">
                         {selectedBrand.name}
                       </span>
                     )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-3xl font-bold mb-3 bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
                     {Math.round(governanceMetrics.avgCPI)}%
                   </div>
-                  <Progress value={governanceMetrics.avgCPI} className="h-2" />
+                  <div className="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all" style={{ width: `${governanceMetrics.avgCPI}%` }} />
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base flex flex-col gap-1">
-                    <span>GAP (Governance Alignment)</span>
+              {/* GAP Card */}
+              <Card className="border-2 border-purple-500/30 bg-gradient-to-br from-slate-900 via-purple-950/20 to-slate-900 shadow-[0_0_25px_rgba(139,92,246,0.15)] hover:shadow-[0_0_35px_rgba(139,92,246,0.25)] transition-all">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex flex-col gap-1">
+                    <span className="text-purple-300">GAP (Governance Alignment)</span>
                     {selectedBrand && (
-                      <span className="text-xs font-normal text-muted-foreground">
+                      <span className="text-xs font-normal text-slate-500">
                         {selectedBrand.name}
                       </span>
                     )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-violet-500 bg-clip-text text-transparent">
                     {Math.round(governanceMetrics.avgGAP)}%
                   </div>
-                  <Progress value={governanceMetrics.avgGAP} className="h-2" />
+                  <div className="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-400 transition-all" style={{ width: `${governanceMetrics.avgGAP}%` }} />
+                  </div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
           <TabsContent value="compliance" className="space-y-6">
-            <Card>
+            <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <CardHeader>
                 <CardTitle className="flex flex-col gap-1">
-                  <span>Checklist de Compliance</span>
+                  <span className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Checklist de Compliance</span>
                   {selectedBrand && (
-                    <span className="text-sm font-normal text-muted-foreground">
+                    <span className="text-sm font-normal text-slate-400">
                       {selectedBrand.name}
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-400">
                   Verificação de conformidade com diretrizes de governança algorítmica
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                  governanceMetrics.avgICE >= 80 
+                    ? 'border-emerald-500/30 bg-emerald-950/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                    : 'border-yellow-500/30 bg-yellow-950/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]'
+                }`}>
                   <div className="flex items-center gap-3">
-                    {governanceMetrics.avgICE >= 80 ? (
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    )}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      governanceMetrics.avgICE >= 80 ? 'bg-gradient-to-br from-emerald-500 to-green-600' : 'bg-gradient-to-br from-yellow-500 to-orange-600'
+                    }`}>
+                      {governanceMetrics.avgICE >= 80 ? (
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-white" />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium">ICE (Eficiência Cognitiva)</p>
-                      <p className="text-sm text-muted-foreground">Mínimo recomendado: 80%</p>
+                      <p className="font-medium text-slate-200">ICE (Eficiência Cognitiva)</p>
+                      <p className="text-sm text-slate-400">Mínimo recomendado: 80%</p>
                     </div>
                   </div>
-                  <Badge variant={governanceMetrics.avgICE >= 80 ? "default" : "secondary"}>
+                  <Badge className={`px-3 py-1 ${governanceMetrics.avgICE >= 80 ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white' : 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'}`}>
                     {Math.round(governanceMetrics.avgICE)}%
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                  governanceMetrics.avgStability >= 70 
+                    ? 'border-emerald-500/30 bg-emerald-950/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                    : 'border-yellow-500/30 bg-yellow-950/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]'
+                }`}>
                   <div className="flex items-center gap-3">
-                    {governanceMetrics.avgStability >= 70 ? (
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    )}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      governanceMetrics.avgStability >= 70 ? 'bg-gradient-to-br from-emerald-500 to-green-600' : 'bg-gradient-to-br from-yellow-500 to-orange-600'
+                    }`}>
+                      {governanceMetrics.avgStability >= 70 ? (
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-white" />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium">Estabilidade Cognitiva</p>
-                      <p className="text-sm text-muted-foreground">Mínimo recomendado: 70%</p>
+                      <p className="font-medium text-slate-200">Estabilidade Cognitiva</p>
+                      <p className="text-sm text-slate-400">Mínimo recomendado: 70%</p>
                     </div>
                   </div>
-                  <Badge variant={governanceMetrics.avgStability >= 70 ? "default" : "secondary"}>
+                  <Badge className={`px-3 py-1 ${governanceMetrics.avgStability >= 70 ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white' : 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'}`}>
                     {Math.round(governanceMetrics.avgStability)}%
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                  governanceMetrics.avgCPI >= 60 
+                    ? 'border-emerald-500/30 bg-emerald-950/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                    : 'border-yellow-500/30 bg-yellow-950/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]'
+                }`}>
                   <div className="flex items-center gap-3">
-                    {governanceMetrics.avgCPI >= 60 ? (
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    )}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      governanceMetrics.avgCPI >= 60 ? 'bg-gradient-to-br from-emerald-500 to-green-600' : 'bg-gradient-to-br from-yellow-500 to-orange-600'
+                    }`}>
+                      {governanceMetrics.avgCPI >= 60 ? (
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-white" />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium">CPI Score</p>
-                      <p className="text-sm text-muted-foreground">Mínimo recomendado: 60%</p>
+                      <p className="font-medium text-slate-200">CPI Score</p>
+                      <p className="text-sm text-slate-400">Mínimo recomendado: 60%</p>
                     </div>
                   </div>
-                  <Badge variant={governanceMetrics.avgCPI >= 60 ? "default" : "secondary"}>
+                  <Badge className={`px-3 py-1 ${governanceMetrics.avgCPI >= 60 ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white' : 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'}`}>
                     {Math.round(governanceMetrics.avgCPI)}%
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                  governanceMetrics.avgGAP >= 75 
+                    ? 'border-emerald-500/30 bg-emerald-950/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                    : 'border-yellow-500/30 bg-yellow-950/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]'
+                }`}>
                   <div className="flex items-center gap-3">
-                    {governanceMetrics.avgGAP >= 75 ? (
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    )}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      governanceMetrics.avgGAP >= 75 ? 'bg-gradient-to-br from-emerald-500 to-green-600' : 'bg-gradient-to-br from-yellow-500 to-orange-600'
+                    }`}>
+                      {governanceMetrics.avgGAP >= 75 ? (
+                        <CheckCircle className="h-4 w-4 text-white" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-white" />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium">Alinhamento de Governança (GAP)</p>
-                      <p className="text-sm text-muted-foreground">Mínimo recomendado: 75%</p>
+                      <p className="font-medium text-slate-200">Alinhamento de Governança (GAP)</p>
+                      <p className="text-sm text-slate-400">Mínimo recomendado: 75%</p>
                     </div>
                   </div>
-                  <Badge variant={governanceMetrics.avgGAP >= 75 ? "default" : "secondary"}>
+                  <Badge className={`px-3 py-1 ${governanceMetrics.avgGAP >= 75 ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white' : 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'}`}>
                     {Math.round(governanceMetrics.avgGAP)}%
                   </Badge>
                 </div>
@@ -822,86 +898,94 @@ export default function AlgorithmicGovernance() {
           </TabsContent>
 
           <TabsContent value="risks" className="space-y-6">
-            <Card>
+            <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                    <AlertTriangle className="h-5 w-5 text-white" />
+                  </div>
                   <div className="flex flex-col gap-1">
-                    <span>Análise de Riscos</span>
+                    <span className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Análise de Riscos</span>
                     {selectedBrand && (
-                      <span className="text-sm font-normal text-muted-foreground">
+                      <span className="text-sm font-normal text-slate-400">
                         {selectedBrand.name}
                       </span>
                     )}
                   </div>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-400">
                   Riscos identificados através de monitoramento multi-LLM
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {governanceMetrics.risks.length === 0 ? (
-                  <div className="flex items-center gap-2 text-green-600 p-4 border border-green-200 rounded-lg">
-                    <CheckCircle className="h-5 w-5" />
-                    <span>Nenhum risco crítico detectado. Sistema operando dentro dos parâmetros.</span>
+                  <div className="flex items-center gap-3 p-4 border-2 border-emerald-500/30 bg-emerald-950/20 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                      <CheckCircle className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-emerald-300">Nenhum risco crítico detectado. Sistema operando dentro dos parâmetros.</span>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {governanceMetrics.risks.map((risk: any, idx: number) => (
                       <div
                         key={idx}
-                        className={`p-6 border-l-4 rounded-lg ${
+                        className={`p-6 rounded-xl border-2 transition-all ${
                           risk.level === 'high' 
-                            ? 'border-red-500 bg-red-50 dark:bg-red-950/20' 
-                            : 'border-yellow-500 bg-yellow-50 dark:bg-yellow-950/20'
+                            ? 'border-red-500/40 bg-gradient-to-br from-red-950/30 to-slate-900/50 shadow-[0_0_20px_rgba(239,68,68,0.15)]' 
+                            : 'border-yellow-500/40 bg-gradient-to-br from-yellow-950/30 to-slate-900/50 shadow-[0_0_20px_rgba(234,179,8,0.15)]'
                         }`}
                       >
                         <div className="space-y-3">
-                          {/* Header */}
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3">
-                              <AlertTriangle className={`h-5 w-5 ${
-                                risk.level === 'high' ? 'text-red-600' : 'text-yellow-600'
-                              }`} />
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                risk.level === 'high' ? 'bg-gradient-to-br from-red-500 to-rose-600' : 'bg-gradient-to-br from-yellow-500 to-amber-600'
+                              }`}>
+                                <AlertTriangle className="h-5 w-5 text-white" />
+                              </div>
                               <div>
-                                <h4 className="font-semibold text-lg">{risk.title}</h4>
+                                <h4 className="font-semibold text-lg text-slate-100">{risk.title}</h4>
                                 <p className={`text-sm ${
-                                  risk.level === 'high' ? 'text-red-700 dark:text-red-400' : 'text-yellow-700 dark:text-yellow-400'
+                                  risk.level === 'high' ? 'text-red-400' : 'text-yellow-400'
                                 }`}>
                                   {risk.message}
                                 </p>
                               </div>
                             </div>
-                            <Badge variant={risk.level === 'high' ? 'destructive' : 'secondary'}>
+                            <Badge className={`px-3 py-1 ${
+                              risk.level === 'high' 
+                                ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.4)]' 
+                                : 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-[0_0_10px_rgba(234,179,8,0.4)]'
+                            }`}>
                               {risk.level === 'high' ? 'Alto' : 'Médio'}
                             </Badge>
                           </div>
 
-                          {/* Details */}
-                          <div className="pl-8 space-y-2">
-                            <p className="text-sm text-muted-foreground">
-                              <span className="font-medium">Análise:</span> {risk.details}
+                          <div className="pl-12 space-y-2">
+                            <p className="text-sm text-slate-300">
+                              <span className="font-medium text-slate-200">Análise:</span> {risk.details}
                             </p>
                             
                             {risk.affectedLLMs && risk.affectedLLMs.length > 0 && (
                               <div className="flex items-center gap-2 text-sm">
-                                <span className="font-medium">LLMs Afetados:</span>
+                                <span className="font-medium text-slate-200">LLMs Afetados:</span>
                                 {risk.affectedLLMs.map((llm: string) => (
-                                  <Badge key={llm} variant="outline" className="text-xs">
+                                  <Badge key={llm} variant="outline" className="text-xs border-slate-600 text-slate-300">
                                     {llm}
                                   </Badge>
                                 ))}
                               </div>
                             )}
 
-                            <div className="pt-2 border-t">
+                            <div className="pt-2 border-t border-slate-700/50">
                               <p className="text-sm">
-                                <span className="font-medium">💡 Recomendação:</span>{' '}
-                                <span className="text-muted-foreground">{risk.recommendation}</span>
+                                <span className="font-medium text-amber-400">💡 Recomendação:</span>{' '}
+                                <span className="text-slate-300">{risk.recommendation}</span>
                               </p>
                             </div>
 
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-slate-500">
                               Detectado em {new Date(risk.timestamp).toLocaleString('pt-BR')}
                             </p>
                           </div>
@@ -915,80 +999,81 @@ export default function AlgorithmicGovernance() {
           </TabsContent>
 
           <TabsContent value="recommendations" className="space-y-6">
-            <Card>
+            <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                    <Brain className="h-5 w-5 text-white" />
+                  </div>
                   <div className="flex flex-col gap-1">
-                    <span>Recomendações Inteligentes IGO</span>
+                    <span className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Recomendações Inteligentes IGO</span>
                     {selectedBrand && (
-                      <span className="text-sm font-normal text-muted-foreground">
+                      <span className="text-sm font-normal text-slate-400">
                         {selectedBrand.name}
                       </span>
                     )}
                   </div>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-400">
                   Ações baseadas em análise matemática das métricas atuais
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {governanceMetrics.recommendations.map((rec: any, idx: number) => (
-                    <Card key={idx} className={
-                      rec.priority === 'critical' ? 'border-red-500 dark:border-red-900' :
-                      rec.priority === 'high' ? 'border-orange-500 dark:border-orange-900' :
-                      rec.priority === 'medium' ? 'border-yellow-500 dark:border-yellow-900' :
-                      'border-blue-500 dark:border-blue-900'
-                    }>
+                    <Card key={idx} className={`border-2 transition-all ${
+                      rec.priority === 'critical' ? 'border-red-500/40 bg-gradient-to-br from-red-950/20 to-slate-900/50 shadow-[0_0_20px_rgba(239,68,68,0.1)]' :
+                      rec.priority === 'high' ? 'border-orange-500/40 bg-gradient-to-br from-orange-950/20 to-slate-900/50 shadow-[0_0_20px_rgba(249,115,22,0.1)]' :
+                      rec.priority === 'medium' ? 'border-yellow-500/40 bg-gradient-to-br from-yellow-950/20 to-slate-900/50 shadow-[0_0_20px_rgba(234,179,8,0.1)]' :
+                      'border-blue-500/40 bg-gradient-to-br from-blue-950/20 to-slate-900/50 shadow-[0_0_20px_rgba(59,130,246,0.1)]'
+                    }`}>
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <Badge className="mb-2" variant={
-                              rec.priority === 'critical' ? 'destructive' :
-                              rec.priority === 'high' ? 'default' :
-                              rec.priority === 'medium' ? 'secondary' :
-                              'outline'
-                            }>
+                            <Badge className={`mb-2 px-3 py-1 ${
+                              rec.priority === 'critical' ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white' :
+                              rec.priority === 'high' ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white' :
+                              rec.priority === 'medium' ? 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white' :
+                              'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                            }`}>
                               {rec.priority === 'critical' ? 'CRÍTICO' :
                                rec.priority === 'high' ? 'ALTO' :
                                rec.priority === 'medium' ? 'MÉDIO' :
                                'INFO'}
                             </Badge>
-                            <CardTitle className="text-lg">{rec.title}</CardTitle>
-                            <CardDescription className="mt-1 text-xs font-semibold">
+                            <CardTitle className="text-lg text-slate-100">{rec.title}</CardTitle>
+                            <CardDescription className="mt-1 text-xs font-semibold text-slate-400">
                               {rec.category}
                             </CardDescription>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-3">
-                        <p className="text-sm text-muted-foreground">{rec.description}</p>
+                        <p className="text-sm text-slate-300">{rec.description}</p>
                         
                         <div className="space-y-2">
-                          <p className="text-sm font-semibold">Ações Recomendadas:</p>
-                          <ul className="space-y-1 text-sm text-muted-foreground">
+                          <p className="text-sm font-semibold text-slate-200">Ações Recomendadas:</p>
+                          <ul className="space-y-1 text-sm text-slate-400">
                             {rec.actions.map((action: string, actionIdx: number) => (
                               <li key={actionIdx} className="flex items-start gap-2">
-                                <span className="text-primary mt-1">•</span>
+                                <span className="text-purple-400 mt-1">•</span>
                                 <span>{action}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                         
-                        <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                          <strong>Impacto:</strong> {rec.impact}
+                        <div className="text-xs text-slate-300 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                          <strong className="text-slate-200">Impacto:</strong> {rec.impact}
                         </div>
 
-                        {/* Quick Action Buttons */}
-                        <div className="pt-3 border-t flex flex-wrap gap-2">
+                        <div className="pt-3 border-t border-slate-700/50 flex flex-wrap gap-2">
                           {(rec.category.includes('CPI') || rec.title.includes('contexto')) && (
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => navigate('/brands')}
-                              className="gap-2"
+                              className="gap-2 border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
                             >
                               <Edit className="h-4 w-4" />
                               Editar Contexto da Marca
@@ -1000,7 +1085,7 @@ export default function AlgorithmicGovernance() {
                               size="sm"
                               variant="outline"
                               onClick={() => navigate(`/igo-observability?brandId=${selectedBrandId}`)}
-                              className="gap-2"
+                              className="gap-2 border-blue-500/50 text-blue-300 hover:bg-blue-500/10"
                             >
                               <Eye className="h-4 w-4" />
                               Ver IGO Observability
@@ -1012,7 +1097,7 @@ export default function AlgorithmicGovernance() {
                               size="sm"
                               variant="outline"
                               onClick={() => navigate(`/igo-observability?brandId=${selectedBrandId}`)}
-                              className="gap-2"
+                              className="gap-2 border-amber-500/50 text-amber-300 hover:bg-amber-500/10"
                             >
                               <Search className="h-4 w-4" />
                               Detectar Alucinações
@@ -1024,7 +1109,7 @@ export default function AlgorithmicGovernance() {
                               size="sm"
                               variant="outline"
                               onClick={() => navigate(`/llm-mentions?brandId=${selectedBrandId}`)}
-                              className="gap-2"
+                              className="gap-2 border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10"
                             >
                               <ExternalLink className="h-4 w-4" />
                               Ver Menções LLM
@@ -1040,35 +1125,37 @@ export default function AlgorithmicGovernance() {
           </TabsContent>
 
           <TabsContent value="multi-llm" className="space-y-6">
-            <Card>
+            <Card className="border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <CardHeader>
                 <CardTitle className="flex flex-col gap-1">
-                  <span>Consenso Multi-LLM</span>
+                  <span className="text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Consenso Multi-LLM</span>
                   {selectedBrand && (
-                    <span className="text-sm font-normal text-muted-foreground">
+                    <span className="text-sm font-normal text-slate-400">
                       {selectedBrand.name}
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-400">
                   Análise comparativa do comportamento de cada LLM
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {governanceMetrics.providerConsensus.map((provider: any) => (
-                  <div key={provider.provider} className="p-4 border rounded-lg">
+                  <div key={provider.provider} className="p-4 rounded-xl border-2 border-slate-700/50 bg-slate-800/30 hover:border-purple-500/30 hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-medium text-lg">{provider.provider}</span>
-                      <Badge>
+                      <span className="font-medium text-lg text-slate-200">{provider.provider}</span>
+                      <Badge className="bg-gradient-to-r from-purple-500 to-violet-600 text-white px-3 py-1">
                         Confiança: {Math.round(provider.avgConfidence)}%
                       </Badge>
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Taxa de Menção</span>
-                        <span className="font-medium">{Math.round(provider.mentionRate)}%</span>
+                        <span className="text-slate-400">Taxa de Menção</span>
+                        <span className="font-medium text-purple-300">{Math.round(provider.mentionRate)}%</span>
                       </div>
-                      <Progress value={provider.mentionRate} className="h-2" />
+                      <div className="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                        <div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-400 transition-all" style={{ width: `${provider.mentionRate}%` }} />
+                      </div>
                     </div>
                   </div>
                 ))}
