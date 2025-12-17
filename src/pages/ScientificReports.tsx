@@ -196,11 +196,13 @@ export default function ScientificReports() {
         doc.text('Nenhum dado de providers disponível', 14, yPos);
         yPos += 8;
       } else {
-        providers.forEach((p: any) => {
+      providers.forEach((p: any) => {
           const providerName = p.provider.charAt(0).toUpperCase() + p.provider.slice(1);
           doc.text(`${providerName}:`, 14, yPos);
           doc.text(`Taxa: ${((p.mentionRate || 0) * 100).toFixed(1)}%`, 60, yPos);
-          doc.text(`Confiança: ${(p.avgConfidence || 0).toFixed(1)}%`, 120, yPos);
+          // Normalizar confiança: se < 1, multiplicar por 100 (é decimal)
+          const confidence = (p.avgConfidence || 0) < 1 ? (p.avgConfidence || 0) * 100 : (p.avgConfidence || 0);
+          doc.text(`Confiança: ${confidence.toFixed(1)}%`, 120, yPos);
           yPos += 6;
           
           if (p.totalMentions !== undefined) {
