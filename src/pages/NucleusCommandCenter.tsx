@@ -6,18 +6,64 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Brain, Send, Loader2, Trash2, BookOpen } from "lucide-react";
+import { Brain, Send, Loader2, Trash2, BookOpen, Bot, Sparkles, MessageSquare, Search, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { logger } from "@/utils/logger";
 import { USE_CODE_BASED_VISIBILITY, VISIBLE_BRAND_NAME } from "@/config/brandVisibility";
 import { KnowledgeBaseUpload } from "@/components/nucleus/KnowledgeBaseUpload";
 
+// Corporate LLM Icons Component
+const LLMIcon = ({ provider, size = 'md' }: { provider: string; size?: 'sm' | 'md' | 'lg' }) => {
+  const sizeClasses = {
+    sm: 'w-5 h-5',
+    md: 'w-6 h-6',
+    lg: 'w-8 h-8'
+  };
+  const containerSizes = {
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-12 h-12'
+  };
+  
+  const configs: Record<string, { icon: typeof Bot; gradient: string; shadow: string }> = {
+    chatgpt: {
+      icon: Bot,
+      gradient: 'from-emerald-500 to-teal-500',
+      shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+    },
+    gemini: {
+      icon: Sparkles,
+      gradient: 'from-blue-500 to-purple-500',
+      shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.4)]'
+    },
+    claude: {
+      icon: MessageSquare,
+      gradient: 'from-orange-500 to-amber-500',
+      shadow: 'shadow-[0_0_15px_rgba(249,115,22,0.4)]'
+    },
+    perplexity: {
+      icon: Search,
+      gradient: 'from-cyan-500 to-blue-500',
+      shadow: 'shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+    }
+  };
+  
+  const config = configs[provider.toLowerCase()] || configs.chatgpt;
+  const IconComponent = config.icon;
+  
+  return (
+    <div className={`${containerSizes[size]} rounded-xl bg-gradient-to-br ${config.gradient} ${config.shadow} flex items-center justify-center flex-shrink-0`}>
+      <IconComponent className={`${sizeClasses[size]} text-white`} />
+    </div>
+  );
+};
+
 const LLM_OPTIONS = [
-  { key: 'chatgpt', name: 'ChatGPT', icon: '🤖' },
-  { key: 'gemini', name: 'Google Gemini', icon: '✨' },
-  { key: 'claude', name: 'Claude', icon: '🧠' },
-  { key: 'perplexity', name: 'Perplexity', icon: '🔍' },
+  { key: 'chatgpt', name: 'ChatGPT' },
+  { key: 'gemini', name: 'Google Gemini' },
+  { key: 'claude', name: 'Claude' },
+  { key: 'perplexity', name: 'Perplexity' },
 ];
 
 interface Message {
@@ -162,29 +208,29 @@ export default function NucleusCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+    <div className="min-h-screen bg-slate-950">
       {/* Animated Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <div className="container mx-auto p-6 max-w-5xl">
         <div className="flex flex-col gap-6">
           {/* Premium Header */}
-          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative overflow-hidden rounded-2xl border-2 border-purple-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 backdrop-blur-xl p-8 shadow-[0_0_50px_rgba(168,85,247,0.15)] transition-all duration-500 hover:shadow-[0_0_60px_rgba(168,85,247,0.25)] hover:border-purple-500/50">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-cyan-500/5 pointer-events-none" />
             <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
               <div>
-                <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-                    <Brain className="h-8 w-8 text-primary" />
+                <h1 className="text-4xl font-black mb-2 flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 shadow-[0_0_25px_rgba(168,85,247,0.5)]">
+                    <Brain className="h-8 w-8 text-white" />
                   </div>
-                  <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-purple-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
                     Nucleus Chat
                   </span>
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-slate-400">
                   Converse com 4 LLMs simultaneamente sobre sua marca
                 </p>
               </div>
@@ -195,7 +241,7 @@ export default function NucleusCommandCenter() {
                     variant="outline"
                     size="sm"
                     onClick={handleClearChat}
-                    className="gap-2 border-primary/30 hover:border-primary/50 hover:bg-primary/5"
+                    className="gap-2 border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-purple-300"
                   >
                     <Trash2 className="h-4 w-4" />
                     Limpar Chat
@@ -203,12 +249,12 @@ export default function NucleusCommandCenter() {
                 )}
                 
                 <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
-                  <SelectTrigger className="w-64 border-primary/30 hover:border-primary/50 bg-background/50 backdrop-blur-sm">
+                  <SelectTrigger className="w-64 border-purple-500/30 hover:border-purple-500/50 bg-slate-800/50 backdrop-blur-sm text-white">
                     <SelectValue placeholder="Selecione uma marca" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-slate-800 border-purple-500/30">
                     {brands?.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id}>
+                      <SelectItem key={brand.id} value={brand.id} className="text-white hover:bg-purple-500/20">
                         {brand.name}
                       </SelectItem>
                     ))}
@@ -226,21 +272,25 @@ export default function NucleusCommandCenter() {
             />
           )}
 
-          <Card className="flex flex-col h-[calc(100vh-26rem)] border-primary/20 bg-background/50 backdrop-blur-sm shadow-xl">
+          <Card className="flex flex-col h-[calc(100vh-26rem)] border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-sm shadow-[0_0_40px_rgba(30,41,59,0.5)]">
           <ScrollArea className="flex-1 p-6">
             <div className="space-y-6">
               {messages.length === 0 && (
                 <div className="text-center py-12">
-                  <Brain className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <h3 className="text-lg font-semibold mb-2">Bem-vindo ao Nucleus Chat</h3>
-                  <p className="text-muted-foreground mb-6">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+                    <Brain className="h-10 w-10 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-black mb-2 bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">Bem-vindo ao Nucleus Chat</h3>
+                  <p className="text-slate-400 mb-8">
                     Faça perguntas sobre sua marca e os 4 LLMs responderão simultaneamente
                   </p>
-                  <div className="flex justify-center gap-4">
+                  <div className="flex justify-center gap-6">
                     {LLM_OPTIONS.map((llm) => (
-                      <div key={llm.key} className="text-center">
-                        <div className="text-3xl mb-1">{llm.icon}</div>
-                        <div className="text-xs text-muted-foreground">{llm.name}</div>
+                      <div key={llm.key} className="text-center group">
+                        <div className="mb-2 transform group-hover:scale-110 transition-transform duration-300">
+                          <LLMIcon provider={llm.key} size="lg" />
+                        </div>
+                        <div className="text-xs text-slate-400 font-medium">{llm.name}</div>
                       </div>
                     ))}
                   </div>
@@ -254,26 +304,24 @@ export default function NucleusCommandCenter() {
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
-                  {message.role === 'assistant' && (
-                    <div className="text-2xl flex-shrink-0">
-                      {LLM_OPTIONS.find(l => l.key === message.llm)?.icon || '🤖'}
-                    </div>
+                  {message.role === 'assistant' && message.llm && (
+                    <LLMIcon provider={message.llm} size="md" />
                   )}
                   
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
+                    className={`max-w-[80%] rounded-xl p-4 ${
                       message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
+                        ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
+                        : 'bg-slate-800/80 border border-slate-700/50 text-slate-100'
                     }`}
                   >
                     {message.role === 'assistant' && message.llm && (
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-semibold opacity-70">
+                        <span className="text-xs font-bold text-slate-300">
                           {LLM_OPTIONS.find(l => l.key === message.llm)?.name}
                         </span>
                         {message.usedKnowledgeBase && (
-                          <Badge variant="secondary" className="text-[10px] py-0 px-1">
+                          <Badge className="text-[10px] py-0 px-1.5 bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
                             <BookOpen className="w-3 h-3 mr-1" />
                             KB
                           </Badge>
@@ -281,7 +329,7 @@ export default function NucleusCommandCenter() {
                       </div>
                     )}
                     <p className="whitespace-pre-wrap">{message.content}</p>
-                    <div className="text-xs opacity-50 mt-2">
+                    <div className="text-xs text-slate-500 mt-2">
                       {message.timestamp.toLocaleTimeString('pt-BR', { 
                         hour: '2-digit', 
                         minute: '2-digit' 
@@ -290,16 +338,20 @@ export default function NucleusCommandCenter() {
                   </div>
 
                   {message.role === 'user' && (
-                    <div className="text-2xl flex-shrink-0">👤</div>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 shadow-lg flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
                   )}
                 </div>
               ))}
 
               {isLoading && (
-                <div className="flex justify-start gap-3">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                  <div className="bg-muted rounded-lg p-4">
-                    <p className="text-sm text-muted-foreground">
+                <div className="flex justify-start gap-3 items-center">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/30 to-cyan-500/30 border border-purple-500/30 flex items-center justify-center">
+                    <Loader2 className="h-5 w-5 animate-spin text-purple-400" />
+                  </div>
+                  <div className="bg-slate-800/80 border border-slate-700/50 rounded-xl p-4">
+                    <p className="text-sm text-slate-400">
                       Consultando os 4 LLMs...
                     </p>
                   </div>
@@ -310,8 +362,8 @@ export default function NucleusCommandCenter() {
             </div>
           </ScrollArea>
 
-          <div className="border-t p-4">
-            <div className="flex gap-2">
+          <div className="border-t border-slate-700/50 p-4 bg-slate-800/30">
+            <div className="flex gap-3">
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
@@ -322,12 +374,13 @@ export default function NucleusCommandCenter() {
                     : "Selecione uma marca primeiro"
                 }
                 disabled={!selectedBrand || isLoading}
-                className="flex-1"
+                className="flex-1 bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-purple-500/50 focus:ring-purple-500/20"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!selectedBrand || !inputMessage.trim() || isLoading}
                 size="icon"
+                className="bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 shadow-[0_0_20px_rgba(168,85,247,0.3)] disabled:opacity-50"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -336,7 +389,7 @@ export default function NucleusCommandCenter() {
                 )}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-slate-500 mt-2">
               Pressione Enter para enviar, Shift+Enter para nova linha
             </p>
           </div>
