@@ -624,7 +624,7 @@ export default function IGODashboard() {
                 <CardContent className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Confiança:</span>
-                    <span className="font-bold">{Math.round(llm.confidence)}%</span>
+                    <span className="font-bold">{Math.round(llm.confidence * 100)}%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sentimento:</span>
