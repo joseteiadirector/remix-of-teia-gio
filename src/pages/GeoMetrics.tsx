@@ -210,17 +210,17 @@ const GeoMetrics = () => {
       <Header />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Header with Actions */}
+        {/* Premium Header with Actions */}
         <div className="flex flex-col gap-6 mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-6 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-2 border-purple-500/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
             <div className="space-y-2">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 bg-clip-text text-transparent">
                   Métricas GEO
                 </h1>
                 <DataSourceBadge type="real" />
               </div>
-              <p className="text-muted-foreground mt-2">
+              <p className="text-slate-400 mt-2">
                 Visualize as pontuações de otimização para motores generativos
               </p>
               {/* Indicador de Consistência Matemática */}
@@ -231,27 +231,25 @@ const GeoMetrics = () => {
                 showDetails={true}
               />
             </div>
-          </div>
-
-          {/* Brand Selector - Positioned prominently */}
-          {brands && brands.length > 0 && (
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex-1 max-w-xs">
-                <Select value={selectedBrandId || undefined} onValueChange={setSelectedBrandId}>
-                  <SelectTrigger className="bg-background w-full">
-                    <SelectValue placeholder="Selecione uma marca" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background z-50">
-                    {brands.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
+            
+            {/* Actions */}
+            {brands && brands.length > 0 && (
               <div className="flex items-center gap-4">
+                <div className="flex-1 max-w-xs">
+                  <Select value={selectedBrandId || undefined} onValueChange={setSelectedBrandId}>
+                    <SelectTrigger className="bg-slate-800/60 border-slate-600/50 hover:border-purple-500/50 transition-colors w-full">
+                      <SelectValue placeholder="Selecione uma marca" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-900 border-slate-700 z-50">
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.id} value={brand.id}>
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Button
                   onClick={async () => {
                     if (!selectedBrandId || !geoScores) {
@@ -269,7 +267,6 @@ const GeoMetrics = () => {
                         return;
                       }
 
-                      // Preparar dados no formato do sistema unificado
                       const breakdown = geoScores.breakdown as any;
                       const geoData = {
                         brandName: brand.name,
@@ -298,8 +295,8 @@ const GeoMetrics = () => {
                       setIsExportingPdf(false);
                     }
                   }}
-                  variant="outline"
                   disabled={isExportingPdf}
+                  className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] transition-all"
                 >
                   {isExportingPdf ? (
                     <>
@@ -325,7 +322,8 @@ const GeoMetrics = () => {
                   onClick={handleCalculateMetrics}
                   disabled={isCalculating}
                   size="default"
-                  className="relative"
+                  variant="outline"
+                  className="border-slate-600/50 hover:border-purple-500/50 hover:bg-purple-500/10"
                 >
                   {isCalculating ? (
                     <>
@@ -340,19 +338,19 @@ const GeoMetrics = () => {
                   )}
                 </Button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-          {/* Brand Info */}
+          {/* Brand Info - Premium */}
           {selectedBrandId && brands && geoScores && (
-            <Card className="p-4 bg-muted/50">
+            <Card className="p-4 border-2 border-slate-700/50 bg-gradient-to-r from-slate-900/80 via-slate-800/60 to-slate-900/80 shadow-[0_0_20px_rgba(100,116,139,0.1)] mb-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-semibold text-lg">{brands.find(b => b.id === selectedBrandId)?.name}</div>
-                  <div className="text-sm text-muted-foreground">{brands.find(b => b.id === selectedBrandId)?.domain}</div>
+                  <div className="font-semibold text-lg text-white">{brands.find(b => b.id === selectedBrandId)?.name}</div>
+                  <div className="text-sm text-slate-400">{brands.find(b => b.id === selectedBrandId)?.domain}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-slate-500">
                   {geoScores.computed_at 
                     ? `Última atualização: ${new Date(geoScores.computed_at).toLocaleString('pt-BR')}` 
                     : 'Nenhum dado coletado ainda'}
@@ -363,104 +361,110 @@ const GeoMetrics = () => {
 
           {/* Verificar se há marcas */}
           {!brands || brands.length === 0 ? (
-          <Card className="p-12 text-center">
-            <Brain className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-xl font-semibold mb-2">Nenhuma marca cadastrada</h3>
-            <p className="text-muted-foreground mb-6">
+          <Card className="p-12 text-center border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
+            <Brain className="w-16 h-16 mx-auto mb-4 text-slate-500" />
+            <h3 className="text-xl font-semibold mb-2 text-white">Nenhuma marca cadastrada</h3>
+            <p className="text-slate-400 mb-6">
               Você precisa cadastrar ao menos uma marca antes de analisar métricas GEO
             </p>
             <Button 
               onClick={() => window.location.href = '/brands'}
-              className="bg-gradient-to-r from-purple-600 to-pink-600"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
             >
               Cadastrar Marca
             </Button>
           </Card>
         ) : (
           <>
-            {/* Main Scores */}
+            {/* Main Scores - Premium Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* GEO Score */}
-          <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-200">
+          <Card className="p-6 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/80 to-slate-950/80 shadow-[0_0_30px_rgba(139,92,246,0.2)]">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">GEO Score</p>
+                <p className="text-sm font-medium text-slate-400">GEO Score</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <h2 className="text-5xl font-bold text-purple-600">{geoScore}</h2>
-                  <span className="text-sm text-muted-foreground">/100</span>
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">{geoScore}</h2>
+                  <span className="text-sm text-slate-500">/100</span>
                 </div>
               </div>
-              <Brain className="w-8 h-8 text-purple-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
             </div>
             <Progress value={geoScore} className="h-2 mb-2" />
-            <p className="text-xs text-muted-foreground">Presença em respostas de IA</p>
+            <p className="text-xs text-slate-500">Presença em respostas de IA</p>
           </Card>
 
           {/* SEO Score */}
-          <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-200">
+          <Card className="p-6 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 via-slate-900/80 to-slate-950/80 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">SEO Score</p>
+                <p className="text-sm font-medium text-slate-400">SEO Score</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <h2 className="text-5xl font-bold text-blue-600">{seoScore}</h2>
-                  <span className="text-sm text-muted-foreground">/100</span>
+                  <h2 className="text-5xl font-bold text-blue-400">{seoScore}</h2>
+                  <span className="text-sm text-slate-500">/100</span>
                 </div>
               </div>
-              <Target className="w-8 h-8 text-blue-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                <Target className="w-6 h-6 text-white" />
+              </div>
             </div>
             <Progress value={seoScore} className="h-2 mb-2" />
             {seoScore === 0 && (
-              <div className="mt-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded">
-                <p className="text-yellow-600 font-medium text-xs mb-2">⚠️ Sem dados do GSC</p>
-                <p className="text-muted-foreground text-xs mb-3">Configure Google Search Console para calcular SEO Score</p>
+              <div className="mt-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                <p className="text-amber-400 font-medium text-xs mb-2">⚠️ Sem dados do GSC</p>
+                <p className="text-slate-500 text-xs mb-3">Configure Google Search Console para calcular SEO Score</p>
                 <Button 
                   size="sm" 
                   variant="outline"
-                  className="text-xs h-7"
+                  className="text-xs h-7 border-amber-500/30 hover:bg-amber-500/10"
                   onClick={() => navigate('/google-setup')}
                 >
                   Configurar GSC
                 </Button>
               </div>
             )}
-            <p className="text-xs text-muted-foreground">Otimização tradicional</p>
+            <p className="text-xs text-slate-500">Otimização tradicional</p>
           </Card>
 
           {/* GAP GEO/SEO */}
-          <Card className="p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-200">
+          <Card className="p-6 border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/80 to-slate-950/80 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Gap GEO/SEO</p>
+                <p className="text-sm font-medium text-slate-400">Gap GEO/SEO</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <h2 className="text-5xl font-bold text-orange-600">{gapScore}</h2>
-                  <span className="text-sm text-muted-foreground">pts</span>
+                  <h2 className="text-5xl font-bold text-amber-400">{gapScore}</h2>
+                  <span className="text-sm text-slate-500">pts</span>
                 </div>
               </div>
-              <BarChart3 className="w-8 h-8 text-orange-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">
-                GEO: <span className="font-semibold">{geoScore}</span>
+              <p className="text-sm text-slate-400">
+                GEO: <span className="font-semibold text-purple-400">{geoScore}</span>
               </p>
-              <p className="text-sm text-muted-foreground">
-                SEO: <span className="font-semibold">{seoScore}</span>
+              <p className="text-sm text-slate-400">
+                SEO: <span className="font-semibold text-blue-400">{seoScore}</span>
               </p>
             </div>
             {seoScore === 0 ? (
-              <div className="mt-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded">
-                <p className="text-yellow-600 font-medium text-xs mb-1">⚠️ GAP não calculável</p>
-                <p className="text-muted-foreground text-xs mb-3">Configure o GSC para calcular a diferença entre GEO e SEO</p>
+              <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                <p className="text-amber-400 font-medium text-xs mb-1">⚠️ GAP não calculável</p>
+                <p className="text-slate-500 text-xs mb-3">Configure o GSC para calcular a diferença entre GEO e SEO</p>
                 <Button 
                   size="sm" 
                   variant="outline"
-                  className="text-xs h-7"
+                  className="text-xs h-7 border-amber-500/30 hover:bg-amber-500/10"
                   onClick={() => navigate('/google-setup')}
                 >
                   Configurar GSC
                 </Button>
               </div>
             ) : (
-              <p className="text-xs text-muted-foreground mt-3">
+              <p className="text-xs text-slate-500 mt-3">
                 {geoScore > seoScore ? '✅ GEO está melhor' : '⚠️ SEO está melhor'}
               </p>
             )}
@@ -469,16 +473,18 @@ const GeoMetrics = () => {
 
         {breakdown && (
           <>
-            {/* Gráfico Radar dos 5 Pilares */}
-            <Card className="p-6 mb-8">
+            {/* Gráfico Radar dos 5 Pilares - Premium */}
+            <Card className="p-6 mb-8 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Target className="w-5 h-5 text-purple-600" />
-                Análise dos 5 Pilares GEO
+                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-violet-600/20">
+                  <Target className="w-5 h-5 text-purple-400" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Análise dos 5 Pilares GEO</span>
               </h3>
               <div id="geo-radar-chart">
                 <ResponsiveContainer width="100%" height={450}>
                 <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
-                  <PolarGrid stroke="#e5e7eb" />
+                  <PolarGrid stroke="rgba(148,163,184,0.2)" />
                   <PolarAngleAxis 
                     dataKey="pilar" 
                     tick={<CustomRadarTick cx={225} />}
@@ -487,9 +493,9 @@ const GeoMetrics = () => {
                   <Radar 
                     name="Score" 
                     dataKey="valor" 
-                    stroke="#9b87f5" 
-                    fill="#9b87f5" 
-                    fillOpacity={0.5}
+                    stroke="#a855f7" 
+                    fill="#a855f7" 
+                    fillOpacity={0.4}
                   />
                   <Legend />
                 </RadarChart>
@@ -497,69 +503,71 @@ const GeoMetrics = () => {
               </div>
             </Card>
 
-            {/* Breakdown dos 5 Pilares GEO */}
+            {/* Breakdown dos 5 Pilares GEO - Premium */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-              <Card className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
-                  <Target className="w-6 h-6 text-blue-600" />
+              <Card className="p-6 text-center border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(59,130,246,0.15)] hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                  <Target className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-blue-600">{breakdown.base_tecnica || 0}</h3>
-                <p className="text-sm text-muted-foreground mt-1">Base Técnica</p>
+                <h3 className="text-3xl font-bold text-blue-400">{breakdown.base_tecnica || 0}</h3>
+                <p className="text-sm text-slate-400 mt-1">Base Técnica</p>
               </Card>
 
-              <Card className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
-                  <Sparkles className="w-6 h-6 text-green-600" />
+              <Card className="p-6 text-center border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(16,185,129,0.15)] hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                  <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-green-600">{breakdown.estrutura_semantica || 0}</h3>
-                <p className="text-sm text-muted-foreground mt-1">Estrutura Semântica</p>
+                <h3 className="text-3xl font-bold text-emerald-400">{breakdown.estrutura_semantica || 0}</h3>
+                <p className="text-sm text-slate-400 mt-1">Estrutura Semântica</p>
               </Card>
 
-              <Card className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
-                  <Zap className="w-6 h-6 text-purple-600" />
+              <Card className="p-6 text-center border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(139,92,246,0.15)] hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-purple-600">{breakdown.relevancia_conversacional || 0}</h3>
-                <p className="text-sm text-muted-foreground mt-1">Relevância Conversacional</p>
+                <h3 className="text-3xl font-bold text-purple-400">{breakdown.relevancia_conversacional || 0}</h3>
+                <p className="text-sm text-slate-400 mt-1">Relevância Conversacional</p>
               </Card>
 
-              <Card className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
-                  <Award className="w-6 h-6 text-orange-600" />
+              <Card className="p-6 text-center border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(245,158,11,0.15)] hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                  <Award className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-orange-600">{breakdown.autoridade_cognitiva || 0}</h3>
-                <p className="text-sm text-muted-foreground mt-1">Autoridade Cognitiva</p>
+                <h3 className="text-3xl font-bold text-amber-400">{breakdown.autoridade_cognitiva || 0}</h3>
+                <p className="text-sm text-slate-400 mt-1">Autoridade Cognitiva</p>
               </Card>
 
-              <Card className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mx-auto mb-3">
-                  <Brain className="w-6 h-6 text-pink-600" />
+              <Card className="p-6 text-center border-2 border-pink-500/30 bg-gradient-to-br from-pink-950/50 via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_rgba(236,72,153,0.15)] hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(236,72,153,0.5)]">
+                  <Brain className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-pink-600">{breakdown.inteligencia_estrategica || 0}</h3>
-                <p className="text-sm text-muted-foreground mt-1">Inteligência Estratégica</p>
+                <h3 className="text-3xl font-bold text-pink-400">{breakdown.inteligencia_estrategica || 0}</h3>
+                <p className="text-sm text-slate-400 mt-1">Inteligência Estratégica</p>
               </Card>
             </div>
 
-            {/* Gráfico de Evolução */}
-            <Card className="p-6 mb-8">
+            {/* Gráfico de Evolução - Premium */}
+            <Card className="p-6 mb-8 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-purple-600" />
-                Evolução do Score GEO
+                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-violet-600/20">
+                  <TrendingUp className="w-5 h-5 text-purple-400" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</span>
               </h3>
               <div id="geo-evolution-chart">
                 <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
+                  <XAxis dataKey="date" stroke="#94a3b8" />
+                  <YAxis domain={[0, 100]} stroke="#94a3b8" />
                   <RechartsTooltip />
                   <Line 
                     type="monotone" 
                     dataKey="score" 
-                    stroke="#9b87f5" 
+                    stroke="#a855f7" 
                     strokeWidth={2}
-                    dot={{ fill: '#9b87f5', r: 4 }}
-                    activeDot={{ r: 6 }}
+                    dot={{ fill: '#a855f7', r: 4 }}
+                    activeDot={{ r: 6, fill: '#c084fc' }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -569,16 +577,16 @@ const GeoMetrics = () => {
         )}
 
         {!geoScores && (
-          <Card className="p-12 text-center">
-            <Brain className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-xl font-semibold mb-2">Nenhuma métrica GEO calculada ainda</h3>
-            <p className="text-muted-foreground mb-6">
+          <Card className="p-12 text-center border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90">
+            <Brain className="w-16 h-16 mx-auto mb-4 text-slate-500" />
+            <h3 className="text-xl font-semibold mb-2 text-white">Nenhuma métrica GEO calculada ainda</h3>
+            <p className="text-slate-400 mb-6">
               Clique em "Calcular Métricas" para analisar a presença da sua marca em IAs
             </p>
             <Button 
               onClick={handleCalculateMetrics}
               disabled={isCalculating}
-              className="bg-gradient-to-r from-purple-600 to-pink-600"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
             >
               {isCalculating ? 'Calculando...' : 'Calcular Agora'}
             </Button>

@@ -342,13 +342,14 @@ const Scores = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="flex justify-between items-start animate-fade-in">
+        {/* Premium Header */}
+        <div className="flex justify-between items-start animate-fade-in p-6 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-2 border-purple-500/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
           <div className="flex items-center gap-2 flex-wrap">
             <div className="space-y-2">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold gradient-text">GEO Escore</h1>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-violet-400 to-purple-500 bg-clip-text text-transparent">GEO Escore</h1>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-slate-400">
                 Framework IGO · Governança Semântica · Otimização para Motores Generativos
               </p>
               {/* Indicador de Consistência Matemática */}
@@ -369,10 +370,10 @@ const Scores = () => {
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
-            {/* Brand Selector - PRIMEIRO */}
+            {/* Brand Selector */}
             <div className="w-64">
               <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-slate-800/60 border-slate-600/50 hover:border-purple-500/50 transition-colors">
                   <SelectValue placeholder="Selecione uma marca" />
                 </SelectTrigger>
                 <SelectContent>
@@ -385,12 +386,12 @@ const Scores = () => {
               </Select>
             </div>
 
-            {/* EXPORTAR PDF GEO - DESTAQUE MÁXIMO */}
+            {/* EXPORTAR PDF GEO */}
             <Button 
               onClick={() => handleExport('pdf')} 
               size="lg"
               disabled={isExporting}
-              className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
+              className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white font-bold shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] transition-all"
             >
               {isExporting ? (
                 <>
@@ -400,7 +401,7 @@ const Scores = () => {
               ) : (
                 <>
                   <Download className="mr-2 h-5 w-5" />
-                  📊 Exportar Relatório GEO com Gráficos
+                  Exportar Relatório GEO com Gráficos
                 </>
               )}
             </Button>
@@ -411,6 +412,7 @@ const Scores = () => {
               disabled={isCalculating}
               size="default"
               variant="outline"
+              className="border-slate-600/50 hover:border-purple-500/50 hover:bg-purple-500/10"
             >
               {isCalculating ? (
                 <>
@@ -425,7 +427,7 @@ const Scores = () => {
               )}
             </Button>
 
-            {/* Audit Button - MENOR */}
+            {/* Audit Button */}
             <AuditButton 
               onClick={async () => {
                 const brandName = brands.find(b => b.id === selectedBrand)?.name;
@@ -440,96 +442,107 @@ const Scores = () => {
         </div>
 
 
-        {/* Overall Score */}
-        <Card className="p-8 bg-gradient-to-br from-primary/10 to-primary/5 card-hover animate-scale-in">
+        {/* Overall Score - Premium Card */}
+        <Card className="p-8 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/80 to-slate-950/80 shadow-[0_0_40px_rgba(139,92,246,0.2)] card-hover animate-scale-in">
           <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-4">
+            <div className="text-sm text-slate-400 mb-4">
               {brand?.name} - {brand?.domain}
             </div>
-            <div className="text-6xl font-bold text-primary mb-2">
+            <div className="text-7xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent mb-2">
               {latestScore.score.toFixed(1)}
             </div>
-            <div className="text-muted-foreground">Score GEO Geral</div>
-            <div className="text-xs text-muted-foreground mt-2">
+            <div className="text-slate-400">Score GEO Geral</div>
+            <div className="text-xs text-slate-500 mt-2">
               Última atualização: {new Date(latestScore.computed_at).toLocaleString('pt-BR')}
             </div>
           </div>
         </Card>
 
-        {/* Pillars Cards */}
+        {/* Pillars Cards - Premium Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {pillars.map((pillar, index) => (
-            <Card 
-              key={pillar.name} 
-              className="p-4 card-hover animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`${pillar.color} p-2 rounded-lg`}>
-                  <pillar.icon className="h-5 w-5 text-white" />
+          {pillars.map((pillar, index) => {
+            const colors = [
+              { border: 'border-blue-500/30', bg: 'from-blue-950/50', shadow: 'rgba(59,130,246,0.15)', text: 'text-blue-400', iconBg: 'from-blue-500 to-cyan-500' },
+              { border: 'border-emerald-500/30', bg: 'from-emerald-950/50', shadow: 'rgba(16,185,129,0.15)', text: 'text-emerald-400', iconBg: 'from-emerald-500 to-green-500' },
+              { border: 'border-purple-500/30', bg: 'from-purple-950/50', shadow: 'rgba(139,92,246,0.15)', text: 'text-purple-400', iconBg: 'from-purple-500 to-violet-500' },
+              { border: 'border-amber-500/30', bg: 'from-amber-950/50', shadow: 'rgba(245,158,11,0.15)', text: 'text-amber-400', iconBg: 'from-amber-500 to-orange-500' },
+              { border: 'border-pink-500/30', bg: 'from-pink-950/50', shadow: 'rgba(236,72,153,0.15)', text: 'text-pink-400', iconBg: 'from-pink-500 to-rose-500' },
+            ];
+            const color = colors[index];
+            
+            return (
+              <Card 
+                key={pillar.name} 
+                className={`p-4 border-2 ${color.border} bg-gradient-to-br ${color.bg} via-slate-900/50 to-slate-950/50 shadow-[0_0_25px_${color.shadow}] card-hover animate-slide-up hover:scale-[1.02] transition-all duration-300`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`bg-gradient-to-br ${color.iconBg} p-2 rounded-lg shadow-lg`}>
+                    <pillar.icon className="h-5 w-5 text-white" />
+                  </div>
                 </div>
-              </div>
-              <div className="text-2xl font-bold mb-1">
-                {pillar.value.toFixed(1)}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {pillar.name}
-              </div>
-            </Card>
-          ))}
+                <div className={`text-2xl font-bold mb-1 ${color.text}`}>
+                  {pillar.value.toFixed(1)}
+                </div>
+                <div className="text-sm text-slate-400">
+                  {pillar.name}
+                </div>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* CPI Score Card - Proprietary Metric */}
-        <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 card-hover">
+        {/* CPI Score Card - Premium */}
+        <Card className="p-6 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/40 via-slate-900/80 to-pink-950/30 shadow-[0_0_35px_rgba(139,92,246,0.2)] card-hover">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-lg">
+              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.5)]">
                 <Brain className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-xl">CPI Score</h3>
-                <p className="text-sm text-muted-foreground">Cognitive Predictive Index</p>
+                <h3 className="font-bold text-xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">CPI Score</h3>
+                <p className="text-sm text-slate-400">Cognitive Predictive Index</p>
               </div>
             </div>
-            <Badge variant="secondary" className="bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/30">
+            <Badge className="bg-gradient-to-r from-purple-600/80 to-pink-600/80 text-white border-purple-500/30 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
               Métrica Proprietária
             </Badge>
           </div>
 
           <div className="flex items-baseline gap-3 mb-4">
-            <div className="text-5xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               {latestScore.cpi ? Number(latestScore.cpi).toFixed(1) : '0.0'}
             </div>
-            <div className="text-muted-foreground">/100</div>
+            <div className="text-slate-400">/100</div>
           </div>
 
           <div className="space-y-2">
-            <p className="text-sm">
+            <p className="text-sm text-slate-300">
               <strong>Consistência Preditiva Inter-IA:</strong> Mede o quanto diferentes LLMs são 
-              <strong className="text-purple-600 dark:text-purple-400"> previsíveis e consistentes</strong> ao mencionar sua marca.
+              <strong className="text-purple-400"> previsíveis e consistentes</strong> ao mencionar sua marca.
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-slate-500">
               ✨ Valores altos (≥80) indicam respostas uniformes entre OpenAI, Claude, Gemini e Perplexity — 
               sinal de forte governança semântica e posicionamento consolidado.
             </p>
           </div>
         </Card>
 
-        {/* Charts */}
+        {/* Charts - Premium Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Radar Chart */}
-          <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-xl font-semibold mb-4">Visão Geral dos Pilares</h3>
+          <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '200ms' }}>
+            <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Visão Geral dos Pilares</h3>
             <div id="geo-radar-chart" className="recharts-wrapper">
               <ResponsiveContainer width="100%" height={400}>
                 <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
-                  <PolarGrid />
+                  <PolarGrid stroke="rgba(148,163,184,0.2)" />
                   <PolarAngleAxis 
                     dataKey="subject" 
                     tick={<CustomRadarTick cx={200} />}
                   />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                  <Radar name="Score" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                  <Radar name="Score" dataKey="value" stroke="#a855f7" fill="#a855f7" fillOpacity={0.5} />
                   <Tooltip />
                 </RadarChart>
               </ResponsiveContainer>
@@ -537,35 +550,35 @@ const Scores = () => {
           </Card>
 
           {/* Line Chart */}
-          <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '300ms' }}>
-            <h3 className="text-xl font-semibold mb-4">Evolução do Score GEO</h3>
+          <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '300ms' }}>
+            <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</h3>
             <div id="geo-evolution-chart" className="recharts-wrapper">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={timeSeriesData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
+                  <XAxis dataKey="date" stroke="#94a3b8" />
+                  <YAxis domain={[0, 100]} stroke="#94a3b8" />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} name="Score GEO" />
+                  <Line type="monotone" dataKey="score" stroke="#a855f7" strokeWidth={2} name="Score GEO" dot={{ fill: '#a855f7', r: 4 }} activeDot={{ r: 6, fill: '#c084fc' }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </Card>
         </div>
 
-        {/* Bar Chart */}
-        <Card className="p-6 card-hover animate-slide-up" style={{ animationDelay: '400ms' }}>
-          <h3 className="text-xl font-semibold mb-4">Comparação de Pilares</h3>
+        {/* Bar Chart - Premium */}
+        <Card className="p-6 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)] card-hover animate-slide-up" style={{ animationDelay: '400ms' }}>
+          <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Comparação de Pilares</h3>
           <div id="geo-pillars-chart" className="recharts-wrapper">
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={radarData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="subject" />
-                <YAxis domain={[0, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
+                <XAxis dataKey="subject" stroke="#94a3b8" />
+                <YAxis domain={[0, 100]} stroke="#94a3b8" />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="value" fill="hsl(var(--primary))" name="Pontuação" />
+                <Bar dataKey="value" fill="#a855f7" name="Pontuação" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
