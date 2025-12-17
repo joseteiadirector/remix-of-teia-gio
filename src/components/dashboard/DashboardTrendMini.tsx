@@ -65,29 +65,40 @@ export function DashboardTrendMini() {
 
   return (
     <div 
-      className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6"
+      className="relative overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl p-6"
       style={{
+        background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+        boxShadow: '0 0 40px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         animation: 'fade-in 0.6s ease-out forwards',
         animationDelay: '600ms',
         opacity: 0
       }}
     >
+      {/* Glass Reflection */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+      
+      {/* Animated Corner Gradient */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-30 bg-gradient-to-br from-blue-500 to-cyan-500" />
+      
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="relative z-10 flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-            <Activity className="h-5 w-5 text-blue-400" />
+          <div className="relative">
+            <div className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-to-br from-blue-500 to-cyan-500" />
+            <div className="relative p-2.5 rounded-xl bg-gradient-to-br from-blue-500/30 to-cyan-500/20 border border-white/10">
+              <Activity className="h-5 w-5 text-blue-400" />
+            </div>
           </div>
           <div>
-            <h3 className="font-semibold text-foreground">Tendência 7 dias</h3>
-            <p className="text-xs text-muted-foreground">GEO Score</p>
+            <h3 className="font-semibold text-white">Tendência 7 dias</h3>
+            <p className="text-xs text-white/50">GEO Score</p>
           </div>
         </div>
         <Button 
           variant="ghost" 
           size="sm"
           onClick={() => navigate('/scores')}
-          className="text-xs gap-1 hover:bg-primary/10 hover:text-primary"
+          className="text-xs gap-1 text-white/60 hover:bg-white/10 hover:text-primary"
         >
           Detalhes
           <ArrowRight className="h-3 w-3" />
@@ -95,41 +106,47 @@ export function DashboardTrendMini() {
       </div>
 
       {trendData ? (
-        <div className="space-y-4">
-          {/* Mini Chart */}
-          <div className="h-16 flex items-end gap-1">
+        <div className="relative z-10 space-y-4">
+          {/* Mini Chart with Premium Styling */}
+          <div className="h-16 flex items-end gap-1 p-2 rounded-xl bg-white/5 border border-white/10">
             {trendData.values.map((value, index) => (
               <div
                 key={index}
                 className={cn(
-                  "flex-1 rounded-t transition-all duration-300",
-                  trendData.isPositive ? "bg-emerald-500/60" : "bg-red-500/60",
-                  index === trendData.values.length - 1 && "bg-primary"
+                  "flex-1 rounded-t transition-all duration-300 relative",
+                  index === trendData.values.length - 1 ? "bg-gradient-to-t from-primary to-primary/70" : 
+                  trendData.isPositive ? "bg-gradient-to-t from-emerald-500/60 to-emerald-400/40" : "bg-gradient-to-t from-red-500/60 to-red-400/40"
                 )}
-                style={{ height: `${Math.max(value, 10)}%` }}
+                style={{ 
+                  height: `${Math.max(value, 10)}%`,
+                  boxShadow: index === trendData.values.length - 1 ? '0 0 10px rgba(139, 92, 246, 0.5)' : 'none'
+                }}
               />
             ))}
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-between pt-3 border-t border-border/50">
+          <div className="flex items-center justify-between pt-3 border-t border-white/10">
             <div>
-              <p className="text-2xl font-display font-bold">{trendData.latest.toFixed(1)}</p>
-              <p className="text-xs text-muted-foreground">Score atual</p>
+              <p className="text-2xl font-display font-bold text-white">{trendData.latest.toFixed(1)}</p>
+              <p className="text-xs text-white/50">Score atual</p>
             </div>
             <div className={cn(
-              "flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium",
+              "flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-white/10",
               trendData.isPositive 
-                ? "bg-emerald-500/10 text-emerald-400" 
-                : "bg-red-500/10 text-red-400"
-            )}>
+                ? "bg-emerald-500/20 text-emerald-400" 
+                : "bg-red-500/20 text-red-400"
+            )}
+            style={{
+              boxShadow: trendData.isPositive ? '0 0 15px rgba(16, 185, 129, 0.2)' : '0 0 15px rgba(239, 68, 68, 0.2)'
+            }}>
               <TrendingUp className={cn("h-4 w-4", !trendData.isPositive && "rotate-180")} />
               {trendData.isPositive ? '+' : ''}{trendData.changePercent.toFixed(1)}%
             </div>
           </div>
         </div>
       ) : (
-        <div className="h-24 flex items-center justify-center text-muted-foreground text-sm">
+        <div className="relative z-10 h-24 flex items-center justify-center text-white/50 text-sm">
           Dados insuficientes
         </div>
       )}
