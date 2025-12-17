@@ -12,8 +12,7 @@ import {
   Sparkles, 
   Calendar,
   Building2,
-  ChevronRight,
-  Crown
+  ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -119,16 +118,6 @@ export function DashboardPremiumHeader({ className }: DashboardPremiumHeaderProp
 
             {/* Right: Status & Actions */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              {/* Premium Badge */}
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-400 rounded-full blur-sm opacity-75 group-hover:opacity-100 transition-opacity" />
-                <Badge 
-                  className="relative px-4 py-2 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-amber-500/50 text-amber-300 gap-2 rounded-full"
-                >
-                  <Crown className="h-4 w-4" />
-                  <span className="font-semibold">Platinum</span>
-                </Badge>
-              </div>
 
               {/* Sync Status */}
               <Badge 
