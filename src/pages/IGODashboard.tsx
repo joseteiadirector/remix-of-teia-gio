@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Brain, Network, GitCompare, Activity, TrendingUp, RefreshCw, Download } from "lucide-react";
+import { Brain, Network, GitCompare, Activity, TrendingUp, RefreshCw, Download, BarChart3, Lightbulb, Sparkles } from "lucide-react";
 import { RealCollectionButton } from "@/components/llm/RealCollectionButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -391,17 +391,19 @@ export default function IGODashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <WidgetCPIScore key={`cpi-${refreshKey}`} brandId={selectedBrandId || undefined} />
-          <Card>
+          <Card className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 transition-all duration-300">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-primary" />
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                  <Activity className="h-5 w-5 text-primary" />
+                </div>
                 <CardTitle className="text-base font-semibold">Governance Score</CardTitle>
               </div>
               <CardDescription className="text-xs">Semantic Governance Quality</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-baseline gap-2">
-                <div className="text-4xl font-bold">{governanceScore}</div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">{governanceScore}</div>
                 <div className="text-sm text-muted-foreground">/100</div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
@@ -411,28 +413,32 @@ export default function IGODashboard() {
           </Card>
         </div>
 
-        <Card>
+        <Card className="border-secondary/20 bg-gradient-to-br from-background/80 to-secondary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-secondary/10 hover:border-secondary/40 transition-all duration-300">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Network className="h-4 w-4 text-secondary" />
+              <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/5 border border-secondary/20">
+                <Network className="h-4 w-4 text-secondary" />
+              </div>
               LLMs Monitored
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{consensusData.length}</div>
+            <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-secondary bg-clip-text text-transparent">{consensusData.length}</div>
             <p className="text-xs text-muted-foreground">Active Observational Nodes</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-accent/20 bg-gradient-to-br from-background/80 to-accent/5 backdrop-blur-sm hover:shadow-lg hover:shadow-accent/10 hover:border-accent/40 transition-all duration-300">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <GitCompare className="h-4 w-4 text-accent" />
+              <div className="p-2 rounded-lg bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20">
+                <GitCompare className="h-4 w-4 text-accent" />
+              </div>
               Convergence
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent">
               {consensusData.length > 0 
                 ? Math.round((consensusData.reduce((sum, c) => sum + c.confidence, 0) / consensusData.length) * 100)
                 : 0}%
@@ -444,19 +450,21 @@ export default function IGODashboard() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="convergence" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="convergence">Convergência Cognitiva</TabsTrigger>
-          <TabsTrigger value="coherence">Matriz de Coerência</TabsTrigger>
-          <TabsTrigger value="consensus">Consenso Multi-LLM</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-background/50 backdrop-blur-sm border border-primary/20 p-1 rounded-xl">
+          <TabsTrigger value="convergence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/30 rounded-lg transition-all">Convergência Cognitiva</TabsTrigger>
+          <TabsTrigger value="coherence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/30 rounded-lg transition-all">Matriz de Coerência</TabsTrigger>
+          <TabsTrigger value="consensus" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/30 rounded-lg transition-all">Consenso Multi-LLM</TabsTrigger>
         </TabsList>
 
         {/* Convergence Tab */}
         <TabsContent value="convergence" className="space-y-4">
-          <Card>
+          <Card className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <GitCompare className="h-5 w-5" />
-                Convergência Temporal entre LLMs
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                  <GitCompare className="h-5 w-5 text-primary" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">Convergência Temporal entre LLMs</span>
               </CardTitle>
               <CardDescription>
                 Análise da estabilidade cognitiva ao longo do tempo — Como diferentes IAs convergem na percepção da marca
@@ -485,9 +493,14 @@ export default function IGODashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-primary/5 to-secondary/5">
+          <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-lg">📊 Interpretação da Convergência</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">Interpretação da Convergência</span>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <p><strong>Alta convergência (&gt;80%):</strong> IAs concordam fortemente sobre a marca — governança semântica estável</p>
@@ -499,11 +512,13 @@ export default function IGODashboard() {
 
         {/* Coherence Matrix Tab */}
         <TabsContent value="coherence" className="space-y-4">
-          <Card>
+          <Card className="border-secondary/20 bg-gradient-to-br from-background/80 to-secondary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Network className="h-5 w-5" />
-                Matriz de Coerência Semântica
+                <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/5 border border-secondary/20">
+                  <Network className="h-5 w-5 text-secondary" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-secondary bg-clip-text text-transparent">Matriz de Coerência Semântica</span>
               </CardTitle>
               <CardDescription>
                 Mapa de concordância entre diferentes LLMs — Quanto cada IA "concorda" com as outras
@@ -575,8 +590,13 @@ export default function IGODashboard() {
                 </table>
               </div>
 
-              <div className="mt-6 p-4 bg-muted/30 rounded-lg">
-                <p className="text-sm font-semibold mb-2">🧠 Metacognição IGO:</p>
+              <div className="mt-6 p-4 bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 rounded-xl border border-primary/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                    <Brain className="h-4 w-4 text-primary" />
+                  </div>
+                  <p className="text-sm font-semibold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">Metacognição IGO:</p>
+                </div>
                 <p className="text-sm text-muted-foreground">
                   A matriz mostra o grau de "acordo" entre IAs diferentes. Valores altos indicam que múltiplas IAs 
                   geram percepções similares da marca, validando a governança semântica. Esta é a essência do 
@@ -589,11 +609,13 @@ export default function IGODashboard() {
 
         {/* Consensus Tab */}
         <TabsContent value="consensus" className="space-y-4">
-          <Card>
+          <Card className="border-accent/20 bg-gradient-to-br from-background/80 to-accent/5 backdrop-blur-sm hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                Consenso Multi-LLM — Radar de Observabilidade
+                <div className="p-2 rounded-lg bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20">
+                  <Brain className="h-5 w-5 text-accent" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent">Consenso Multi-LLM — Radar de Observabilidade</span>
               </CardTitle>
               <CardDescription>
                 Análise radial das métricas de cada LLM — Confiança, Sentimento e Volume de Menções
@@ -630,23 +652,23 @@ export default function IGODashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {consensusData.map((llm) => (
-              <Card key={llm.provider}>
+              <Card key={llm.provider} className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 transition-all duration-300">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">{llm.provider}</CardTitle>
+                  <CardTitle className="text-lg bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">{llm.provider}</CardTitle>
                   <CardDescription>Métricas Observacionais</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Confiança:</span>
-                    <span className="font-bold">{Math.round(llm.confidence * 100)}%</span>
+                    <span className="font-bold text-primary">{Math.round(llm.confidence * 100)}%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sentimento:</span>
-                    <span className="font-bold">{Math.round(llm.sentiment)}%</span>
+                    <span className="font-bold text-secondary">{Math.round(llm.sentiment)}%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Menções:</span>
-                    <Badge variant="secondary">{llm.mentions}</Badge>
+                    <Badge variant="secondary" className="bg-gradient-to-r from-accent/20 to-accent/10 text-accent border border-accent/20">{llm.mentions}</Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -764,7 +786,7 @@ export default function IGODashboard() {
             </table>
           </div>
           <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-sm font-bold mb-3 text-gray-800">🧠 Metacognição IGO:</p>
+            <p className="text-sm font-bold mb-3 text-gray-800">Metacognição IGO:</p>
             <p className="text-sm text-gray-700 leading-relaxed">
               A matriz mostra o grau de "acordo" entre IAs diferentes. Valores altos indicam que múltiplas IAs 
               geram percepções similares da marca, validando a governança semântica. Esta é a essência do 
