@@ -147,7 +147,7 @@ export function classifyKAPIMetric(metricId: keyof typeof KAPI_CONFIGS, value: n
   const config = KAPI_CONFIGS[metricId];
   const { levels, threshold, logic } = config;
 
-  // GAP usa lógica inversa (menor = melhor)
+  // Para métricas com lógica inversa (menor = melhor) - não usado atualmente
   if (logic === 'inverse') {
     if (value <= levels.excellent.value) {
       return { label: levels.excellent.label, color: 'green', isOk: true };
@@ -182,7 +182,7 @@ export function classifyKAPIMetric(metricId: keyof typeof KAPI_CONFIGS, value: n
  */
 export function isKAPIMetricOk(metricId: keyof typeof KAPI_CONFIGS, value: number): boolean {
   const config = KAPI_CONFIGS[metricId];
-  // GAP usa lógica inversa (menor = melhor)
+  // Para métricas com lógica inversa (menor = melhor) - não usado atualmente
   if (config.logic === 'inverse') {
     return value <= config.threshold;
   }
@@ -197,7 +197,7 @@ export function isKAPIMetricOk(metricId: keyof typeof KAPI_CONFIGS, value: numbe
  */
 export function getKAPIThresholdDescription(metricId: keyof typeof KAPI_CONFIGS): string {
   const config = KAPI_CONFIGS[metricId];
-  // GAP usa lógica inversa
+  // Para métricas com lógica inversa - não usado atualmente
   if (config.logic === 'inverse') {
     return `Máximo recomendado: ${config.threshold} ${config.unit}`;
   }
