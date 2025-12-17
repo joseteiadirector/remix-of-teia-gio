@@ -12,7 +12,29 @@ import { Loader2, TrendingUp, TrendingDown, Brain, Target, Award, Sparkles, BarC
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from "recharts";
+import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from "recharts";
+
+// Premium Tooltip Component with Glassmorphism
+const PremiumTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="px-4 py-3 rounded-xl border border-white/20 shadow-2xl"
+           style={{
+             background: 'linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.98))',
+             backdropFilter: 'blur(20px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+           }}>
+        <p className="text-sm font-semibold text-white/90 mb-2">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+            {entry.name}: <span className="font-bold">{typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 import { exportGEOReport } from "@/utils/pdf";
 import { useAudit } from "@/hooks/useAudit";
 import { AuditButton } from "@/components/audit/AuditButton";
@@ -474,30 +496,61 @@ const GeoMetrics = () => {
         {breakdown && (
           <>
             {/* Gráfico Radar dos 5 Pilares - Premium */}
-            <Card className="p-6 mb-8 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-violet-600/20">
-                  <Target className="w-5 h-5 text-purple-400" />
+            <Card className="p-6 mb-8 border border-white/10 backdrop-blur-xl relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                    boxShadow: '0 0 50px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 relative z-10">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-lg blur-lg opacity-50 bg-gradient-to-br from-purple-500 to-violet-600" />
+                  <div className="relative p-2 rounded-lg bg-gradient-to-br from-purple-500/30 to-violet-600/20 border border-white/10">
+                    <Target className="w-5 h-5 text-purple-400" />
+                  </div>
                 </div>
-                <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Análise dos 5 Pilares GEO</span>
+                <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Análise dos 5 Pilares GEO</span>
               </h3>
-              <div id="geo-radar-chart">
+              <div id="geo-radar-chart" className="relative z-10">
                 <ResponsiveContainer width="100%" height={450}>
                 <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
-                  <PolarGrid stroke="rgba(148,163,184,0.2)" />
+                  <defs>
+                    <linearGradient id="radarFillGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#a855f7" stopOpacity={0.6} />
+                      <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.2} />
+                    </linearGradient>
+                    <filter id="radarGlow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <PolarGrid stroke="rgba(255, 255, 255, 0.1)" />
                   <PolarAngleAxis 
                     dataKey="pilar" 
                     tick={<CustomRadarTick cx={225} />}
                   />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                  <PolarRadiusAxis 
+                    angle={90} 
+                    domain={[0, 100]} 
+                    tick={{ fill: 'rgba(255, 255, 255, 0.5)', fontSize: 10 }}
+                    axisLine={{ stroke: 'rgba(255, 255, 255, 0.1)' }}
+                  />
                   <Radar 
                     name="Score" 
                     dataKey="valor" 
                     stroke="#a855f7" 
-                    fill="#a855f7" 
-                    fillOpacity={0.4}
+                    strokeWidth={2}
+                    fill="url(#radarFillGradient)"
+                    filter="url(#radarGlow)"
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ paddingTop: 10 }}
+                    formatter={(value) => <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 12 }}>{value}</span>}
+                  />
+                  <RechartsTooltip content={<PremiumTooltip />} />
                 </RadarChart>
               </ResponsiveContainer>
               </div>
@@ -547,29 +600,52 @@ const GeoMetrics = () => {
             </div>
 
             {/* Gráfico de Evolução - Premium */}
-            <Card className="p-6 mb-8 border-2 border-slate-700/50 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90 shadow-[0_0_30px_rgba(100,116,139,0.1)]">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-violet-600/20">
-                  <TrendingUp className="w-5 h-5 text-purple-400" />
+            <Card className="p-6 mb-8 border border-white/10 backdrop-blur-xl relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95))',
+                    boxShadow: '0 0 50px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-violet-500/5 pointer-events-none" />
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 relative z-10">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-lg blur-lg opacity-50 bg-gradient-to-br from-purple-500 to-violet-600" />
+                  <div className="relative p-2 rounded-lg bg-gradient-to-br from-purple-500/30 to-violet-600/20 border border-white/10">
+                    <TrendingUp className="w-5 h-5 text-purple-400" />
+                  </div>
                 </div>
-                <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</span>
+                <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Evolução do Score GEO</span>
               </h3>
-              <div id="geo-evolution-chart">
+              <div id="geo-evolution-chart" className="relative z-10">
                 <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
-                  <XAxis dataKey="date" stroke="#94a3b8" />
-                  <YAxis domain={[0, 100]} stroke="#94a3b8" />
-                  <RechartsTooltip />
-                  <Line 
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="geoAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5} />
+                      <stop offset="100%" stopColor="#a855f7" stopOpacity={0.05} />
+                    </linearGradient>
+                    <filter id="lineGlow">
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
+                  <XAxis dataKey="date" stroke="rgba(255, 255, 255, 0.5)" tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 11 }} />
+                  <YAxis domain={[0, 100]} stroke="rgba(255, 255, 255, 0.5)" tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 11 }} />
+                  <RechartsTooltip content={<PremiumTooltip />} />
+                  <Area 
                     type="monotone" 
                     dataKey="score" 
                     stroke="#a855f7" 
                     strokeWidth={2}
-                    dot={{ fill: '#a855f7', r: 4 }}
-                    activeDot={{ r: 6, fill: '#c084fc' }}
+                    fill="url(#geoAreaGradient)"
+                    filter="url(#lineGlow)"
+                    dot={{ fill: '#a855f7', strokeWidth: 2, r: 4, style: { filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.6))' } }}
+                    activeDot={{ r: 6, fill: '#c084fc', style: { filter: 'drop-shadow(0 0 8px rgba(192, 132, 252, 0.8))' } }}
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
               </div>
             </Card>
