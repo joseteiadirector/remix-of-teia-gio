@@ -1,1 +1,10 @@
 project_id = "aebyoezagedzuxjbsdnn"
+
+[functions.analyze-technical-seo]
+verify_jwt = false
+
+[functions.collect-seo-metrics]
+verify_jwt = true
+
+[functions.calculate-seo-score]
+verify_jwt = true
