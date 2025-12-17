@@ -238,17 +238,30 @@ export default function Profile() {
   }
 
   return (
-    <div className="container max-w-4xl py-8 space-y-8 animate-fadeIn">
-      <div className="flex items-center gap-4">
-        <User className="h-8 w-8 text-primary" />
-        <div>
-          <h1 className="text-3xl font-bold">Meu Perfil</h1>
-          <p className="text-muted-foreground">Gerencie suas informações pessoais e preferências</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
+      <div className="container max-w-4xl py-8 space-y-8 animate-fadeIn">
+        {/* Premium Header */}
+        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+              <User className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">Meu Perfil</h1>
+              <p className="text-muted-foreground">Gerencie suas informações pessoais e preferências</p>
+            </div>
+          </div>
+        </div>
+
       {/* Avatar Section */}
-      <Card className="card-hover">
+      <Card className="border-primary/20 bg-background/50 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:border-primary/30">
         <CardHeader>
           <CardTitle className="text-lg">Foto de Perfil</CardTitle>
           <CardDescription>Esta é sua foto que aparece em toda a plataforma</CardDescription>
@@ -296,7 +309,7 @@ export default function Profile() {
       </Card>
 
       {/* Personal Information */}
-      <Card className="card-hover">
+      <Card className="border-primary/20 bg-background/50 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:border-primary/30">
         <CardHeader>
           <CardTitle className="text-lg">Informações Pessoais</CardTitle>
           <CardDescription>Seus dados de identificação na plataforma</CardDescription>
@@ -372,7 +385,7 @@ export default function Profile() {
       </Card>
 
       {/* Preferences */}
-      <Card className="card-hover">
+      <Card className="border-primary/20 bg-background/50 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:border-primary/30">
         <CardHeader>
           <CardTitle className="text-lg">Preferências</CardTitle>
           <CardDescription>Configure notificações e comportamentos da plataforma</CardDescription>
@@ -448,7 +461,7 @@ export default function Profile() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={saving} size="lg">
+        <Button onClick={handleSave} disabled={saving} size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 transition-all shadow-lg hover:shadow-primary/25">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -461,6 +474,7 @@ export default function Profile() {
             </>
           )}
         </Button>
+      </div>
       </div>
     </div>
   );

@@ -330,52 +330,70 @@ export default function LLMMentions() {
   const totalPages = Math.ceil(totalMentions / pageSize);
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard" className="flex items-center gap-2">
-                <Home className="h-4 w-4" />
-                Dashboard
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Menções em LLMs</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-                IGO Observational Layer
-              </h1>
+      <div className="p-4 md:p-8">
+        <div className="max-w-7xl mx-auto space-y-4 md:space-y-8">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                  <Home className="h-4 w-4" />
+                  Dashboard
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="flex items-center gap-2">
+                  <Brain className="h-4 w-4 text-primary" />
+                  Menções em LLMs
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+
+          {/* Premium Header */}
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start gap-4">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                    <Brain className="h-6 w-6 text-primary" />
+                  </div>
+                  <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                    IGO Observational Layer
+                  </h1>
+                </div>
+                <p className="text-sm md:text-base text-muted-foreground">
+                  Camada de observação IA-sobre-IA · Monitore menções de marca em respostas generativas
+                </p>
+                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
+                  <span className="font-semibold text-primary">Governança Semântica</span>
+                  · IA observando IA · Multi-LLM Tracking
+                </p>
+              </div>
+
+              <div className="flex gap-2 flex-wrap">
+                <ConsolidatedPDFExport />
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleExport('pdf')}
+                  disabled={!filteredMentions || filteredMentions.length === 0}
+                  className="border-primary/30 hover:border-primary/50 hover:bg-primary/5"
+                >
+                  <Download className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">PDF</span>
+                </Button>
+              </div>
             </div>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Camada de observação IA-sobre-IA · Monitore menções de marca em respostas generativas
-            </p>
-            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
-              <span className="font-semibold text-primary">Governança Semântica</span>
-              · IA observando IA · Multi-LLM Tracking
-            </p>
           </div>
-
-          <div className="flex gap-2 flex-wrap">
-            <ConsolidatedPDFExport />
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => handleExport('pdf')}
-              disabled={!filteredMentions || filteredMentions.length === 0}
-            >
-              <Download className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">PDF</span>
-            </Button>
-          </div>
-        </div>
 
         {/* Controls */}
         <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 md:gap-4">
@@ -696,6 +714,7 @@ export default function LLMMentions() {
             </p>
           </Card>
         )}
+        </div>
       </div>
     </div>
   );

@@ -153,20 +153,27 @@ export default function Subscription() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      {/* Hero Section com animação */}
-      <div className="text-center mb-12 animate-slideUp">
-        <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30">
-          <Sparkles className="w-3.5 h-3.5 mr-1.5 inline" />
-          Framework IGO Exclusivo
-        </Badge>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-          Escolha seu Plano
-        </h1>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Potencialize sua presença em respostas de IA com o único framework IGO do mercado
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
+
+      <div className="container mx-auto p-6 max-w-7xl">
+        {/* Hero Section com animação */}
+        <div className="text-center mb-12 animate-slideUp">
+          <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30 bg-primary/5">
+            <Sparkles className="w-3.5 h-3.5 mr-1.5 inline" />
+            Framework IGO Exclusivo
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+            Escolha seu Plano
+          </h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Potencialize sua presença em respostas de IA com o único framework IGO do mercado
+          </p>
+        </div>
 
       {subscription?.subscribed && (
         <Card className="mb-8 border-primary/50 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 animate-fadeIn hover-lift">
@@ -430,6 +437,7 @@ export default function Subscription() {
             <span>99.9% Uptime</span>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
