@@ -11,7 +11,8 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  ArrowUpRight
+  ArrowUpRight,
+  Sparkles
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -28,39 +29,54 @@ interface KPICardProps {
 
 const colorVariants = {
   purple: {
-    bg: 'from-purple-500/20 via-purple-500/10 to-transparent',
-    border: 'border-purple-500/30 hover:border-purple-500/50',
-    icon: 'bg-purple-500/20 text-purple-400',
-    value: 'text-purple-400',
-    glow: 'shadow-purple-500/20',
+    bg: 'from-purple-500/30 via-purple-500/10 to-transparent',
+    border: 'border-purple-500/40',
+    borderHover: 'hover:border-purple-400/60',
+    icon: 'from-purple-500/30 to-purple-600/20 text-purple-400 shadow-purple-500/30',
+    value: 'from-purple-400 to-purple-300',
+    glow: 'group-hover:shadow-purple-500/30',
+    ring: 'ring-purple-500/20',
+    gradient: 'from-purple-500 to-purple-600',
   },
   blue: {
-    bg: 'from-blue-500/20 via-blue-500/10 to-transparent',
-    border: 'border-blue-500/30 hover:border-blue-500/50',
-    icon: 'bg-blue-500/20 text-blue-400',
-    value: 'text-blue-400',
-    glow: 'shadow-blue-500/20',
+    bg: 'from-blue-500/30 via-blue-500/10 to-transparent',
+    border: 'border-blue-500/40',
+    borderHover: 'hover:border-blue-400/60',
+    icon: 'from-blue-500/30 to-blue-600/20 text-blue-400 shadow-blue-500/30',
+    value: 'from-blue-400 to-blue-300',
+    glow: 'group-hover:shadow-blue-500/30',
+    ring: 'ring-blue-500/20',
+    gradient: 'from-blue-500 to-blue-600',
   },
   emerald: {
-    bg: 'from-emerald-500/20 via-emerald-500/10 to-transparent',
-    border: 'border-emerald-500/30 hover:border-emerald-500/50',
-    icon: 'bg-emerald-500/20 text-emerald-400',
-    value: 'text-emerald-400',
-    glow: 'shadow-emerald-500/20',
+    bg: 'from-emerald-500/30 via-emerald-500/10 to-transparent',
+    border: 'border-emerald-500/40',
+    borderHover: 'hover:border-emerald-400/60',
+    icon: 'from-emerald-500/30 to-emerald-600/20 text-emerald-400 shadow-emerald-500/30',
+    value: 'from-emerald-400 to-emerald-300',
+    glow: 'group-hover:shadow-emerald-500/30',
+    ring: 'ring-emerald-500/20',
+    gradient: 'from-emerald-500 to-emerald-600',
   },
   amber: {
-    bg: 'from-amber-500/20 via-amber-500/10 to-transparent',
-    border: 'border-amber-500/30 hover:border-amber-500/50',
-    icon: 'bg-amber-500/20 text-amber-400',
-    value: 'text-amber-400',
-    glow: 'shadow-amber-500/20',
+    bg: 'from-amber-500/30 via-amber-500/10 to-transparent',
+    border: 'border-amber-500/40',
+    borderHover: 'hover:border-amber-400/60',
+    icon: 'from-amber-500/30 to-amber-600/20 text-amber-400 shadow-amber-500/30',
+    value: 'from-amber-400 to-amber-300',
+    glow: 'group-hover:shadow-amber-500/30',
+    ring: 'ring-amber-500/20',
+    gradient: 'from-amber-500 to-amber-600',
   },
   cyan: {
-    bg: 'from-cyan-500/20 via-cyan-500/10 to-transparent',
-    border: 'border-cyan-500/30 hover:border-cyan-500/50',
-    icon: 'bg-cyan-500/20 text-cyan-400',
-    value: 'text-cyan-400',
-    glow: 'shadow-cyan-500/20',
+    bg: 'from-cyan-500/30 via-cyan-500/10 to-transparent',
+    border: 'border-cyan-500/40',
+    borderHover: 'hover:border-cyan-400/60',
+    icon: 'from-cyan-500/30 to-cyan-600/20 text-cyan-400 shadow-cyan-500/30',
+    value: 'from-cyan-400 to-cyan-300',
+    glow: 'group-hover:shadow-cyan-500/30',
+    ring: 'ring-cyan-500/20',
+    gradient: 'from-cyan-500 to-cyan-600',
   },
 };
 
@@ -68,14 +84,15 @@ function KPICard({ title, value, suffix = '', icon, trend, color, description, d
   const variant = colorVariants[color];
   
   const TrendIcon = trend === undefined ? null : trend > 0 ? TrendingUp : trend < 0 ? TrendingDown : Minus;
-  const trendColor = trend === undefined ? '' : trend > 0 ? 'text-emerald-400' : trend < 0 ? 'text-red-400' : 'text-muted-foreground';
+  const trendColor = trend === undefined ? '' : trend > 0 ? 'text-emerald-400 bg-emerald-500/10' : trend < 0 ? 'text-red-400 bg-red-500/10' : 'text-muted-foreground bg-muted/50';
 
   return (
     <div 
       className={cn(
-        "group relative overflow-hidden rounded-2xl border bg-card/50 backdrop-blur-sm p-6",
-        "transition-all duration-500 hover:-translate-y-1 hover:shadow-xl",
+        "group relative overflow-hidden rounded-3xl border-2 bg-card/40 backdrop-blur-xl",
+        "transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl",
         variant.border,
+        variant.borderHover,
         variant.glow
       )}
       style={{ 
@@ -84,41 +101,83 @@ function KPICard({ title, value, suffix = '', icon, trend, color, description, d
         opacity: 0
       }}
     >
+      {/* Glass Reflection Effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+      
+      {/* Animated Corner Gradient */}
+      <div className={cn(
+        "absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+        `bg-gradient-to-br ${variant.gradient}`
+      )} />
+      
       {/* Gradient Background */}
       <div className={cn(
-        "absolute inset-0 bg-gradient-to-br opacity-50 group-hover:opacity-100 transition-opacity duration-500",
+        "absolute inset-0 bg-gradient-to-br opacity-30 group-hover:opacity-60 transition-opacity duration-500",
         variant.bg
       )} />
       
+      {/* Shimmer Effect on Hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+      </div>
+      
       {/* Content */}
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className={cn("p-3 rounded-xl", variant.icon)}>
-            {icon}
+      <div className="relative z-10 p-6">
+        <div className="flex items-start justify-between mb-5">
+          {/* Icon with Glow */}
+          <div className="relative">
+            <div className={cn("absolute inset-0 rounded-2xl blur-lg opacity-50", `bg-gradient-to-br ${variant.gradient}`)} />
+            <div className={cn(
+              "relative p-3.5 rounded-2xl bg-gradient-to-br border border-white/10 shadow-lg",
+              variant.icon
+            )}>
+              {icon}
+            </div>
           </div>
+          
+          {/* Trend Badge */}
           {trend !== undefined && (
-            <div className={cn("flex items-center gap-1 text-sm font-medium", trendColor)}>
+            <div className={cn(
+              "flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-sm",
+              trendColor
+            )}>
               {TrendIcon && <TrendIcon className="h-4 w-4" />}
               <span>{trend > 0 ? '+' : ''}{trend.toFixed(1)}%</span>
             </div>
           )}
         </div>
         
-        <div className="space-y-1">
-          <p className="text-sm text-muted-foreground font-medium">{title}</p>
-          <div className="flex items-baseline gap-1">
-            <span className={cn("text-4xl font-display font-bold tracking-tight", variant.value)}>
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground font-semibold tracking-wide uppercase">{title}</p>
+          <div className="flex items-baseline gap-2">
+            <span className={cn(
+              "text-5xl font-display font-black tracking-tighter bg-gradient-to-r bg-clip-text text-transparent",
+              variant.value
+            )}>
               {value !== null ? value.toFixed(1) : '—'}
             </span>
-            {suffix && <span className="text-lg text-muted-foreground">{suffix}</span>}
+            {suffix && <span className="text-xl text-muted-foreground font-medium">{suffix}</span>}
           </div>
-          <p className="text-xs text-muted-foreground/70 mt-2">{description}</p>
+          <p className="text-xs text-muted-foreground/80 mt-3 leading-relaxed">{description}</p>
         </div>
       </div>
 
-      {/* Hover Arrow */}
-      <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
-        <ArrowUpRight className={cn("h-5 w-5", variant.value)} />
+      {/* Bottom Gradient Line */}
+      <div className={cn(
+        "absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500",
+        `bg-gradient-to-r ${variant.gradient}`
+      )} />
+
+      {/* Hover Arrow with Glow */}
+      <div className="absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+        <div className={cn("p-2 rounded-full bg-gradient-to-br", variant.icon)}>
+          <ArrowUpRight className="h-4 w-4" />
+        </div>
+      </div>
+      
+      {/* Sparkle on Hover */}
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+        <Sparkles className={cn("h-4 w-4 animate-pulse", `text-${color}-400`)} />
       </div>
     </div>
   );
