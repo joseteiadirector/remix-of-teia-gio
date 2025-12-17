@@ -550,15 +550,17 @@ const SeoScores = () => {
           const periodStr = `${startDate.toLocaleDateString('pt-BR')} - ${endDate.toLocaleDateString('pt-BR')}`;
 
           // Preparar dados no formato do sistema unificado
+          // ✅ CORREÇÃO: Buscar métricas de seoOptimization (estrutura correta)
+          const seoOptData = latestAnalysis.analysis_data?.seoOptimization || {};
           const seoData = {
             brandName: brand.name,
             seoScore: latestAnalysis.seo_score,
             metrics: {
-              organic_traffic: latestAnalysis.analysis_data?.organic_traffic || 0,
-              total_clicks: latestAnalysis.analysis_data?.total_clicks || 0,
-              total_impressions: latestAnalysis.analysis_data?.total_impressions || 0,
-              ctr: latestAnalysis.analysis_data?.ctr || 0,
-              avg_position: latestAnalysis.analysis_data?.avg_position || 0,
+              organic_traffic: seoOptData.organic_traffic || 0,
+              total_clicks: seoOptData.total_clicks || 0,
+              total_impressions: seoOptData.total_impressions || 0,
+              ctr: seoOptData.ctr || 0,
+              avg_position: seoOptData.avg_position || 0,
               seo_score: latestAnalysis.seo_score,
             },
             period: periodStr,
