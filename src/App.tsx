@@ -29,6 +29,7 @@ const ReportsGeo = lazy(() => import("./pages/ReportsGeo"));
 const ReportsSeo = lazy(() => import("./pages/ReportsSeo"));
 const Alerts = lazy(() => import("./pages/Alerts"));
 const Insights = lazy(() => import("./pages/Insights"));
+const InsightsIA = lazy(() => import("./pages/InsightsIA"));
 const LLMMentions = lazy(() => import("./pages/LLMMentions"));
 const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -150,6 +151,7 @@ function ProtectedContent() {
                   <Route path="comparison" element={<BrandComparison />} />
                   <Route path="url-analysis" element={<UrlAnalysis />} />
                   <Route path="insights" element={<Insights />} />
+                  <Route path="insights-ia" element={<InsightsIA />} />
                   <Route path="llm-mentions" element={<LLMMentions />} />
                   <Route path="reports" element={<Reports />} />
                   <Route path="reports/geo" element={<ReportsGeo />} />
