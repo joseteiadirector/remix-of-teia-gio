@@ -779,42 +779,43 @@ export default function IGOObservability() {
               )}
 
               {/* Sub-tabs para diferentes análises */}
-              <Tabs defaultValue="timeline" className="space-y-4">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="timeline">Timeline Multi-LLM</TabsTrigger>
-                  <TabsTrigger value="divergence">Divergência Semântica</TabsTrigger>
-                  <TabsTrigger value="providers">Comparação de Provedores</TabsTrigger>
+              <Tabs defaultValue="timeline" className="space-y-6">
+                <TabsList className="grid w-full grid-cols-3 !bg-transparent p-0 gap-2 h-auto">
+                  <TabsTrigger value="timeline" className="!bg-slate-800/80 data-[state=active]:!bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(6,182,212,0.4)] data-[state=inactive]:text-slate-300 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 hover:!bg-cyan-500/20">Timeline Multi-LLM</TabsTrigger>
+                  <TabsTrigger value="divergence" className="!bg-slate-800/80 data-[state=active]:!bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-500 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(168,85,247,0.4)] data-[state=inactive]:text-slate-300 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 hover:!bg-purple-500/20">Divergência Semântica</TabsTrigger>
+                  <TabsTrigger value="providers" className="!bg-slate-800/80 data-[state=active]:!bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-500 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(236,72,153,0.4)] data-[state=inactive]:text-slate-300 data-[state=inactive]:border data-[state=inactive]:border-slate-600/50 rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 hover:!bg-pink-500/20">Comparação de Provedores</TabsTrigger>
                 </TabsList>
 
         <TabsContent value="timeline" className="space-y-4">
-          <Card>
-            <CardHeader>
+          <Card className="relative overflow-hidden border-2 border-cyan-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_0_40px_rgba(6,182,212,0.15)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+            <CardHeader className="relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-black bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
                     Timeline de Observações IGO
                     {selectedBrandId && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs border-cyan-500/50 bg-cyan-500/10 text-cyan-300">
                         {brands?.find(b => b.id === selectedBrandId)?.name}
                       </Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-slate-400">
                     Histórico de queries executadas e menções coletadas por múltiplos LLMs
                   </CardDescription>
                 </div>
                 {usingFallback && (
-                  <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/50">
+                  <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400 border-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
                     <AlertTriangle className="w-3 h-3 mr-1" />
                     Dados não-orquestrados
                   </Badge>
                 )}
               </div>
               {usingFallback && (
-                <div className="mt-3 p-3 bg-muted/50 rounded-lg border border-border/50">
-                  <p className="text-sm text-muted-foreground">
+                <div className="mt-3 p-3 bg-slate-800/50 rounded-lg border border-cyan-500/20">
+                  <p className="text-sm text-slate-400">
                     ℹ️ Exibindo menções diretas agrupadas. Para dados orquestrados completos, execute queries no{" "}
-                    <a href="/nucleus-center" className="text-primary hover:underline font-medium">
+                    <a href="/nucleus-center" className="text-cyan-400 hover:underline font-bold">
                       Nucleus Command Center
                     </a>
                     .
@@ -822,18 +823,18 @@ export default function IGOObservability() {
                 </div>
               )}
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div data-chart="timeline">
                 <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={timelineData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" />
+                    <XAxis dataKey="date" stroke="#94a3b8" />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(6,182,212,0.3)', borderRadius: '8px' }} />
                     <Legend />
-                    <Line type="monotone" dataKey="queries" stroke="hsl(var(--primary))" name="Queries" strokeWidth={2} />
-                    <Line type="monotone" dataKey="mentions" stroke="hsl(var(--accent))" name="Menções" strokeWidth={2} />
-                    <Line type="monotone" dataKey="llms" stroke="hsl(var(--chart-3))" name="LLMs Usados" strokeWidth={2} />
+                    <Line type="monotone" dataKey="queries" stroke="#06b6d4" name="Queries" strokeWidth={2} />
+                    <Line type="monotone" dataKey="mentions" stroke="#a855f7" name="Menções" strokeWidth={2} />
+                    <Line type="monotone" dataKey="llms" stroke="#ec4899" name="LLMs Usados" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -842,87 +843,90 @@ export default function IGOObservability() {
         </TabsContent>
 
         {/* Divergence Tab */}
-        <TabsContent value="divergence" className="space-y-4">
-          <Card>
-            <CardHeader>
+        <TabsContent value="divergence" className="space-y-6">
+          <Card className="relative overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_0_40px_rgba(168,85,247,0.15)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-violet-500/5 pointer-events-none" />
+            <CardHeader className="relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-black bg-gradient-to-r from-purple-300 to-violet-300 bg-clip-text text-transparent">
                     Análise de Divergência Semântica
                     {selectedBrandId && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs border-purple-500/50 bg-purple-500/10 text-purple-300">
                         {brands?.find(b => b.id === selectedBrandId)?.name}
                       </Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-slate-400">
                     Distribuição de confiança vs menções por provedor LLM
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div data-chart="divergence">
                 <ResponsiveContainer width="100%" height={400}>
                   <ScatterChart>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" dataKey="confidence" name="Confiança" unit="%" domain={[0, 100]} />
-                    <YAxis type="number" dataKey="mentioned" name="Mencionado" domain={[-0.1, 1.1]} ticks={[0, 1]} />
-                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" />
+                    <XAxis type="number" dataKey="confidence" name="Confiança" unit="%" domain={[0, 100]} stroke="#94a3b8" />
+                    <YAxis type="number" dataKey="mentioned" name="Mencionado" domain={[-0.1, 1.1]} ticks={[0, 1]} stroke="#94a3b8" />
+                    <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(168,85,247,0.3)', borderRadius: '8px' }} />
                     <Legend />
-                    <Scatter name="ChatGPT" data={divergenceData.filter(d => d.provider.toLowerCase() === 'chatgpt')} fill="hsl(var(--chart-1))" />
-                    <Scatter name="Gemini" data={divergenceData.filter(d => d.provider.toLowerCase() === 'gemini')} fill="hsl(var(--chart-2))" />
-                    <Scatter name="Claude" data={divergenceData.filter(d => d.provider.toLowerCase() === 'claude')} fill="hsl(var(--chart-3))" />
-                    <Scatter name="Perplexity" data={divergenceData.filter(d => d.provider.toLowerCase() === 'perplexity')} fill="hsl(var(--chart-4))" />
+                    <Scatter name="ChatGPT" data={divergenceData.filter(d => d.provider.toLowerCase() === 'chatgpt')} fill="#06b6d4" />
+                    <Scatter name="Gemini" data={divergenceData.filter(d => d.provider.toLowerCase() === 'gemini')} fill="#a855f7" />
+                    <Scatter name="Claude" data={divergenceData.filter(d => d.provider.toLowerCase() === 'claude')} fill="#ec4899" />
+                    <Scatter name="Perplexity" data={divergenceData.filter(d => d.provider.toLowerCase() === 'perplexity')} fill="#22d3ee" />
                   </ScatterChart>
                 </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Interpretação da Divergência</CardTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="relative overflow-hidden border-2 border-emerald-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 pointer-events-none" />
+              <CardHeader className="relative z-10">
+                <CardTitle className="text-lg font-black bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent">Interpretação da Divergência</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5" />
+              <CardContent className="space-y-4 relative z-10">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5" />
                   <div>
-                    <p className="font-medium">Convergência Alta (&gt;80%)</p>
-                    <p className="text-sm text-muted-foreground">LLMs concordam, resultado confiável</p>
+                    <p className="font-bold text-emerald-300">Convergência Alta (&gt;80%)</p>
+                    <p className="text-sm text-slate-400">LLMs concordam, resultado confiável</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                  <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
                   <div>
-                    <p className="font-medium">Divergência Moderada (50-80%)</p>
-                    <p className="text-sm text-muted-foreground">Variação esperada, monitorar contexto</p>
+                    <p className="font-bold text-yellow-300">Divergência Moderada (50-80%)</p>
+                    <p className="text-sm text-slate-400">Variação esperada, monitorar contexto</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5" />
                   <div>
-                    <p className="font-medium">Divergência Alta (&lt;50%)</p>
-                    <p className="text-sm text-muted-foreground">LLMs discordam, requer análise manual</p>
+                    <p className="font-bold text-red-300">Divergência Alta (&lt;50%)</p>
+                    <p className="text-sm text-slate-400">LLMs discordam, requer análise manual</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Score de Governança Contextual</CardTitle>
+            <Card className="relative overflow-hidden border-2 border-amber-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_0_30px_rgba(245,158,11,0.15)]">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+              <CardHeader className="relative z-10">
+                <CardTitle className="text-lg font-black bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-transparent">Score de Governança Contextual</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative z-10">
                 <div className="text-center py-6">
-                  <div className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  <div className="text-6xl font-black bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(245,158,11,0.5)]">
                     {convergenceScore.toFixed(0)}
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-sm text-slate-400 mt-2">
                     Governança Contextual IGO
                   </p>
-                  <Badge variant="outline" className="mt-4">
+                  <Badge className={`mt-4 px-4 py-1 font-bold ${convergenceScore > 80 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50' : convergenceScore > 50 ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50' : 'bg-red-500/20 text-red-300 border-red-500/50'}`}>
                     {convergenceScore > 80 ? "Excelente" : convergenceScore > 50 ? "Bom" : "Requer atenção"}
                   </Badge>
                 </div>
@@ -932,50 +936,51 @@ export default function IGOObservability() {
         </TabsContent>
 
         {/* Providers Tab */}
-        <TabsContent value="providers" className="space-y-4">
-          <Card>
-            <CardHeader>
+        <TabsContent value="providers" className="space-y-6">
+          <Card className="relative overflow-hidden border-2 border-pink-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_0_40px_rgba(236,72,153,0.15)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 via-transparent to-rose-500/5 pointer-events-none" />
+            <CardHeader className="relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-black bg-gradient-to-r from-pink-300 to-rose-300 bg-clip-text text-transparent">
                     Comparação entre Provedores LLM
                     {selectedBrandId && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs border-pink-500/50 bg-pink-500/10 text-pink-300">
                         {brands?.find(b => b.id === selectedBrandId)?.name}
                       </Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-slate-400">
                     Taxa de menção e confiança média por provedor
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div data-chart="providers">
                 <ResponsiveContainer width="100%" height={400}>
                   <BarChart data={providerData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="provider" />
-                    <YAxis />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" />
+                    <XAxis dataKey="provider" stroke="#94a3b8" />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(236,72,153,0.3)', borderRadius: '8px' }} />
                     <Legend />
-                    <Bar dataKey="rate" fill="hsl(var(--primary))" name="Taxa de Menção (%)" />
-                    <Bar dataKey="confidence" fill="hsl(var(--accent))" name="Confiança Média (%)" />
+                    <Bar dataKey="rate" fill="#a855f7" name="Taxa de Menção (%)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="confidence" fill="#ec4899" name="Confiança Média (%)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
 
               <div className="mt-6 space-y-3">
                 {providerData.map(p => (
-                  <div key={p.provider} className="flex items-center justify-between p-3 rounded-lg border">
+                  <div key={p.provider} className="flex items-center justify-between p-4 rounded-xl border-2 border-slate-700/50 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-pink-500/30 hover:shadow-[0_0_20px_rgba(236,72,153,0.1)] transition-all duration-300">
                     <div>
-                      <p className="font-semibold">{p.provider}</p>
-                      <p className="text-sm text-muted-foreground">{p.mentions} menções de {p.total} queries</p>
+                      <p className="font-black text-white">{p.provider}</p>
+                      <p className="text-sm text-slate-400">{p.mentions} menções de {p.total} queries</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold">{p.rate}%</p>
-                      <p className="text-xs text-muted-foreground">Confiança: {p.confidence}%</p>
+                      <p className="text-3xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">{p.rate}%</p>
+                      <p className="text-xs text-slate-400">Confiança: {p.confidence}%</p>
                     </div>
                   </div>
                 ))}
