@@ -162,56 +162,71 @@ export default function NucleusCommandCenter() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl">
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-              <Brain className="h-8 w-8 text-primary" />
-              Nucleus Chat
-            </h1>
-            <p className="text-muted-foreground">
-              Converse com 4 LLMs simultaneamente sobre sua marca
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="container mx-auto p-6 max-w-5xl">
+        <div className="flex flex-col gap-6">
+          {/* Premium Header */}
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                    <Brain className="h-8 w-8 text-primary" />
+                  </div>
+                  <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                    Nucleus Chat
+                  </span>
+                </h1>
+                <p className="text-muted-foreground">
+                  Converse com 4 LLMs simultaneamente sobre sua marca
+                </p>
+              </div>
+
+              <div className="flex gap-3 items-center flex-wrap">
+                {messages.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClearChat}
+                    className="gap-2 border-primary/30 hover:border-primary/50 hover:bg-primary/5"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Limpar Chat
+                  </Button>
+                )}
+                
+                <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
+                  <SelectTrigger className="w-64 border-primary/30 hover:border-primary/50 bg-background/50 backdrop-blur-sm">
+                    <SelectValue placeholder="Selecione uma marca" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {brands?.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id}>
+                        {brand.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
-          <div className="flex gap-3 items-center">
-            {messages.length > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClearChat}
-                className="gap-2"
-              >
-                <Trash2 className="h-4 w-4" />
-                Limpar Chat
-              </Button>
-            )}
-            
-            <Select value={selectedBrand || undefined} onValueChange={setSelectedBrand}>
-              <SelectTrigger className="w-64">
-                <SelectValue placeholder="Selecione uma marca" />
-              </SelectTrigger>
-              <SelectContent>
-                {brands?.map((brand) => (
-                  <SelectItem key={brand.id} value={brand.id}>
-                    {brand.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+          {/* Knowledge Base Upload Section */}
+          {selectedBrand && selectedBrandData && (
+            <KnowledgeBaseUpload 
+              brandId={selectedBrand} 
+              brandName={selectedBrandData.name} 
+            />
+          )}
 
-        {/* Knowledge Base Upload Section */}
-        {selectedBrand && selectedBrandData && (
-          <KnowledgeBaseUpload 
-            brandId={selectedBrand} 
-            brandName={selectedBrandData.name} 
-          />
-        )}
-
-        <Card className="flex flex-col h-[calc(100vh-22rem)]">
+          <Card className="flex flex-col h-[calc(100vh-26rem)] border-primary/20 bg-background/50 backdrop-blur-sm shadow-xl">
           <ScrollArea className="flex-1 p-6">
             <div className="space-y-6">
               {messages.length === 0 && (
@@ -326,6 +341,7 @@ export default function NucleusCommandCenter() {
             </p>
           </div>
         </Card>
+      </div>
       </div>
     </div>
   );

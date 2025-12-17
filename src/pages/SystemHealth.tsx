@@ -116,40 +116,56 @@ export default function SystemHealth() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent mb-2">
-          🏆 Certificação PLATINUM
-        </h1>
-        <p className="text-muted-foreground">
-          Monitoramento completo da plataforma - Auditoria em tempo real
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      {/* SCORE PLATINUM PRINCIPAL */}
-      <Card className="p-8 border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-purple-500/5">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-6">
-            <div className="p-4 rounded-full bg-primary/10">
-              <Shield className="w-12 h-12 text-primary" />
+      <div className="container mx-auto p-6 space-y-6">
+        {/* Premium Header */}
+        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-4 mb-2">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                <Shield className="h-8 w-8 text-primary" />
+              </div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                🏆 Certificação PLATINUM
+              </h1>
             </div>
-            <div>
-              <h2 className="text-4xl font-bold mb-2">{platinumScore}% PLATINUM</h2>
-              <p className="text-muted-foreground">Status Geral da Plataforma</p>
-            </div>
-          </div>
-          <div className="w-full md:w-64">
-            <Progress value={platinumScore} className="h-4" />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-              <span>0%</span>
-              <span className={platinumScore >= 95 ? 'text-green-500 font-bold' : platinumScore >= 85 ? 'text-yellow-500' : 'text-red-500'}>
-                {platinumScore >= 95 ? '🏆 EXCELENTE' : platinumScore >= 85 ? '⚠️ BOM' : '❌ ATENÇÃO'}
-              </span>
-              <span>100%</span>
-            </div>
+            <p className="text-muted-foreground">
+              Monitoramento completo da plataforma - Auditoria em tempo real
+            </p>
           </div>
         </div>
-      </Card>
+
+        {/* SCORE PLATINUM PRINCIPAL */}
+        <Card className="p-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-purple-500/10 backdrop-blur-sm shadow-xl hover:shadow-primary/20 transition-all duration-500">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-6">
+              <div className="p-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                <Shield className="w-12 h-12 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">{platinumScore}% PLATINUM</h2>
+                <p className="text-muted-foreground">Status Geral da Plataforma</p>
+              </div>
+            </div>
+            <div className="w-full md:w-64">
+              <Progress value={platinumScore} className="h-4" />
+              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                <span>0%</span>
+                <span className={platinumScore >= 95 ? 'text-green-500 font-bold' : platinumScore >= 85 ? 'text-yellow-500' : 'text-red-500'}>
+                  {platinumScore >= 95 ? '🏆 EXCELENTE' : platinumScore >= 85 ? '⚠️ BOM' : '❌ ATENÇÃO'}
+                </span>
+                <span>100%</span>
+              </div>
+            </div>
+          </div>
+        </Card>
 
       {/* GRID DE SETORES */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -419,6 +435,7 @@ export default function SystemHealth() {
           </div>
         </ScrollArea>
       </Card>
+      </div>
     </div>
   );
 }
