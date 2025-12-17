@@ -26,8 +26,6 @@ import {
   CheckCircle2,
   XCircle,
   Sparkles,
-  Crown,
-  Gem,
   MessageSquare,
   Target,
   Zap
@@ -307,32 +305,22 @@ const Alerts = () => {
         </Breadcrumb>
 
         {/* Premium Header */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-amber-500/10 rounded-3xl blur-xl" />
-          <Card className="relative p-8 bg-card/40 backdrop-blur-xl border-border/50 overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-500/10 to-transparent rounded-full blur-2xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-2xl" />
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-amber-500/10 rounded-3xl blur-xl transition-all duration-500 group-hover:from-violet-500/20 group-hover:via-purple-500/25 group-hover:to-amber-500/20" />
+          <Card className="relative p-8 bg-card/40 backdrop-blur-xl border-border/50 overflow-hidden transition-all duration-500 group-hover:border-violet-500/40 group-hover:shadow-[0_0_40px_rgba(139,92,246,0.15),0_0_80px_rgba(139,92,246,0.1)] group-hover:bg-card/60">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-500/10 to-transparent rounded-full blur-2xl transition-all duration-500 group-hover:from-violet-500/20" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-amber-500/10 to-transparent rounded-full blur-2xl transition-all duration-500 group-hover:from-amber-500/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
             <div className="relative flex items-start gap-6">
-              <div className="relative">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500/20 via-purple-500/20 to-amber-500/20 flex items-center justify-center border border-violet-500/30">
-                  <BellRing className="w-10 h-10 text-violet-400" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg flex items-center justify-center">
-                  <Crown className="w-3.5 h-3.5 text-white" />
-                </div>
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500/20 via-purple-500/20 to-amber-500/20 flex items-center justify-center border border-violet-500/30 transition-all duration-500 group-hover:border-violet-400/50 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                <BellRing className="w-10 h-10 text-violet-400 transition-all duration-500 group-hover:text-violet-300" />
               </div>
               
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
-                    Alertas e Notificações
-                  </h1>
-                  <Badge className="bg-gradient-to-r from-violet-500/20 to-purple-500/20 text-violet-300 border-violet-500/30">
-                    <Gem className="w-3 h-3 mr-1" />
-                    Premium
-                  </Badge>
-                </div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-amber-400 bg-clip-text text-transparent mb-2">
+                  Alertas e Notificações
+                </h1>
                 <p className="text-muted-foreground text-lg">
                   Configure notificações inteligentes com sistema de prioridades avançado
                 </p>
@@ -574,7 +562,7 @@ const Alerts = () => {
                   <div>
                     <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
                       Configurar Limite
-                      <Gem className="w-4 h-4 text-cyan-400" />
+                      <Sparkles className="w-4 h-4 text-cyan-400" />
                     </h2>
                     <p className="text-sm text-muted-foreground">
                       Defina o score mínimo para receber alertas
