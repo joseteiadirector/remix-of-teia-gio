@@ -21,7 +21,30 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+// Custom Premium Tooltip
+const PremiumTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div 
+        className="px-4 py-3 rounded-xl border border-purple-500/40 backdrop-blur-xl"
+        style={{ 
+          background: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,20,50,0.95) 100%)',
+          boxShadow: '0 0 30px rgba(139,92,246,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
+        }}
+      >
+        <p className="text-xs text-slate-400 mb-1">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-lg font-bold" style={{ color: entry.color || '#a855f7' }}>
+            {entry.name}: <span className="text-white">{typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 import { logger } from "@/utils/logger";
 
 interface GeoScore {
@@ -580,60 +603,173 @@ const Scores = () => {
 
         {/* Charts - Premium Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Radar Chart */}
-          <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '200ms' }}>
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
-            <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Visão Geral dos Pilares</h3>
-            <div id="geo-radar-chart" className="recharts-wrapper">
-              <ResponsiveContainer width="100%" height={400}>
-                <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
-                  <PolarGrid stroke="rgba(148,163,184,0.2)" />
-                  <PolarAngleAxis 
-                    dataKey="subject" 
-                    tick={<CustomRadarTick cx={200} />}
-                  />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                  <Radar name="Score" dataKey="value" stroke="#a855f7" fill="#a855f7" fillOpacity={0.5} />
-                  <Tooltip />
-                </RadarChart>
-              </ResponsiveContainer>
+          {/* Radar Chart - Premium */}
+          <Card className="relative overflow-hidden p-6 border-2 border-purple-500/30 bg-gradient-to-br from-slate-900/95 via-purple-950/30 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 50px rgba(139,92,246,0.2), inset 0 1px 0 rgba(255,255,255,0.08)', animationDelay: '200ms' }}>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(139,92,246,0.1)_0%,_transparent_70%)]" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+            <div className="relative">
+              <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white via-purple-200 to-slate-300 bg-clip-text text-transparent">Visão Geral dos Pilares</h3>
+              <div id="geo-radar-chart" className="recharts-wrapper">
+                <ResponsiveContainer width="100%" height={400}>
+                  <RadarChart data={radarData} margin={{ top: 60, right: 100, bottom: 40, left: 100 }}>
+                    <defs>
+                      <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c084fc" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.3} />
+                      </linearGradient>
+                      <filter id="radarGlow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    <PolarGrid stroke="rgba(139,92,246,0.2)" strokeWidth={1} />
+                    <PolarAngleAxis 
+                      dataKey="subject" 
+                      tick={<CustomRadarTick cx={200} />}
+                    />
+                    <PolarRadiusAxis angle={90} domain={[0, 100]} stroke="rgba(148,163,184,0.3)" />
+                    <Radar 
+                      name="Score" 
+                      dataKey="value" 
+                      stroke="#a855f7" 
+                      strokeWidth={3}
+                      fill="url(#radarGradient)" 
+                      fillOpacity={0.6}
+                      filter="url(#radarGlow)"
+                    />
+                    <Tooltip content={<PremiumTooltip />} />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </Card>
 
-          {/* Line Chart */}
-          <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '300ms' }}>
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
-            <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</h3>
-            <div id="geo-evolution-chart" className="recharts-wrapper">
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={timeSeriesData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
-                  <XAxis dataKey="date" stroke="#94a3b8" />
-                  <YAxis domain={[0, 100]} stroke="#94a3b8" />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="score" stroke="#a855f7" strokeWidth={2} name="Score GEO" dot={{ fill: '#a855f7', r: 4 }} activeDot={{ r: 6, fill: '#c084fc' }} />
-                </LineChart>
-              </ResponsiveContainer>
+          {/* Area Chart - Premium Evolution */}
+          <Card className="relative overflow-hidden p-6 border-2 border-emerald-500/30 bg-gradient-to-br from-slate-900/95 via-emerald-950/20 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 50px rgba(16,185,129,0.15), inset 0 1px 0 rgba(255,255,255,0.08)', animationDelay: '300ms' }}>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(16,185,129,0.08)_0%,_transparent_60%)]" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+            <div className="relative">
+              <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white via-emerald-200 to-slate-300 bg-clip-text text-transparent">Evolução do Score GEO</h3>
+              <div id="geo-evolution-chart" className="recharts-wrapper">
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={timeSeriesData}>
+                    <defs>
+                      <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#10b981" stopOpacity={0.5} />
+                        <stop offset="50%" stopColor="#a855f7" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.05} />
+                      </linearGradient>
+                      <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="50%" stopColor="#a855f7" />
+                        <stop offset="100%" stopColor="#ec4899" />
+                      </linearGradient>
+                      <filter id="lineGlow">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" />
+                    <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={{ stroke: 'rgba(148,163,184,0.2)' }} />
+                    <YAxis domain={[0, 100]} stroke="#64748b" fontSize={12} tickLine={false} axisLine={{ stroke: 'rgba(148,163,184,0.2)' }} />
+                    <Tooltip content={<PremiumTooltip />} />
+                    <Legend 
+                      wrapperStyle={{ paddingTop: '20px' }}
+                      formatter={(value) => <span className="text-slate-300 text-sm">{value}</span>}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="score" 
+                      stroke="url(#lineGradient)" 
+                      strokeWidth={3}
+                      fill="url(#areaGradient)" 
+                      name="Score GEO"
+                      filter="url(#lineGlow)"
+                      dot={{ fill: '#a855f7', strokeWidth: 2, stroke: '#c084fc', r: 5 }}
+                      activeDot={{ r: 8, fill: '#c084fc', stroke: '#fff', strokeWidth: 2 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </Card>
         </div>
 
-        {/* Bar Chart - Premium */}
-        <Card className="relative overflow-hidden p-6 border-2 border-slate-600/50 bg-gradient-to-br from-slate-900/95 via-slate-800/70 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 40px rgba(100,116,139,0.15), inset 0 1px 0 rgba(255,255,255,0.05)', animationDelay: '400ms' }}>
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-500/30 to-transparent" />
-          <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Comparação de Pilares</h3>
-          <div id="geo-pillars-chart" className="recharts-wrapper">
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={radarData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
-                <XAxis dataKey="subject" stroke="#94a3b8" />
-                <YAxis domain={[0, 100]} stroke="#94a3b8" />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#a855f7" name="Pontuação" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Bar Chart - Premium Comparison */}
+        <Card className="relative overflow-hidden p-6 border-2 border-pink-500/30 bg-gradient-to-br from-slate-900/95 via-pink-950/20 to-slate-900/95 animate-slide-up" style={{ boxShadow: '0 0 50px rgba(236,72,153,0.15), inset 0 1px 0 rgba(255,255,255,0.08)', animationDelay: '400ms' }}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(236,72,153,0.08)_0%,_transparent_60%)]" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-pink-400/50 to-transparent" />
+          <div className="relative">
+            <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-white via-pink-200 to-slate-300 bg-clip-text text-transparent">Comparação de Pilares</h3>
+            <div id="geo-pillars-chart" className="recharts-wrapper">
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={radarData} barCategoryGap="20%">
+                  <defs>
+                    <linearGradient id="barGradient1" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#38bdf8" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#0284c7" stopOpacity={0.8} />
+                    </linearGradient>
+                    <linearGradient id="barGradient2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#34d399" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#059669" stopOpacity={0.8} />
+                    </linearGradient>
+                    <linearGradient id="barGradient3" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#c084fc" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8} />
+                    </linearGradient>
+                    <linearGradient id="barGradient4" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#fbbf24" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
+                    </linearGradient>
+                    <linearGradient id="barGradient5" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#f472b6" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#db2777" stopOpacity={0.8} />
+                    </linearGradient>
+                    <filter id="barGlow">
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" vertical={false} />
+                  <XAxis 
+                    dataKey="subject" 
+                    stroke="#64748b" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={{ stroke: 'rgba(148,163,184,0.2)' }}
+                    interval={0}
+                    angle={-15}
+                    textAnchor="end"
+                    height={80}
+                  />
+                  <YAxis domain={[0, 100]} stroke="#64748b" fontSize={12} tickLine={false} axisLine={{ stroke: 'rgba(148,163,184,0.2)' }} />
+                  <Tooltip content={<PremiumTooltip />} cursor={{ fill: 'rgba(139,92,246,0.1)' }} />
+                  <Legend 
+                    wrapperStyle={{ paddingTop: '20px' }}
+                    formatter={(value) => <span className="text-slate-300 text-sm">{value}</span>}
+                  />
+                  <Bar 
+                    dataKey="value" 
+                    name="Pontuação" 
+                    radius={[8, 8, 0, 0]}
+                    filter="url(#barGlow)"
+                  >
+                    {radarData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={`url(#barGradient${(index % 5) + 1})`} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </Card>
       </div>
