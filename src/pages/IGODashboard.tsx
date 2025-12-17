@@ -388,95 +388,100 @@ export default function IGODashboard() {
         </div>
 
       {/* Main KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
           <WidgetCPIScore key={`cpi-${refreshKey}`} brandId={selectedBrandId || undefined} />
-          <Card className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 transition-all duration-300">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                  <Activity className="h-5 w-5 text-primary" />
+          <Card className="relative overflow-hidden border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/50 via-background to-purple-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:shadow-[0_0_60px_rgba(168,85,247,0.25)] hover:border-purple-400/60 transition-all duration-500 group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-violet-500/10 rounded-full blur-2xl" />
+            <CardHeader className="pb-3 relative z-10">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 border border-purple-400/50 shadow-lg shadow-purple-500/40">
+                  <Activity className="h-5 w-5 text-white" />
                 </div>
-                <CardTitle className="text-base font-semibold">Governance Score</CardTitle>
+                <CardTitle className="text-base font-bold text-purple-100">Governance Score</CardTitle>
               </div>
-              <CardDescription className="text-xs">Semantic Governance Quality</CardDescription>
+              <CardDescription className="text-xs text-purple-300/70">Semantic Governance Quality</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div className="flex items-baseline gap-2">
-                <div className="text-4xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">{governanceScore}</div>
-                <div className="text-sm text-muted-foreground">/100</div>
+                <div className="text-5xl font-black bg-gradient-to-r from-purple-300 via-violet-200 to-purple-300 bg-clip-text text-transparent drop-shadow-lg">{governanceScore}</div>
+                <div className="text-lg text-purple-400/80 font-medium">/100</div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-purple-300/60 mt-3">
                 Média de confiança entre todos os LLMs monitorados
               </p>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="border-secondary/20 bg-gradient-to-br from-background/80 to-secondary/5 backdrop-blur-sm hover:shadow-lg hover:shadow-secondary/10 hover:border-secondary/40 transition-all duration-300">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/5 border border-secondary/20">
-                <Network className="h-4 w-4 text-secondary" />
+        <Card className="relative overflow-hidden border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/50 via-background to-cyan-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:shadow-[0_0_60px_rgba(6,182,212,0.25)] hover:border-cyan-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-cyan-100">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 shadow-lg shadow-cyan-500/40">
+                <Network className="h-5 w-5 text-white" />
               </div>
               LLMs Monitored
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-secondary bg-clip-text text-transparent">{consensusData.length}</div>
-            <p className="text-xs text-muted-foreground">Active Observational Nodes</p>
+          <CardContent className="relative z-10">
+            <div className="text-5xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg">{consensusData.length}</div>
+            <p className="text-xs text-cyan-300/60 mt-2">Active Observational Nodes</p>
           </CardContent>
         </Card>
 
-        <Card className="border-accent/20 bg-gradient-to-br from-background/80 to-accent/5 backdrop-blur-sm hover:shadow-lg hover:shadow-accent/10 hover:border-accent/40 transition-all duration-300">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20">
-                <GitCompare className="h-4 w-4 text-accent" />
+        <Card className="relative overflow-hidden border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/50 via-background to-emerald-900/20 backdrop-blur-xl shadow-[0_0_40px_rgba(16,185,129,0.15)] hover:shadow-[0_0_60px_rgba(16,185,129,0.25)] hover:border-emerald-400/60 transition-all duration-500 group">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-500/30 transition-all duration-500" />
+          <CardHeader className="pb-3 relative z-10">
+            <CardTitle className="text-sm font-bold flex items-center gap-3 text-emerald-100">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 border border-emerald-400/50 shadow-lg shadow-emerald-500/40">
+                <GitCompare className="h-5 w-5 text-white" />
               </div>
               Convergence
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent">
+          <CardContent className="relative z-10">
+            <div className="text-5xl font-black bg-gradient-to-r from-emerald-300 via-green-200 to-emerald-300 bg-clip-text text-transparent drop-shadow-lg">
               {consensusData.length > 0 
                 ? Math.round((consensusData.reduce((sum, c) => sum + c.confidence, 0) / consensusData.length) * 100)
                 : 0}%
             </div>
-            <p className="text-xs text-muted-foreground">Cognitive Alignment</p>
+            <p className="text-xs text-emerald-300/60 mt-2">Cognitive Alignment</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="convergence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-background/80 backdrop-blur-xl border-2 border-primary/30 p-2 rounded-2xl shadow-lg shadow-primary/10">
-          <TabsTrigger value="convergence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-green-500/30 rounded-xl py-3 font-semibold transition-all duration-300">Convergência Cognitiva</TabsTrigger>
-          <TabsTrigger value="coherence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/30 rounded-xl py-3 font-semibold transition-all duration-300">Matriz de Coerência</TabsTrigger>
-          <TabsTrigger value="consensus" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 rounded-xl py-3 font-semibold transition-all duration-300">Consenso Multi-LLM</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-xl border-2 border-primary/40 p-2 rounded-2xl shadow-[0_0_30px_rgba(139,92,246,0.2)]">
+          <TabsTrigger value="convergence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-green-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(16,185,129,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-emerald-500/20">Convergência Cognitiva</TabsTrigger>
+          <TabsTrigger value="coherence" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(168,85,247,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-purple-500/20">Matriz de Coerência</TabsTrigger>
+          <TabsTrigger value="consensus" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-[0_0_20px_rgba(6,182,212,0.5)] rounded-xl py-3 font-bold transition-all duration-300 hover:bg-cyan-500/20">Consenso Multi-LLM</TabsTrigger>
         </TabsList>
 
         {/* Convergence Tab */}
-        <TabsContent value="convergence" className="space-y-4">
-          <Card className="relative overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-background via-primary/10 to-background backdrop-blur-sm shadow-xl shadow-primary/5 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-500">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <TabsContent value="convergence" className="space-y-6">
+          <Card className="relative overflow-hidden border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-background to-green-950/20 backdrop-blur-xl shadow-[0_0_50px_rgba(16,185,129,0.15)] hover:shadow-[0_0_70px_rgba(16,185,129,0.25)] hover:border-emerald-400/60 transition-all duration-500 group">
+            <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-emerald-500/25 transition-all duration-700" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all duration-700" />
             <CardHeader className="relative z-10">
-              <CardTitle className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/60 border border-primary/50 shadow-lg shadow-primary/30">
-                  <GitCompare className="h-6 w-6 text-white" />
+              <CardTitle className="flex items-center gap-4">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                  <GitCompare className="h-7 w-7 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-primary via-yellow-400 to-primary bg-clip-text text-transparent">
+                <span className="text-2xl font-black bg-gradient-to-r from-emerald-300 via-green-200 to-emerald-300 bg-clip-text text-transparent drop-shadow-lg">
                   Convergência Temporal entre LLMs
                 </span>
               </CardTitle>
-              <CardDescription className="text-base mt-2">
+              <CardDescription className="text-base mt-3 text-emerald-200/60">
                 Análise da estabilidade cognitiva ao longo do tempo — Como diferentes IAs convergem na percepção da marca
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10">
               {loading ? (
                 <div className="h-[400px] flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent shadow-[0_0_20px_rgba(16,185,129,0.4)]"></div>
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={400}>
@@ -484,7 +489,7 @@ export default function IGODashboard() {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground) / 0.2)" />
                     <XAxis dataKey="timestamp" stroke="hsl(var(--muted-foreground))" />
                     <YAxis domain={[0, 100]} stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--primary) / 0.3)', borderRadius: '12px' }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '2px solid rgba(16,185,129,0.4)', borderRadius: '16px', boxShadow: '0 0 30px rgba(16,185,129,0.2)' }} />
                     <Legend />
                     <Line type="monotone" dataKey="openai" stroke="#10b981" name="OpenAI" strokeWidth={3} dot={{ r: 5, fill: '#10b981' }} />
                     <Line type="monotone" dataKey="claude" stroke="#8b5cf6" name="Claude" strokeWidth={3} dot={{ r: 5, fill: '#8b5cf6' }} />
@@ -496,98 +501,104 @@ export default function IGODashboard() {
             </CardContent>
           </Card>
 
-          <Card className="relative overflow-hidden border-2 border-yellow-500/30 bg-gradient-to-r from-yellow-500/10 via-orange-500/5 to-yellow-500/10 backdrop-blur-sm shadow-lg shadow-yellow-500/5">
-            <div className="absolute top-0 left-0 w-32 h-32 bg-yellow-500/20 rounded-full blur-2xl" />
+          <Card className="relative overflow-hidden border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/30 via-background to-orange-950/20 backdrop-blur-xl shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:shadow-[0_0_60px_rgba(245,158,11,0.25)] hover:border-amber-400/60 transition-all duration-500 group">
+            <div className="absolute top-0 left-0 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl group-hover:bg-amber-500/30 transition-all duration-500" />
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-orange-500/15 rounded-full blur-2xl" />
             <CardHeader className="relative z-10">
-              <CardTitle className="text-xl flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 border border-yellow-400/50 shadow-lg shadow-yellow-500/30">
-                  <BarChart3 className="h-5 w-5 text-white" />
+              <CardTitle className="text-xl flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400/50 shadow-[0_0_25px_rgba(245,158,11,0.4)]">
+                  <BarChart3 className="h-6 w-6 text-white" />
                 </div>
-                <span className="font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                <span className="font-black text-xl bg-gradient-to-r from-amber-300 via-orange-200 to-amber-300 bg-clip-text text-transparent drop-shadow-lg">
                   Interpretação da Convergência
                 </span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm relative z-10">
-              <p className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-green-500"></span><strong>Alta convergência (&gt;80%):</strong> IAs concordam fortemente sobre a marca — governança semântica estável</p>
-              <p className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-yellow-500"></span><strong>Convergência moderada (60-80%):</strong> Percepção alinhada com variações esperadas</p>
-              <p className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-red-500"></span><strong>Baixa convergência (&lt;60%):</strong> Divergência cognitiva — requer análise de contexto</p>
+            <CardContent className="space-y-4 text-sm relative z-10">
+              <p className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30"><span className="w-4 h-4 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span><strong className="text-emerald-300">Alta convergência (&gt;80%):</strong> <span className="text-emerald-200/80">IAs concordam fortemente sobre a marca — governança semântica estável</span></p>
+              <p className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30"><span className="w-4 h-4 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></span><strong className="text-amber-300">Convergência moderada (60-80%):</strong> <span className="text-amber-200/80">Percepção alinhada com variações esperadas</span></p>
+              <p className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/30"><span className="w-4 h-4 rounded-full bg-gradient-to-r from-red-400 to-rose-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></span><strong className="text-red-300">Baixa convergência (&lt;60%):</strong> <span className="text-red-200/80">Divergência cognitiva — requer análise de contexto</span></p>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Coherence Matrix Tab */}
-        <TabsContent value="coherence" className="space-y-4">
-          <Card className="relative overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-background via-purple-500/10 to-background backdrop-blur-sm shadow-xl shadow-purple-500/5 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-500">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
+        <TabsContent value="coherence" className="space-y-6">
+          <Card className="relative overflow-hidden border-2 border-purple-500/40 bg-gradient-to-br from-purple-950/30 via-background to-violet-950/20 backdrop-blur-xl shadow-[0_0_50px_rgba(168,85,247,0.15)] hover:shadow-[0_0_70px_rgba(168,85,247,0.25)] hover:border-purple-400/60 transition-all duration-500 group">
+            <div className="absolute top-0 left-0 w-72 h-72 bg-purple-500/15 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 group-hover:bg-purple-500/25 transition-all duration-700" />
+            <div className="absolute bottom-0 right-0 w-48 h-48 bg-violet-500/10 rounded-full blur-3xl group-hover:bg-violet-500/20 transition-all duration-700" />
             <CardHeader className="relative z-10">
-              <CardTitle className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 border border-purple-400/50 shadow-lg shadow-purple-500/30">
-                  <Network className="h-6 w-6 text-white" />
+              <CardTitle className="flex items-center gap-4">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 border border-purple-400/50 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
+                  <Network className="h-7 w-7 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="text-2xl font-black bg-gradient-to-r from-purple-300 via-violet-200 to-purple-300 bg-clip-text text-transparent drop-shadow-lg">
                   Matriz de Coerência Semântica
                 </span>
               </CardTitle>
-              <CardDescription className="text-base mt-2">
+              <CardDescription className="text-base mt-3 text-purple-200/60">
                 Mapa de concordância entre diferentes LLMs — Quanto cada IA "concorda" com as outras
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10">
-              <div className="overflow-x-auto rounded-xl border border-purple-500/20 bg-background/50">
+              <div className="overflow-x-auto rounded-2xl border-2 border-purple-500/30 bg-purple-950/30 shadow-inner">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="border-b-2 border-purple-500/30 bg-purple-500/5">
-                      <th className="p-4 text-left font-bold">LLM</th>
-                      <th className="p-4 text-center font-bold text-green-400">OpenAI</th>
-                      <th className="p-4 text-center font-bold text-purple-400">Claude</th>
-                      <th className="p-4 text-center font-bold text-blue-400">Gemini</th>
-                      <th className="p-4 text-center font-bold text-orange-400">Perplexity</th>
+                    <tr className="border-b-2 border-purple-500/40 bg-gradient-to-r from-purple-900/50 via-purple-800/30 to-purple-900/50">
+                      <th className="p-5 text-left font-black text-purple-200">LLM</th>
+                      <th className="p-5 text-center font-black text-emerald-400">OpenAI</th>
+                      <th className="p-5 text-center font-black text-purple-400">Claude</th>
+                      <th className="p-5 text-center font-black text-cyan-400">Gemini</th>
+                      <th className="p-5 text-center font-black text-amber-400">Perplexity</th>
                     </tr>
                   </thead>
                   <tbody>
                     {coherenceMatrix.map((row) => (
-                      <tr key={row.llm} className="border-b border-purple-500/20 hover:bg-purple-500/5 transition-colors">
-                        <td className="p-4 font-semibold">{row.llm}</td>
-                        <td className="p-4 text-center">
+                      <tr key={row.llm} className="border-b border-purple-500/20 hover:bg-purple-500/10 transition-all duration-300">
+                        <td className="p-5 font-bold text-purple-100">{row.llm}</td>
+                        <td className="p-5 text-center">
                           <div 
-                            className="inline-block px-4 py-2 rounded-lg font-bold text-sm shadow-md"
+                            className="inline-block px-5 py-2.5 rounded-xl font-black text-sm shadow-lg"
                             style={{
                               backgroundColor: row.openai >= 80 ? '#10b981' : row.openai >= 50 ? '#f59e0b' : '#ef4444',
-                              color: 'white'
+                              color: 'white',
+                              boxShadow: row.openai >= 80 ? '0 0 20px rgba(16,185,129,0.4)' : row.openai >= 50 ? '0 0 20px rgba(245,158,11,0.4)' : '0 0 20px rgba(239,68,68,0.4)'
                             }}
                           >
                             {row.openai}%
                           </div>
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-5 text-center">
                           <div 
-                            className="inline-block px-4 py-2 rounded-lg font-bold text-sm shadow-md"
+                            className="inline-block px-5 py-2.5 rounded-xl font-black text-sm shadow-lg"
                             style={{
                               backgroundColor: row.claude >= 80 ? '#10b981' : row.claude >= 50 ? '#f59e0b' : '#ef4444',
-                              color: 'white'
+                              color: 'white',
+                              boxShadow: row.claude >= 80 ? '0 0 20px rgba(16,185,129,0.4)' : row.claude >= 50 ? '0 0 20px rgba(245,158,11,0.4)' : '0 0 20px rgba(239,68,68,0.4)'
                             }}
                           >
                             {row.claude}%
                           </div>
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-5 text-center">
                           <div 
-                            className="inline-block px-4 py-2 rounded-lg font-bold text-sm shadow-md"
+                            className="inline-block px-5 py-2.5 rounded-xl font-black text-sm shadow-lg"
                             style={{
                               backgroundColor: row.gemini >= 80 ? '#10b981' : row.gemini >= 50 ? '#f59e0b' : '#ef4444',
-                              color: 'white'
+                              color: 'white',
+                              boxShadow: row.gemini >= 80 ? '0 0 20px rgba(16,185,129,0.4)' : row.gemini >= 50 ? '0 0 20px rgba(245,158,11,0.4)' : '0 0 20px rgba(239,68,68,0.4)'
                             }}
                           >
                             {row.gemini}%
                           </div>
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-5 text-center">
                           <div 
-                            className="inline-block px-4 py-2 rounded-lg font-bold text-sm shadow-md"
+                            className="inline-block px-5 py-2.5 rounded-xl font-black text-sm shadow-lg"
                             style={{
                               backgroundColor: row.perplexity >= 80 ? '#10b981' : row.perplexity >= 50 ? '#f59e0b' : '#ef4444',
-                              color: 'white'
+                              color: 'white',
+                              boxShadow: row.perplexity >= 80 ? '0 0 20px rgba(16,185,129,0.4)' : row.perplexity >= 50 ? '0 0 20px rgba(245,158,11,0.4)' : '0 0 20px rgba(239,68,68,0.4)'
                             }}
                           >
                             {row.perplexity}%
@@ -599,17 +610,17 @@ export default function IGODashboard() {
                 </table>
               </div>
 
-              <div className="mt-6 p-5 bg-gradient-to-r from-purple-500/10 via-violet-500/5 to-purple-500/10 rounded-xl border-2 border-purple-500/30">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-violet-500 shadow-lg shadow-purple-500/30">
-                    <Brain className="h-5 w-5 text-white" />
+              <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/40 via-violet-900/20 to-purple-900/40 rounded-2xl border-2 border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                    <Brain className="h-6 w-6 text-white" />
                   </div>
-                  <p className="text-base font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">Metacognição IGO:</p>
+                  <p className="text-lg font-black bg-gradient-to-r from-purple-300 to-violet-300 bg-clip-text text-transparent">Metacognição IGO:</p>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-purple-200/70 leading-relaxed">
                   A matriz mostra o grau de "acordo" entre IAs diferentes. Valores altos indicam que múltiplas IAs 
                   geram percepções similares da marca, validando a governança semântica. Esta é a essência do 
-                  <strong className="text-purple-400"> IGO Framework</strong> — uma IA observando e validando outras.
+                  <strong className="text-purple-300"> IGO Framework</strong> — uma IA observando e validando outras.
                 </p>
               </div>
             </CardContent>
@@ -617,26 +628,27 @@ export default function IGODashboard() {
         </TabsContent>
 
         {/* Consensus Tab */}
-        <TabsContent value="consensus" className="space-y-4">
-          <Card className="relative overflow-hidden border-2 border-blue-500/30 bg-gradient-to-br from-background via-blue-500/10 to-background backdrop-blur-sm shadow-xl shadow-blue-500/5 hover:shadow-2xl hover:shadow-blue-500/20 hover:border-blue-500/50 transition-all duration-500">
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 translate-x-1/2" />
+        <TabsContent value="consensus" className="space-y-6">
+          <Card className="relative overflow-hidden border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/30 via-background to-blue-950/20 backdrop-blur-xl shadow-[0_0_50px_rgba(6,182,212,0.15)] hover:shadow-[0_0_70px_rgba(6,182,212,0.25)] hover:border-cyan-400/60 transition-all duration-500 group">
+            <div className="absolute bottom-0 right-0 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 group-hover:bg-cyan-500/25 transition-all duration-700" />
+            <div className="absolute top-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700" />
             <CardHeader className="relative z-10">
-              <CardTitle className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 border border-blue-400/50 shadow-lg shadow-blue-500/30">
-                  <Brain className="h-6 w-6 text-white" />
+              <CardTitle className="flex items-center gap-4">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.4)]">
+                  <Brain className="h-7 w-7 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <span className="text-2xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg">
                   Consenso Multi-LLM — Radar de Observabilidade
                 </span>
               </CardTitle>
-              <CardDescription className="text-base mt-2">
+              <CardDescription className="text-base mt-3 text-cyan-200/60">
                 Análise radial das métricas de cada LLM — Confiança, Sentimento e Volume de Menções
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10">
               {loading ? (
                 <div className="h-[400px] flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-4 border-cyan-500 border-t-transparent shadow-[0_0_20px_rgba(6,182,212,0.4)]"></div>
                 </div>
               ) : radarData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={400}>
@@ -651,45 +663,45 @@ export default function IGODashboard() {
                     <Radar name="Sentimento" dataKey="Sentimento" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.3} strokeWidth={2} />
                     <Radar name="Menções" dataKey="Menções" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.2} strokeWidth={2} />
                     <Legend />
-                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--primary) / 0.3)', borderRadius: '12px' }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '2px solid rgba(6,182,212,0.4)', borderRadius: '16px', boxShadow: '0 0 30px rgba(6,182,212,0.2)' }} />
                   </RadarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                <div className="h-[400px] flex items-center justify-center text-cyan-300/60">
                   Sem dados suficientes para análise de consenso
                 </div>
               )}
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {consensusData.map((llm, index) => {
               const colors = [
-                { border: 'border-green-500/30', bg: 'from-green-500/10', icon: 'from-green-500 to-emerald-500', text: 'from-green-400 to-emerald-400', shadow: 'shadow-green-500/30' },
-                { border: 'border-purple-500/30', bg: 'from-purple-500/10', icon: 'from-purple-500 to-violet-500', text: 'from-purple-400 to-violet-400', shadow: 'shadow-purple-500/30' },
-                { border: 'border-blue-500/30', bg: 'from-blue-500/10', icon: 'from-blue-500 to-cyan-500', text: 'from-blue-400 to-cyan-400', shadow: 'shadow-blue-500/30' },
-                { border: 'border-orange-500/30', bg: 'from-orange-500/10', icon: 'from-orange-500 to-yellow-500', text: 'from-orange-400 to-yellow-400', shadow: 'shadow-orange-500/30' },
+                { border: 'border-emerald-500/40', bg: 'from-emerald-950/40', icon: 'from-emerald-500 to-green-600', text: 'from-emerald-300 to-green-300', shadow: '0_0_30px_rgba(16,185,129,0.3)', glow: 'bg-emerald-500/20' },
+                { border: 'border-purple-500/40', bg: 'from-purple-950/40', icon: 'from-purple-500 to-violet-600', text: 'from-purple-300 to-violet-300', shadow: '0_0_30px_rgba(168,85,247,0.3)', glow: 'bg-purple-500/20' },
+                { border: 'border-cyan-500/40', bg: 'from-cyan-950/40', icon: 'from-cyan-500 to-blue-600', text: 'from-cyan-300 to-blue-300', shadow: '0_0_30px_rgba(6,182,212,0.3)', glow: 'bg-cyan-500/20' },
+                { border: 'border-amber-500/40', bg: 'from-amber-950/40', icon: 'from-amber-500 to-orange-600', text: 'from-amber-300 to-orange-300', shadow: '0_0_30px_rgba(245,158,11,0.3)', glow: 'bg-amber-500/20' },
               ];
               const color = colors[index % colors.length];
               return (
-                <Card key={llm.provider} className={`relative overflow-hidden border-2 ${color.border} bg-gradient-to-br ${color.bg} to-background backdrop-blur-sm hover:shadow-xl transition-all duration-300`}>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-current opacity-5 rounded-full blur-2xl" />
-                  <CardHeader className="pb-3 relative z-10">
-                    <CardTitle className={`text-xl font-bold bg-gradient-to-r ${color.text} bg-clip-text text-transparent`}>{llm.provider}</CardTitle>
-                    <CardDescription>Métricas Observacionais</CardDescription>
+                <Card key={llm.provider} className={`relative overflow-hidden border-2 ${color.border} bg-gradient-to-br ${color.bg} via-background to-background backdrop-blur-xl shadow-[${color.shadow}] hover:shadow-[${color.shadow.replace('0.3', '0.5')}] transition-all duration-500 group`}>
+                  <div className={`absolute top-0 right-0 w-40 h-40 ${color.glow} rounded-full blur-3xl group-hover:w-48 group-hover:h-48 transition-all duration-500`} />
+                  <CardHeader className="pb-4 relative z-10">
+                    <CardTitle className={`text-2xl font-black bg-gradient-to-r ${color.text} bg-clip-text text-transparent drop-shadow-lg`}>{llm.provider}</CardTitle>
+                    <CardDescription className="text-muted-foreground/80">Métricas Observacionais</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4 relative z-10">
-                    <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                      <span className="text-sm text-muted-foreground">Confiança:</span>
-                      <span className="font-bold text-lg text-green-400">{Math.round(llm.confidence * 100)}%</span>
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                      <span className="text-sm font-medium text-emerald-200/80">Confiança:</span>
+                      <span className="font-black text-xl text-emerald-400 drop-shadow-lg">{Math.round(llm.confidence * 100)}%</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                      <span className="text-sm text-muted-foreground">Sentimento:</span>
-                      <span className="font-bold text-lg text-purple-400">{Math.round(llm.sentiment)}%</span>
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                      <span className="text-sm font-medium text-purple-200/80">Sentimento:</span>
+                      <span className="font-black text-xl text-purple-400 drop-shadow-lg">{Math.round(llm.sentiment)}%</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                      <span className="text-sm text-muted-foreground">Menções:</span>
-                      <Badge className={`bg-gradient-to-r ${color.icon} text-white border-0 shadow-lg ${color.shadow} px-4 py-1`}>{llm.mentions}</Badge>
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                      <span className="text-sm font-medium text-amber-200/80">Menções:</span>
+                      <Badge className={`bg-gradient-to-r ${color.icon} text-white border-0 shadow-lg px-5 py-1.5 text-sm font-bold`} style={{ boxShadow: color.shadow.replace('0_0_30px', '0 0 15px') }}>{llm.mentions}</Badge>
                     </div>
                   </CardContent>
                 </Card>
