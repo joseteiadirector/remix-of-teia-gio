@@ -1,104 +1,114 @@
-import { Activity, Database, Zap, TrendingUp } from "lucide-react";
+import { Activity, Brain, FileText, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDashboardConfig } from "@/hooks/useDashboardConfig";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardQuickActions } from "@/components/dashboard/DashboardQuickActions";
-import { DashboardWidgets } from "@/components/dashboard/DashboardWidgets";
+import { DashboardPremiumHeader } from "@/components/dashboard/DashboardPremiumHeader";
+import { DashboardKPIHero } from "@/components/dashboard/DashboardKPIHero";
+import { DashboardAlertsBanner } from "@/components/dashboard/DashboardAlertsBanner";
+import { DashboardQuickInsight } from "@/components/dashboard/DashboardQuickInsight";
+import { DashboardTrendMini } from "@/components/dashboard/DashboardTrendMini";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+const quickActions = [
+  {
+    title: "IGO Dashboard",
+    description: "Métricas de observabilidade",
+    icon: Brain,
+    path: "/igo-dashboard",
+    color: "from-purple-500/20 to-purple-600/5",
+    iconColor: "text-purple-400 bg-purple-500/20",
+  },
+  {
+    title: "Menções LLM",
+    description: "Presença em IAs",
+    icon: Zap,
+    path: "/llm-mentions",
+    color: "from-emerald-500/20 to-emerald-600/5",
+    iconColor: "text-emerald-400 bg-emerald-500/20",
+  },
+  {
+    title: "Relatórios",
+    description: "Análises detalhadas",
+    icon: FileText,
+    path: "/reports",
+    color: "from-blue-500/20 to-blue-600/5",
+    iconColor: "text-blue-400 bg-blue-500/20",
+  },
+  {
+    title: "Análise de URL",
+    description: "Diagnóstico de páginas",
+    icon: Activity,
+    path: "/url-analysis",
+    color: "from-amber-500/20 to-amber-600/5",
+    iconColor: "text-amber-400 bg-amber-500/20",
+  },
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { widgets, loading, toggleWidget, resetToDefault } = useDashboardConfig();
-
-  // Convert Widget[] to Record<string, boolean> for child components
-  const widgetStates = widgets.reduce((acc, widget) => {
-    acc[widget.type] = widget.enabled;
-    return acc;
-  }, {} as Record<string, boolean>);
-
-  const widgetNames = {
-    aiAnalytics: 'Analytics com IA',
-    unified: 'Score Unificado',
-    weekly: 'Variação Semanal',
-    score: 'Score Médio',
-    mentions: 'Menções por Marca',
-    alerts: 'Alertas Recentes',
-    brands: 'Suas Marcas',
-    trends: 'Evolução de Scores',
-  };
-
-  const quickActions = [
-    {
-      title: "Testar APIs",
-      description: "Verificar conexão com OpenAI, Google, Perplexity, etc.",
-      icon: Zap,
-      onClick: () => navigate("/api-test"),
-      color: "bg-blue-500",
-    },
-    {
-      title: "Gerenciar Marcas",
-      description: "Adicionar e gerenciar marcas monitoradas",
-      icon: Database,
-      onClick: () => navigate("/brands"),
-      color: "bg-green-500",
-    },
-    {
-      title: "Sincronizar Analytics",
-      description: "Executar sincronização de GA4 e Search Console",
-      icon: Activity,
-      onClick: () => navigate("/analytics"),
-      color: "bg-purple-500",
-    },
-    {
-      title: "Ver GEO Scores",
-      description: "Visualizar pontuações e métricas GEO",
-      icon: TrendingUp,
-      onClick: () => navigate("/scores"),
-      color: "bg-orange-500",
-    },
-    {
-      title: "Ver SEO Scores",
-      description: "Visualizar pontuações e métricas SEO",
-      icon: Activity,
-      onClick: () => navigate("/seo-scores"),
-      color: "bg-emerald-500",
-    },
-  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20 p-3 sm:p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
-        <DashboardHeader
-          widgets={widgetStates}
-          widgetNames={widgetNames}
-          onToggleWidget={(widgetId) => toggleWidget(`${widgetId}-1`)}
-          onReset={resetToDefault}
-        />
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+        {/* Premium Header with Brand Selector */}
+        <DashboardPremiumHeader />
 
-        <DashboardQuickActions actions={quickActions} />
+        {/* KPI Hero Section */}
+        <section>
+          <DashboardKPIHero />
+        </section>
 
-        {/* Widgets Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6" role="status" aria-label="Carregando widgets">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div 
-                key={i} 
-                className="p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm animate-pulse"
-                style={{ animationDelay: `${i * 100}ms` }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 bg-muted rounded-lg" />
-                  <div className="h-4 w-24 bg-muted rounded" />
+        {/* Alerts Banner */}
+        <section>
+          <DashboardAlertsBanner />
+        </section>
+
+        {/* Quick Actions */}
+        <section 
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+          style={{
+            animation: 'fade-in 0.5s ease-out forwards',
+            animationDelay: '700ms',
+            opacity: 0
+          }}
+        >
+          {quickActions.map((action, index) => (
+            <Card
+              key={action.path}
+              onClick={() => navigate(action.path)}
+              className={cn(
+                "group cursor-pointer overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm",
+                "hover:border-primary/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
+                "p-4 sm:p-5"
+              )}
+              style={{
+                animationDelay: `${800 + index * 50}ms`,
+                animation: 'fade-in 0.4s ease-out forwards',
+                opacity: 0
+              }}
+            >
+              <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity", action.color)} />
+              <div className="relative z-10 flex flex-col gap-3">
+                <div className={cn("p-2.5 rounded-xl w-fit", action.iconColor)}>
+                  <action.icon className="h-5 w-5" />
                 </div>
-                <div className="space-y-3">
-                  <div className="h-20 bg-muted rounded-lg" />
-                  <div className="h-3 w-3/4 bg-muted rounded" />
+                <div>
+                  <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+                    {action.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {action.description}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <DashboardWidgets widgets={widgetStates} />
-        )}
+            </Card>
+          ))}
+        </section>
+
+        {/* Insights & Trends Grid */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <DashboardQuickInsight />
+          <DashboardTrendMini />
+        </section>
       </div>
     </div>
   );
