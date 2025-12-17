@@ -76,13 +76,18 @@ export const GAP_CONFIG: KAPIMetricConfig = {
  * Stability - Estabilidade Cognitiva
  * Mede a consistência temporal das respostas dos LLMs
  * LÓGICA DIRETA: maior valor = melhor estabilidade
+ * 
+ * FÓRMULA CIENTÍFICA (Artigo - Cap. 3):
+ * Estabilidade = max(0, 100 - (σ_normalizado × 150))
+ * Equivalente: max(0, 100 - (σ_bruto × 1.5)) quando σ está em escala 0-100
+ * Base teórica: Montgomery et al. (2012)
  */
 export const STABILITY_CONFIG: KAPIMetricConfig = {
   id: 'stability',
   name: 'Stability',
   fullName: 'Estabilidade Cognitiva',
   description: 'Consistência temporal das respostas dos LLMs',
-  formula: 'Stability = 1 - (σ(respostas temporais) × 2)',
+  formula: 'Estabilidade = max(0, 100 - (σ × 150)) [σ normalizado 0-1]',
   logic: 'direct',
   threshold: 70, // Mínimo para ser considerado "Bom"
   unit: '%',
