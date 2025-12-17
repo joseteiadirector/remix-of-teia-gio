@@ -170,14 +170,14 @@ export default function KPIs() {
       // NÃO recalcular localmente - usar valor da tabela seo_metrics_daily
       const seoScore = seoMetrics?.seo_score || 0;
 
-      // Calcular ICE e GAP - Métricas IGO
-      const ice = 1 - (Math.abs(geoScore - seoScore) / 100);
-      // FÓRMULA GAP PADRONIZADA: Diferença absoluta entre GEO e SEO
-      const gap = Math.abs(geoScore - seoScore);
-
-      // Extrair métricas IGO - CPI de geo_scores (FONTE OFICIAL)
-      const cpi = geoData?.[0]?.cpi || igoData?.[0]?.cpi || 0;
+      // ✅ FONTE ÚNICA DA VERDADE: Métricas KAPI da tabela igo_metrics_history
+      // NUNCA recalcular no frontend - usar valores pré-calculados pela edge function
+      const ice = igoData?.[0]?.ice || 0;
+      const gap = igoData?.[0]?.gap || 0;
       const cognitiveStability = igoData?.[0]?.cognitive_stability || 0;
+      
+      // CPI: Fonte oficial é geo_scores.cpi, fallback para igo_metrics_history
+      const cpi = geoData?.[0]?.cpi || igoData?.[0]?.cpi || 0;
 
       setKpiData({
         geo: {
@@ -246,7 +246,8 @@ export default function KPIs() {
           { name: 'Inteligência Estratégica', value: kpiData.geo.breakdown.inteligencia_estrategica },
         ],
         kapiMetrics: {
-          ice: kpiData.convergence.ice * 100,
+          // ✅ FONTE ÚNICA: Valores já estão em escala 0-100 da igo_metrics_history
+          ice: kpiData.convergence.ice,
           gap: kpiData.convergence.gap,
           cpi: kpiData.igo.cpi,
           stability: kpiData.igo.cognitiveStability,
@@ -592,32 +593,32 @@ export default function KPIs() {
                 <div>
                   <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2 flex items-center gap-2">
                     <Activity className="w-5 h-5" />
-                    ICE (Índice de Convergência Estratégica)
+                    ICE (Index of Cognitive Efficiency)
                   </h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">
-                    <strong>O que é:</strong> Mostra o alinhamento entre a percepção das IAs (GEO) e a estrutura técnica (SEO). Quanto mais próximo de 1, melhor o alinhamento.
+                    <strong>O que é:</strong> Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Fórmula: ICE = 1 - σ(taxas de menção entre LLMs).
                   </p>
                   <p className="text-sm text-foreground/80 leading-relaxed mt-2">
-                    <strong>Como interpretar:</strong> Um ICE alto (próximo de 1) significa que sua estratégia está sincronizada — o que as IAs veem coincide com o que o Google indexa. Um ICE baixo indica desalinhamento crítico que precisa ser corrigido.
+                    <strong>Como interpretar:</strong> Um ICE alto (≥75) significa que os LLMs concordam sobre sua presença. Valores baixos indicam percepções divergentes entre provedores que precisam ser harmonizadas.
                   </p>
                 </div>
 
                 <div className="border-t border-amber-200/50 dark:border-amber-800/50 pt-4">
                   <h3 className="text-lg font-bold text-orange-900 dark:text-orange-100 mb-2 flex items-center gap-2">
                     <Zap className="w-5 h-5" />
-                    GAP Ativo (GA)
+                    GAP (Precisão de Alinhamento de Observabilidade)
                   </h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">
-                    <strong>O que é:</strong> Indica onde agir primeiro. Valores maiores revelam distorções críticas com baixa confiança entre IAs.
+                    <strong>O que é:</strong> Mede a precisão do alinhamento entre provedores de LLM. Fórmula: GAP = (Pₐ / Pₜ) × 100 × C, onde Pₐ = provedores alinhados, Pₜ = total de provedores, C = fator de consenso.
                   </p>
                   <p className="text-sm text-foreground/80 leading-relaxed mt-2">
-                    <strong>Como interpretar:</strong> Um GA alto significa que existe uma grande diferença entre GEO e SEO, e as IAs têm baixa confiança nas informações. Isso exige ação imediata para corrigir a distorção e aumentar a confiabilidade.
+                    <strong>Como interpretar:</strong> Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que exigem ação para aumentar a consistência.
                   </p>
                 </div>
 
                 <div className="bg-white/50 dark:bg-black/20 p-3 rounded-lg border border-amber-200/30 dark:border-amber-800/30">
                   <p className="text-xs text-foreground/70 italic">
-                    💡 <strong>Dica Estratégica:</strong> Priorize ações quando o GAP é alto e o ICE é baixo. Isso indica oportunidades de melhoria que terão maior impacto na sua visibilidade em IAs.
+                    💡 <strong>Dica Estratégica:</strong> Priorize ações quando ICE e GAP estão baixos. Isso indica inconsistências na percepção da sua marca entre LLMs que precisam ser corrigidas.
                   </p>
                 </div>
               </div>
@@ -626,29 +627,29 @@ export default function KPIs() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <KPICard
                 title="ICE - Índice de Convergência Estratégica"
-                value={kpiData.convergence.ice.toFixed(2)}
+                value={kpiData.convergence.ice.toFixed(1)}
                 icon={Activity}
-                description="Alinhamento entre GEO e SEO (0 a 1)"
+                description="Consenso entre LLMs (0 a 100, maior = melhor)"
                 dataSource="real"
                 colorClass="from-cyan-500/5 to-blue-500/10 border-cyan-500/20"
                 tooltip={{
                   title: "O que é o ICE?",
-                  description: "O ICE mostra o alinhamento entre a percepção das IAs (GEO) e a estrutura técnica (SEO). Quanto mais próximo de 1, melhor o alinhamento.",
-                  whyMatters: "Um ICE alto significa que sua estratégia de conteúdo está sincronizada. Um ICE baixo indica que você precisa alinhar melhor o que as IAs veem com o que o Google vê."
+                  description: "Mede o consenso entre diferentes LLMs sobre a taxa de menção da sua marca. Calculado como 1 - σ(taxas de menção).",
+                  whyMatters: "Um ICE alto (≥75) significa que os LLMs concordam sobre sua marca. Valores baixos indicam percepções divergentes que precisam ser harmonizadas."
                 }}
               />
 
               <KPICard
-                title="GAP Ativo (GA) - Prioridade de Ação"
+                title="GAP - Prioridade Estratégica de Ação"
                 value={kpiData.convergence.gap.toFixed(1)}
                 icon={Zap}
-                description="Distorção crítica a corrigir (0 a 50)"
+                description="Alinhamento de observabilidade (0 a 100, maior = melhor)"
                 dataSource="real"
                 colorClass="from-amber-500/5 to-orange-500/10 border-amber-500/20"
                 tooltip={{
-                  title: "O que é o GAP Ativo?",
-                  description: "O GA indica onde agir primeiro. Valores maiores revelam distorções críticas com baixa confiança entre IAs.",
-                  whyMatters: "Um GA alto significa que há uma diferença significativa entre GEO e SEO, e as IAs têm baixa confiança. Isso exige ação imediata para corrigir a distorção."
+                  title: "O que é o GAP?",
+                  description: "Mede a precisão do alinhamento de observabilidade entre provedores de LLM. Fórmula: (Pₐ/Pₜ) × 100 × C.",
+                  whyMatters: "Um GAP alto (≥60) significa que os provedores estão alinhados na representação da sua marca. Valores baixos indicam divergências que precisam de atenção."
                 }}
               />
             </div>
@@ -658,14 +659,14 @@ export default function KPIs() {
               <Card className="p-6 glass-card border-2 shadow-xl hover:shadow-cyan-500/20 transition-all duration-300">
                 <h3 className="text-lg font-bold mb-4 text-center">Índice de Convergência Estratégica (ICE)</h3>
                 <p className="text-sm text-center text-muted-foreground mb-4">
-                  Alinhamento entre GEO e SEO: {kpiData.convergence.ice.toFixed(2)}
+                  Consenso entre LLMs: {kpiData.convergence.ice.toFixed(1)}/100
                 </p>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={[
                       { name: 'Score GEO', value: kpiData.geo.score },
                       { name: 'Score SEO', value: kpiData.seo.score },
-                      { name: 'ICE Final', value: kpiData.convergence.ice * 100 },
+                      { name: 'ICE', value: kpiData.convergence.ice },
                     ]}
                     margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                   >
@@ -698,18 +699,18 @@ export default function KPIs() {
                 </p>
               </Card>
 
-              {/* Gráfico GAP Ativo - Mostrar Pilares */}
+              {/* Gráfico GAP - Mostrar Pilares */}
               <Card className="p-6 glass-card border-2 shadow-xl hover:shadow-orange-500/20 transition-all duration-300">
-                <h3 className="text-lg font-bold mb-4 text-center">GAP Ativo (GA) - Prioridade Estratégica de Ação</h3>
+                <h3 className="text-lg font-bold mb-4 text-center">GAP - Precisão de Alinhamento de Observabilidade</h3>
                 <p className="text-sm text-center text-muted-foreground mb-4">
-                  Distorção crítica: {kpiData.convergence.gap.toFixed(1)}
+                  Alinhamento entre provedores: {kpiData.convergence.gap.toFixed(1)}/100 (maior = melhor)
                 </p>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={[
-                      { name: 'Diferença Absoluta', value: Math.abs(kpiData.geo.score - kpiData.seo.score) },
-                      { name: 'Mult. Confiança', value: (1 - (kpiData.geo.confidence / 100)) },
-                      { name: 'GAP Final', value: kpiData.convergence.gap },
+                      { name: 'Score GEO', value: kpiData.geo.score },
+                      { name: 'Score SEO', value: kpiData.seo.score },
+                      { name: 'GAP', value: kpiData.convergence.gap },
                     ]}
                     margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                   >
@@ -738,7 +739,7 @@ export default function KPIs() {
                   </BarChart>
                 </ResponsiveContainer>
                 <p className="text-xs text-center text-muted-foreground mt-2">
-                  GAP = Diferença Absoluta × Multiplicador Confiança - {selectedBrandName}
+                  GAP = (Provedores Alinhados / Total) × 100 × Consenso - {selectedBrandName}
                 </p>
               </Card>
             </div>
