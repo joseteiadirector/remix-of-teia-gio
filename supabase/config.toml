@@ -1,10 +1,142 @@
 project_id = "aebyoezagedzuxjbsdnn"
 
+# AI & Analytics Functions
+[functions.ai-analytics]
+verify_jwt = true
+
+[functions.ai-predictions]
+verify_jwt = true
+
+[functions.ai-report-generator]
+verify_jwt = true
+
+[functions.analytics-sync]
+verify_jwt = true
+
+# SEO Functions
 [functions.analyze-technical-seo]
 verify_jwt = false
+
+[functions.analyze-url]
+verify_jwt = false
+
+[functions.calculate-seo-score]
+verify_jwt = true
+
+[functions.calculate-seo-estimates]
+verify_jwt = true
 
 [functions.collect-seo-metrics]
 verify_jwt = true
 
-[functions.calculate-seo-score]
+# GEO & IGO Functions
+[functions.calculate-geo-metrics]
 verify_jwt = true
+
+[functions.calculate-igo-metrics]
+verify_jwt = true
+
+[functions.calculate-cpi-score]
+verify_jwt = true
+
+[functions.predict-geo-score]
+verify_jwt = true
+
+# LLM & Mentions Functions
+[functions.collect-llm-mentions]
+verify_jwt = true
+
+[functions.detect-hallucinations]
+verify_jwt = true
+
+[functions.nucleus-chat]
+verify_jwt = true
+
+[functions.execute-nucleus-query]
+verify_jwt = true
+
+[functions.scheduled-mentions-collection]
+verify_jwt = true
+
+# Google Integration Functions
+[functions.fetch-ga4-data]
+verify_jwt = true
+
+[functions.fetch-gsc-queries]
+verify_jwt = true
+
+# Automation Functions
+[functions.automation-orchestrator]
+verify_jwt = true
+
+[functions.run-scheduled-analyses]
+verify_jwt = true
+
+# Report Functions
+[functions.generate-manual-report]
+verify_jwt = true
+
+[functions.generate-scientific-report]
+verify_jwt = true
+
+[functions.generate-pdf-with-pdfshift]
+verify_jwt = true
+
+[functions.capture-charts-for-pdf]
+verify_jwt = true
+
+[functions.audit-report-data]
+verify_jwt = true
+
+# Email Functions
+[functions.send-weekly-report]
+verify_jwt = true
+
+[functions.send-scheduled-weekly-reports]
+verify_jwt = true
+
+[functions.send-alert-notification]
+verify_jwt = true
+
+[functions.send-limit-warning]
+verify_jwt = true
+
+[functions.send-welcome-email]
+verify_jwt = true
+
+[functions.weekly-reset-notification]
+verify_jwt = true
+
+# Alert Functions
+[functions.classify-alerts]
+verify_jwt = true
+
+# Subscription & Payment Functions
+[functions.check-subscription]
+verify_jwt = true
+
+[functions.create-checkout]
+verify_jwt = true
+
+[functions.customer-portal]
+verify_jwt = true
+
+# Document Functions
+[functions.process-document]
+verify_jwt = true
+
+[functions.search-knowledge-base]
+verify_jwt = true
+
+# Utility Functions
+[functions.api-create-key]
+verify_jwt = true
+
+[functions.backup-database]
+verify_jwt = true
+
+[functions.generate-hero-image]
+verify_jwt = true
+
+[functions.test-connections]
+verify_jwt = false
