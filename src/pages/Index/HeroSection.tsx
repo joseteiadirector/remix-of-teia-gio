@@ -1,6 +1,6 @@
 import { LoginCard } from "@/components/LoginCard";
 import { ArrowRight } from "lucide-react";
-import heroBrainBg from "@/assets/hero-brain-bg.png";
+import heroBrainBg from "@/assets/hero-brain-enhanced.png";
 
 export const HeroSection = () => {
   return (
