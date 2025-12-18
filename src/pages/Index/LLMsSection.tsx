@@ -1,3 +1,5 @@
+import llmsSectionBg from "@/assets/llms-section-bg.png";
+
 const llms = [
   { name: "ChatGPT", provider: "OpenAI", model: "GPT-5" },
   { name: "Gemini", provider: "Google", model: "2.5 Flash" },
@@ -7,8 +9,18 @@ const llms = [
 
 export const LLMsSection = () => {
   return (
-    <section className="py-32">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section className="relative py-32 overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img 
+          src={llmsSectionBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/60 to-background" />
+      </div>
+      
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 animate-fade-in">
