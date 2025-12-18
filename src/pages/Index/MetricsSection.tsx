@@ -43,7 +43,7 @@ export const MetricsSection = () => {
         <img 
           src={frameworkIgoBg} 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover opacity-25"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
       </div>

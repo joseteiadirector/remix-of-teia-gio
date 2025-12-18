@@ -11,7 +11,7 @@ export const CTASection = () => {
         <img 
           src={ctaSectionBg} 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
       </div>
