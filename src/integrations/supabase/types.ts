@@ -136,6 +136,45 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string | null
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          record_id: string | null
+          table_name: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          record_id?: string | null
+          table_name: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          record_id?: string | null
+          table_name?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       automation_configs: {
         Row: {
           automation_type: string
@@ -1618,7 +1657,26 @@ export type Database = {
       can_view: { Args: { _user_id: string }; Returns: boolean }
       clean_expired_cache: { Args: never; Returns: undefined }
       clean_old_function_logs: { Args: never; Returns: undefined }
+      cleanup_old_audit_logs: { Args: never; Returns: number }
       cleanup_old_data: { Args: never; Returns: Json }
+      get_audit_logs: {
+        Args: {
+          p_limit?: number
+          p_operation?: string
+          p_table_name?: string
+          p_user_id?: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          new_data: Json
+          old_data: Json
+          operation: string
+          record_id: string
+          table_name: string
+          user_id: string
+        }[]
+      }
       get_platform_health: { Args: never; Returns: Json }
       has_any_role: {
         Args: {
