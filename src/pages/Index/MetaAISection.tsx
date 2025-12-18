@@ -1,159 +1,114 @@
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Brain, Eye, TrendingUp, Sparkles } from "lucide-react";
+import { Brain, Eye, TrendingUp, Sparkles, Layers } from "lucide-react";
 
 export const MetaAISection = () => {
+  const features = [
+    {
+      icon: Eye,
+      title: "Observação Multi-LLM",
+      description: "Monitora e compara simultaneamente como 4 LLMs diferentes percebem e recomendam marcas"
+    },
+    {
+      icon: Brain,
+      title: "Inteligência IGO",
+      description: "Cria inteligência sobre inteligência, identificando padrões, gaps e oportunidades"
+    },
+    {
+      icon: TrendingUp,
+      title: "Análise Comparativa",
+      description: "Detecta como cada modelo de IA interpreta sua marca de forma diferente"
+    },
+    {
+      icon: Sparkles,
+      title: "Disciplina IGO",
+      description: "Inaugura a Inteligência Generativa Observacional — a ciência de otimizar presença em IAs"
+    }
+  ];
+
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
-      {/* Background decorative elements */}
+    <section className="py-32 px-4 sm:px-6 lg:px-8 bg-muted/20 relative overflow-hidden">
+      {/* Subtle background */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1.5s" }} />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-[100px]" />
       </div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
-        <div className="text-center mb-16 space-y-4">
-          <Badge variant="outline" className="mb-4 border-primary/50 bg-primary/10">
-            <Sparkles className="w-4 h-4 mr-2 text-primary" aria-hidden="true" />
-            Tecnologia Pioneira
-          </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+        {/* Header */}
+        <div className="text-center mb-20 space-y-6">
+          <p className="text-sm font-medium tracking-[0.2em] uppercase text-primary">Tecnologia Pioneira</p>
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-foreground">
             IA de Segunda Ordem
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A primeira plataforma que não apenas <strong>usa</strong> IA, mas <strong>observa e analisa</strong> o 
-            comportamento de múltiplas IAs generativas — criando inteligência sobre inteligência
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
+            A primeira plataforma que não apenas <span className="text-foreground">usa</span> IA, mas{" "}
+            <span className="text-foreground">observa e analisa</span> o comportamento de múltiplas IAs generativas
           </p>
         </div>
 
-        {/* Diagrama Visual */}
-        <div className="mb-16">
-          <Card className="p-8 bg-card/80 backdrop-blur-sm border-2 border-primary/20">
-            <div className="grid md:grid-cols-3 gap-8 items-center">
-              {/* Camada 1: IA Tradicional */}
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-muted/50 flex items-center justify-center border-2 border-border">
-                  <Brain className="w-10 h-10 text-muted-foreground" />
-                </div>
-                <h3 className="font-bold text-lg">Camada 1</h3>
-                <p className="text-sm text-muted-foreground">
-                  <strong>IA Tradicional</strong>
-                  <br />
-                  Ferramentas que usam LLMs para tarefas específicas
-                </p>
+        {/* Layers Diagram */}
+        <Card className="p-12 mb-16 bg-card/80 backdrop-blur-sm border-border/50">
+          <div className="grid md:grid-cols-3 gap-12 items-center">
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-muted/50 flex items-center justify-center">
+                <Brain className="w-10 h-10 text-muted-foreground" />
               </div>
-
-              {/* Arrow */}
-              <div className="hidden md:flex justify-center">
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-
-              {/* Camada 2: LLMs Observadas */}
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-secondary/20 flex items-center justify-center border-2 border-secondary">
-                  <Brain className="w-10 h-10 text-secondary" />
-                </div>
-                <h3 className="font-bold text-lg">Camada 2</h3>
-                <p className="text-sm text-muted-foreground">
-                  <strong>LLMs Observadas</strong>
-                  <br />
-                  ChatGPT, Gemini, Claude, Perplexity
-                </p>
-              </div>
-
-              {/* Arrow */}
-              <div className="hidden md:flex justify-center md:col-start-2">
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-
-              {/* Camada 3: Meta-IA */}
-              <div className="text-center space-y-4 md:col-start-3">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center border-2 border-primary shadow-lg shadow-primary/50 animate-pulse">
-                  <Eye className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="font-bold text-lg text-primary">Camada 3 (Nossa)</h3>
-                <p className="text-sm text-muted-foreground">
-                  <strong className="text-primary">Meta-IA (IGO)</strong>
-                  <br />
-                  Analisa comportamento e padrões das LLMs
-                </p>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Camada 1</p>
+                <h3 className="font-heading font-semibold text-foreground">IA Tradicional</h3>
+                <p className="text-xs text-muted-foreground mt-2">Ferramentas que usam LLMs para tarefas específicas</p>
               </div>
             </div>
-          </Card>
-        </div>
 
-        {/* Por que é pioneiro */}
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+                <Layers className="w-10 h-10 text-secondary" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Camada 2</p>
+                <h3 className="font-heading font-semibold text-foreground">LLMs Observadas</h3>
+                <p className="text-xs text-muted-foreground mt-2">ChatGPT, Gemini, Claude, Perplexity</p>
+              </div>
+            </div>
+
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                <Eye className="w-10 h-10 text-white" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-primary mb-1">Camada 3 (Nossa)</p>
+                <h3 className="font-heading font-semibold text-primary">Meta-IA (IGO)</h3>
+                <p className="text-xs text-muted-foreground mt-2">Analisa comportamento e padrões das LLMs</p>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Features Grid */}
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 hover:shadow-xl transition-all">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <Eye className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2">Observação Multi-LLM</h3>
-                <p className="text-muted-foreground">
-                  Monitora e compara simultaneamente como 4 LLMs diferentes (ChatGPT, Gemini, Claude, Perplexity) 
-                  percebem e recomendam marcas — algo inédito no mercado
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20 hover:shadow-xl transition-all">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                <Brain className="w-6 h-6 text-secondary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2">Inteligência IGO</h3>
-                <p className="text-muted-foreground">
-                  Não apenas coleta dados — cria <strong>inteligência sobre inteligência</strong>, 
-                  identificando padrões, gaps e oportunidades no comportamento generativo
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20 hover:shadow-xl transition-all">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                <TrendingUp className="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2">Análise Comparativa</h3>
-                <p className="text-muted-foreground">
-                  Detecta como cada modelo de IA interpreta sua marca de forma diferente, 
-                  permitindo otimização específica para cada LLM
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20 hover:shadow-xl transition-all">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2">Disciplina IGO</h3>
-                <p className="text-muted-foreground">
-                  Inaugura uma nova categoria: <strong>Inteligência Generativa Observacional</strong> — 
-                  a ciência de medir, analisar e otimizar presença em IAs generativas
-                </p>
-              </div>
-            </div>
-          </Card>
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <Card key={index} className="p-8 border-border/50 hover:border-primary/30 transition-all group">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-heading font-semibold text-foreground mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Destaque Final */}
-        <div className="mt-12 text-center">
-          <Card className="inline-block p-6 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 border-2 border-primary/30">
-            <p className="text-lg font-medium">
-              <Sparkles className="w-5 h-5 inline-block mr-2 text-primary" />
-              Enquanto outras plataformas <strong>usam</strong> IA, a Teia GEO <strong>estuda</strong> IA
-              <Sparkles className="w-5 h-5 inline-block ml-2 text-secondary" />
-            </p>
-          </Card>
+        {/* Bottom Quote */}
+        <div className="mt-16 text-center">
+          <p className="text-lg text-muted-foreground italic">
+            "Enquanto outras plataformas <span className="text-foreground">usam</span> IA, a Teia GEO <span className="text-primary font-medium">estuda</span> IA"
+          </p>
         </div>
       </div>
     </section>
