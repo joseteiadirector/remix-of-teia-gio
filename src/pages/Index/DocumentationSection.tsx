@@ -1,148 +1,92 @@
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, CheckCircle2, Brain } from "lucide-react";
+import { CheckCircle2, Brain, ArrowRight } from "lucide-react";
 
 export const DocumentationSection = () => {
+  const steps = [
+    {
+      num: "01",
+      title: "Auditoria Inicial",
+      description: "Registre sua marca e receba uma auditoria completa de visibilidade em IAs generativas.",
+      items: ["Análise de presença digital", "Identificação de gaps", "Score GEO inicial"]
+    },
+    {
+      num: "02",
+      title: "Implementação",
+      description: "Receba recomendações personalizadas seguindo nosso framework de 5 pilares.",
+      items: ["Guias passo a passo", "Templates práticos", "Checklist de implementação"]
+    },
+    {
+      num: "03",
+      title: "Monitoramento",
+      description: "Acompanhe em tempo real como IAs mencionam sua marca.",
+      items: ["Dashboard em tempo real", "Alertas configuráveis", "Histórico de menções"]
+    },
+    {
+      num: "04",
+      title: "Otimização Contínua",
+      description: "Use insights de IA para refinar continuamente sua estratégia GEO.",
+      items: ["Recomendações automáticas", "A/B testing", "Relatórios de performance"]
+    }
+  ];
+
   return (
-    <section id="docs" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
+    <section id="docs" className="py-32 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16 space-y-4">
-          <Badge variant="outline" className="mb-4">
-            <MessageSquare className="w-4 h-4 mr-2" aria-hidden="true" />
-            Documentação
-          </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold">
-            Como Começar com GEO
+        {/* Header */}
+        <div className="text-center mb-20 space-y-6">
+          <p className="text-sm font-medium tracking-[0.2em] uppercase text-primary">Documentação</p>
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-foreground">
+            Como Começar
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Guia completo para implementar GEO e maximizar sua visibilidade em IAs generativas
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
+            Guia completo para implementar GEO e maximizar sua visibilidade em IAs
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <Card className="p-8 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-              <span className="text-2xl font-bold text-primary">1</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-4">Auditoria Inicial</h3>
-            <p className="text-muted-foreground mb-6">
-              Comece registrando sua marca na plataforma. Realizamos uma auditoria completa 
-              para identificar seu estado atual de visibilidade em IAs generativas.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Análise de presença digital atual</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Identificação de gaps de otimização</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Score GEO inicial</span>
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-8 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-6">
-              <span className="text-2xl font-bold text-secondary">2</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-4">Implementação</h3>
-            <p className="text-muted-foreground mb-6">
-              Receba recomendações personalizadas e implemente melhorias seguindo nosso 
-              framework de 5 pilares e 20 módulos.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Guias passo a passo para cada módulo</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Templates e exemplos práticos</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Checklist de implementação</span>
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-8 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
-              <span className="text-2xl font-bold text-accent">3</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-4">Monitoramento</h3>
-            <p className="text-muted-foreground mb-6">
-              Acompanhe em tempo real como IAs estão mencionando sua marca e 
-              receba alertas sobre mudanças importantes.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Dashboard com métricas em tempo real</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Alertas configuráveis</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Histórico de menções</span>
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-8 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-              <span className="text-2xl font-bold text-primary">4</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-4">Otimização Contínua</h3>
-            <p className="text-muted-foreground mb-6">
-              Use insights baseados em IA para refinar continuamente sua estratégia GEO 
-              e maximizar resultados.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Recomendações automáticas de IA</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">A/B testing de estratégias</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-sm">Relatórios de performance</span>
-              </li>
-            </ul>
-          </Card>
+        {/* Steps Grid */}
+        <div className="grid md:grid-cols-2 gap-6 mb-16">
+          {steps.map((step, index) => (
+            <Card key={index} className="p-8 border-border/50 hover:border-primary/30 transition-all">
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl font-display text-primary">{step.num}</span>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-xl font-heading font-semibold text-foreground">{step.title}</h3>
+                  <p className="text-muted-foreground">{step.description}</p>
+                  <ul className="space-y-2">
+                    {step.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-muted-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <Card className="p-8 bg-gradient-to-br from-primary/5 to-secondary/5">
-            <h3 className="text-2xl font-bold mb-4">Precisa de Ajuda?</h3>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Nossa equipe está disponível para ajudar você a implementar GEO de forma efetiva. 
-              Oferecemos consultoria, treinamento e suporte técnico.
-            </p>
-            <div className="flex justify-center">
-              <button
-                onClick={() => {
-                  const element = document.getElementById('framework');
-                  if (element) element.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="inline-flex items-center justify-center h-10 px-8 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground text-sm font-medium transition-colors"
-                aria-label="Ver framework completo do GEO"
-              >
-                <Brain className="w-4 h-4 mr-2" aria-hidden="true" />
-                Ver Framework Completo
-              </button>
-            </div>
-          </Card>
-        </div>
+        {/* Help Card */}
+        <Card className="p-12 bg-gradient-to-br from-primary/5 via-card to-secondary/5 border-border/50 text-center">
+          <h3 className="text-2xl font-heading font-semibold text-foreground mb-4">Precisa de Ajuda?</h3>
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Nossa equipe está disponível para ajudar você a implementar GEO de forma efetiva. 
+            Oferecemos consultoria, treinamento e suporte técnico.
+          </p>
+          <button
+            onClick={() => {
+              const element = document.getElementById('framework');
+              if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-flex items-center justify-center h-12 px-8 rounded-xl border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary font-medium transition-colors"
+          >
+            <Brain className="w-5 h-5 mr-2" />
+            Ver Framework Completo
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </button>
+        </Card>
       </div>
     </section>
   );
