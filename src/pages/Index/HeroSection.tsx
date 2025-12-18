@@ -10,11 +10,11 @@ export const HeroSection = () => {
         <img 
           src={heroBrainBg} 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-30"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
         />
         {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/30" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
