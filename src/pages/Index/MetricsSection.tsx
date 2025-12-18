@@ -4,20 +4,26 @@ const metrics = [
   {
     code: "ICE",
     name: "Index of Cognitive Efficiency",
-    description: "Consenso entre LLMs",
-    value: "91.5"
+    description: "Precisão cognitiva dos LLMs",
+    value: "88%"
   },
   {
     code: "GAP",
     name: "Governance Alignment Precision",
-    description: "Alinhamento contextual",
-    value: "88.2"
+    description: "Consenso entre provedores",
+    value: "76%"
+  },
+  {
+    code: "Estabilidade",
+    name: "Cognitive Stability",
+    description: "Consistência temporal",
+    value: "91%"
   },
   {
     code: "CPI",
     name: "Cognitive Predictive Index",
-    description: "Consistência preditiva",
-    value: "Real-time"
+    description: "Previsibilidade algorítmica",
+    value: "84.6"
   }
 ];
 
@@ -60,7 +66,7 @@ export const MetricsSection = () => {
           </div>
 
           {/* Metrics Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-20">
+          <div className="grid md:grid-cols-4 gap-6 mb-20">
             {metrics.map((metric, index) => (
               <div 
                 key={index}
