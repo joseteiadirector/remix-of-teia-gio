@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { LanguageSelector } from "@/components/LanguageSelector";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
@@ -47,7 +46,6 @@ const Header = () => {
 
           {/* CTA */}
           <div className="flex items-center gap-2 md:gap-3" role="navigation" aria-label="Ações do usuário">
-            <LanguageSelector />
             <ThemeToggle />
             {user ? (
               <>
