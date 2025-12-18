@@ -1,62 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    <title>Teia GEO — Plataforma de Otimização para IAs Generativas</title>
-    <meta name="theme-color" content="#8B5CF6" />
-    <meta name="description" content="Teia GEO: Plataforma brasileira de GEO e IGO. Monitore sua marca em ChatGPT, Claude, Gemini e Perplexity." />
-    
-    <!-- PWA Meta Tags -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Teia GEO" />
-    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-      html, body {
-        background-color: #0f172a;
-        color: #f1f5f9;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-      }
-      #root {
-        min-height: 100vh;
-      }
-      .app-loader {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        gap: 1rem;
-      }
-      .app-loader-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid rgba(139, 92, 246, 0.3);
-        border-top-color: #8B5CF6;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teia GEO</title>
+    <meta name="description" content="Teia GEO: Plataforma brasileira de GEO e IGO." />
   </head>
-  <body class="dark">
-    <div id="root">
-      <div id="preboot" class="app-loader">
-        <div class="app-loader-spinner"></div>
-        <span id="preboot-text">Carregando...</span>
-      </div>
-    </div>
+  <body>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
