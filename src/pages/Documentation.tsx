@@ -804,49 +804,61 @@ Onde:
                 </div>
               </section>
 
-              {/* FAQ Section */}
-              <section>
-                <div className="flex items-center gap-3 mb-6 mt-8">
-                  <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg border border-primary/30">
-                    <HelpCircle className="h-6 w-6 text-primary" />
+              {/* FAQ Section - Premium Styling */}
+              <section className="relative">
+                <div className="flex items-center gap-4 mb-8 mt-8">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-xl blur-lg opacity-40 animate-pulse" />
+                    <div className="relative p-3 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl border border-primary/40 backdrop-blur-sm">
+                      <HelpCircle className="h-7 w-7 text-primary" />
+                    </div>
                   </div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    FAQ — Perguntas Frequentes
-                  </h2>
+                  <div>
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                      FAQ — Perguntas Frequentes
+                    </h2>
+                    <p className="text-sm text-muted-foreground">Respostas para as dúvidas mais comuns</p>
+                  </div>
                 </div>
 
                 <Accordion type="multiple" className="space-y-4">
                   
-                  <AccordionItem value="estrutura-1" className="bg-muted/30 px-4 rounded-xl border border-border/40 hover:border-primary/30 transition-all">
-                    <AccordionTrigger className="font-semibold hover:no-underline">
-                      <span className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-blue-500" />
-                        O que é a arquitetura híbrida GEO+SEO implementada?
+                  <AccordionItem value="estrutura-1" className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 px-5 py-1 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <AccordionTrigger className="font-semibold hover:no-underline relative">
+                      <span className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30 group-hover:border-blue-500/50 transition-all">
+                          <Building2 className="h-4 w-4 text-blue-400" />
+                        </div>
+                        <span className="group-hover:text-primary transition-colors">O que é a arquitetura híbrida GEO+SEO implementada?</span>
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm space-y-3 pt-2">
+                    <AccordionContent className="text-sm space-y-3 pt-2 relative">
                       <p className="text-muted-foreground">A Teia GEO utiliza uma <strong className="text-foreground">arquitetura híbrida convergente</strong> que combina:</p>
                       <ul className="space-y-2 ml-4 text-muted-foreground">
                         <li>• <strong className="text-foreground">GEO (Generative Engine Optimization):</strong> Otimização para motores de IA generativa (ChatGPT, Claude, Gemini, Perplexity)</li>
                         <li>• <strong className="text-foreground">SEO (Search Engine Optimization):</strong> Otimização tradicional para buscadores (Google, Bing)</li>
                       </ul>
-                      <div className="bg-primary/10 p-4 rounded-lg mt-3 border border-primary/20">
+                      <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-4 rounded-lg mt-3 border border-primary/20">
                         <strong>Diferencial Técnico:</strong>
                         <p className="text-xs mt-1 text-muted-foreground">Sistema único que analisa simultaneamente visibilidade orgânica e menções em IA, usando métricas padronizadas 0-100 para comparação direta.</p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem value="faq-geo" className="bg-muted/30 px-4 rounded-xl border border-border/40 hover:border-primary/30 transition-all">
-                    <AccordionTrigger className="font-semibold hover:no-underline">
-                      <span className="flex items-center gap-2">
-                        <HelpCircle className="h-4 w-4 text-purple-500" />
-                        O que é GEO e por que é importante?
+                  <AccordionItem value="faq-geo" className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 px-5 py-1 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <AccordionTrigger className="font-semibold hover:no-underline relative">
+                      <span className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg border border-purple-500/30 group-hover:border-purple-500/50 transition-all">
+                          <Target className="h-4 w-4 text-purple-400" />
+                        </div>
+                        <span className="group-hover:text-primary transition-colors">O que é GEO e por que é importante?</span>
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm space-y-3 pt-2">
+                    <AccordionContent className="text-sm space-y-3 pt-2 relative">
                       <p className="text-muted-foreground"><strong className="text-foreground">GEO (Generative Engine Optimization)</strong> é a evolução natural do SEO para a era da Inteligência Artificial Generativa.</p>
-                      <div className="bg-primary/10 p-4 rounded-lg mt-3 border border-primary/20">
+                      <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-4 rounded-lg mt-3 border border-primary/20">
                         <strong>Por que é importante?</strong>
                         <ul className="text-xs mt-2 ml-4 space-y-1 text-muted-foreground">
                           <li>• Usuários estão cada vez mais consultando IAs em vez de buscar no Google</li>
@@ -858,14 +870,17 @@ Onde:
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem value="faq-llms" className="bg-muted/30 px-4 rounded-xl border border-border/40 hover:border-primary/30 transition-all">
-                    <AccordionTrigger className="font-semibold hover:no-underline">
-                      <span className="flex items-center gap-2">
-                        <BarChart3 className="h-4 w-4 text-green-500" />
-                        Quais LLMs são monitorados?
+                  <AccordionItem value="faq-llms" className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 px-5 py-1 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <AccordionTrigger className="font-semibold hover:no-underline relative">
+                      <span className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg border border-green-500/30 group-hover:border-green-500/50 transition-all">
+                          <Brain className="h-4 w-4 text-green-400" />
+                        </div>
+                        <span className="group-hover:text-primary transition-colors">Quais LLMs são monitorados?</span>
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm space-y-3 pt-2">
+                    <AccordionContent className="text-sm space-y-3 pt-2 relative">
                       <p className="text-muted-foreground">Atualmente monitoramos os principais LLMs do mercado:</p>
                       <div className="grid grid-cols-2 gap-3 mt-3">
                         {[
@@ -874,7 +889,7 @@ Onde:
                           { name: 'Google Gemini', desc: 'Gemini 2.0 e 2.5 Flash' },
                           { name: 'Anthropic Claude', desc: 'Claude 3.5 Sonnet' }
                         ].map((llm, i) => (
-                          <div key={i} className="bg-muted/50 p-3 rounded-lg border border-border/30">
+                          <div key={i} className="bg-gradient-to-br from-muted/50 to-muted/30 p-3 rounded-lg border border-border/40 hover:border-green-500/40 transition-all">
                             <strong className="flex items-center gap-2">
                               <CheckCircle2 className="h-4 w-4 text-green-500" />
                               {llm.name}
@@ -886,25 +901,28 @@ Onde:
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem value="faq-security" className="bg-muted/30 px-4 rounded-xl border border-border/40 hover:border-primary/30 transition-all">
-                    <AccordionTrigger className="font-semibold hover:no-underline">
-                      <span className="flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-red-500" />
-                        Como meus dados são protegidos?
+                  <AccordionItem value="faq-security" className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 px-5 py-1 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <AccordionTrigger className="font-semibold hover:no-underline relative">
+                      <span className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-lg border border-red-500/30 group-hover:border-red-500/50 transition-all">
+                          <Shield className="h-4 w-4 text-red-400" />
+                        </div>
+                        <span className="group-hover:text-primary transition-colors">Como meus dados são protegidos?</span>
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm space-y-3 pt-2">
+                    <AccordionContent className="text-sm space-y-3 pt-2 relative">
                       <p className="text-muted-foreground">A segurança é nossa prioridade máxima:</p>
                       <div className="space-y-3 mt-3">
                         {[
-                          { icon: Shield, color: 'green', title: 'Criptografia em Trânsito', desc: 'Todos os dados são transmitidos via HTTPS/TLS 1.3' },
+                          { icon: Shield, color: 'emerald', title: 'Criptografia em Trânsito', desc: 'Todos os dados são transmitidos via HTTPS/TLS 1.3' },
                           { icon: Database, color: 'blue', title: 'Criptografia em Repouso', desc: 'Database PostgreSQL com criptografia AES-256' },
                           { icon: Lock, color: 'purple', title: 'Row Level Security (RLS)', desc: 'Políticas de acesso granular garantem isolamento total de dados' },
                           { icon: Users, color: 'orange', title: 'Autenticação Segura', desc: 'JWT tokens com expiração, OAuth 2.0, senhas com bcrypt' }
                         ].map((item, i) => (
-                          <div key={i} className={`border-l-4 border-${item.color}-500 pl-4`}>
+                          <div key={i} className={`border-l-4 border-${item.color}-500 pl-4 py-2 bg-gradient-to-r from-${item.color}-500/10 to-transparent rounded-r-lg`}>
                             <strong className="flex items-center gap-2">
-                              <item.icon className={`h-4 w-4 text-${item.color}-500`} />
+                              <item.icon className={`h-4 w-4 text-${item.color}-400`} />
                               {item.title}
                             </strong>
                             <p className="text-xs mt-1 text-muted-foreground">{item.desc}</p>
@@ -914,14 +932,17 @@ Onde:
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem value="faq-support" className="bg-muted/30 px-4 rounded-xl border border-border/40 hover:border-primary/30 transition-all">
-                    <AccordionTrigger className="font-semibold hover:no-underline">
-                      <span className="flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4 text-cyan-500" />
-                        Como funciona o suporte?
+                  <AccordionItem value="faq-support" className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 px-5 py-1 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <AccordionTrigger className="font-semibold hover:no-underline relative">
+                      <span className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 rounded-lg border border-cyan-500/30 group-hover:border-cyan-500/50 transition-all">
+                          <MessageSquare className="h-4 w-4 text-cyan-400" />
+                        </div>
+                        <span className="group-hover:text-primary transition-colors">Como funciona o suporte?</span>
                       </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm space-y-3 pt-2">
+                    <AccordionContent className="text-sm space-y-3 pt-2 relative">
                       <p className="text-muted-foreground">Oferecemos múltiplos canais de suporte:</p>
                       <div className="space-y-3 mt-3">
                         {[
@@ -930,8 +951,10 @@ Onde:
                           { icon: Library, title: 'Base de Conhecimento', desc: 'Documentação completa, tutoriais em vídeo e guias passo a passo' },
                           { icon: Video, title: 'Webinars Mensais', desc: 'Sessões ao vivo sobre melhores práticas GEO' }
                         ].map((item, i) => (
-                          <div key={i} className="flex items-start gap-3 bg-muted/50 p-4 rounded-lg border border-border/30">
-                            <item.icon className="h-5 w-5 text-primary" />
+                          <div key={i} className="flex items-start gap-3 bg-gradient-to-r from-muted/50 to-muted/30 p-4 rounded-lg border border-border/40 hover:border-cyan-500/40 transition-all">
+                            <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 rounded-lg border border-cyan-500/30">
+                              <item.icon className="h-4 w-4 text-cyan-400" />
+                            </div>
                             <div>
                               <strong>{item.title}</strong>
                               <p className="text-xs mt-1 text-muted-foreground">{item.desc}</p>
@@ -945,15 +968,23 @@ Onde:
                 </Accordion>
               </section>
 
-              {/* Segurança */}
+              {/* Segurança - Premium */}
               <section className="mt-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                  <Lock className="h-6 w-6 text-primary" />
-                  Segurança e RLS
-                </h2>
-                <div className="bg-muted/30 p-5 rounded-xl border border-border/40">
-                  <p className="text-sm text-muted-foreground mb-4">Exemplo de política RLS:</p>
-                  <code className="block bg-background p-4 rounded-lg text-xs font-mono">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl blur-lg opacity-30 animate-pulse" />
+                    <div className="relative p-3 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-xl border border-red-500/40 backdrop-blur-sm">
+                      <Lock className="h-6 w-6 text-red-400" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                    Segurança e RLS
+                  </h2>
+                </div>
+                <div className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 p-6 rounded-xl border border-red-500/20 hover:border-red-500/40 transition-all backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(239,68,68,0.15)]">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-transparent to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <p className="text-sm text-muted-foreground mb-4 relative">Exemplo de política RLS:</p>
+                  <code className="block bg-background/80 p-4 rounded-lg text-xs font-mono border border-border/40 relative">
                     CREATE POLICY "Users can view their own brands"<br/>
                     ON brands FOR SELECT<br/>
                     USING (auth.uid() = user_id);
@@ -961,15 +992,38 @@ Onde:
                 </div>
               </section>
 
-              {/* Variáveis de Ambiente */}
+              {/* Variáveis de Ambiente - Premium */}
               <section className="mt-6">
-                <h2 className="text-2xl font-bold mb-4">Variáveis de Ambiente</h2>
-                <div className="bg-muted/30 p-5 rounded-xl border border-border/40">
-                  <p className="font-semibold mb-3">Supabase</p>
-                  <ul className="text-sm space-y-1 text-muted-foreground ml-4">
-                    <li>• SUPABASE_URL</li>
-                    <li>• SUPABASE_ANON_KEY</li>
-                    <li>• SUPABASE_SERVICE_ROLE_KEY</li>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl blur-lg opacity-30 animate-pulse" />
+                    <div className="relative p-3 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-xl border border-emerald-500/40 backdrop-blur-sm">
+                      <Settings className="h-6 w-6 text-emerald-400" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                    Variáveis de Ambiente
+                  </h2>
+                </div>
+                <div className="relative overflow-hidden bg-gradient-to-br from-background/80 via-muted/30 to-background/80 p-6 rounded-xl border border-emerald-500/20 hover:border-emerald-500/40 transition-all backdrop-blur-sm group hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <p className="font-semibold mb-3 flex items-center gap-2 relative">
+                    <Database className="h-4 w-4 text-emerald-400" />
+                    Supabase
+                  </p>
+                  <ul className="text-sm space-y-2 text-muted-foreground ml-4 relative">
+                    <li className="flex items-center gap-2">
+                      <Code2 className="h-3 w-3 text-emerald-500" />
+                      SUPABASE_URL
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Code2 className="h-3 w-3 text-emerald-500" />
+                      SUPABASE_ANON_KEY
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Code2 className="h-3 w-3 text-emerald-500" />
+                      SUPABASE_SERVICE_ROLE_KEY
+                    </li>
                   </ul>
                 </div>
               </section>
