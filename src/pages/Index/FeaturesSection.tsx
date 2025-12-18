@@ -6,6 +6,7 @@ import {
   LayoutDashboard, 
   Sparkles 
 } from "lucide-react";
+import featuresSectionBg from "@/assets/features-section-bg.png";
 
 const features = [
   { icon: Activity, title: "Monitoramento de Menções", description: "Tempo real em 4+ LLMs" },
@@ -18,8 +19,18 @@ const features = [
 
 export const FeaturesSection = () => {
   return (
-    <section className="py-32">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section className="relative py-32 overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img 
+          src={featuresSectionBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
+      </div>
+      
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 animate-fade-in">
