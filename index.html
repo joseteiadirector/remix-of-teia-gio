@@ -81,6 +81,42 @@
           }
         }
 
+        // Fallback extra: se por qualquer motivo o HTML publicado não injetar o bundle,
+        // tentamos localizar o arquivo principal via /sw.js (VitePWA) e carregar manualmente.
+        function tryBootFromBuildAssets() {
+          try {
+            if (window.__APP_BOOTED__ || window.__BOOTSTRAP_INJECTED__) return;
+
+            // Se o HTML já tem um script de /assets, não faça nada.
+            var hasAssetScript = !!document.querySelector('script[type="module"][src^="/assets/"]');
+            if (hasAssetScript) return;
+
+            window.__BOOTSTRAP_INJECTED__ = true;
+
+            fetch('/sw.js', { cache: 'no-store' })
+              .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('sw.js not found')); })
+              .then(function (txt) {
+                var m = txt.match(/assets\/app-[A-Za-z0-9_-]+\.js/);
+                if (!m) throw new Error('app bundle not found');
+
+                var s = document.createElement('script');
+                s.type = 'module';
+                s.src = '/' + m[0];
+                s.onerror = function () {
+                  window.__BOOTSTRAP_INJECTED__ = false;
+                  setTimeout(showHelpIfNotBooted, 250);
+                };
+                document.body.appendChild(s);
+              })
+              .catch(function () {
+                window.__BOOTSTRAP_INJECTED__ = false;
+              });
+          } catch (e) {
+            window.__BOOTSTRAP_INJECTED__ = false;
+          }
+        }
+
+        setTimeout(tryBootFromBuildAssets, 1200);
         setTimeout(showHelpIfNotBooted, 6000);
 
         var reloadBtn = document.getElementById('preboot-reload');
