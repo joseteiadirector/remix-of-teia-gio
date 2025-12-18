@@ -15,7 +15,9 @@ import {
   Zap,
   Shield,
   Cloud,
-  FileText
+  FileText,
+  Trophy,
+  Award
 } from 'lucide-react';
 import { monitoring } from '@/utils/monitoring';
 import { formatDistanceToNow } from 'date-fns';
@@ -65,7 +67,6 @@ export default function SystemHealth() {
   });
 
   useEffect(() => {
-    // Atualizar a cada 5 segundos
     const interval = setInterval(() => {
       setHealth(monitoring.getHealthStatus());
       setRecentEvents(monitoring.getRecentEvents(20));
@@ -74,7 +75,6 @@ export default function SystemHealth() {
     return () => clearInterval(interval);
   }, []);
 
-  // Calcular score de automação
   const getAutomationScore = () => {
     if (!automationJobs) return 0;
     
@@ -87,32 +87,43 @@ export default function SystemHealth() {
     return Math.round(successRate);
   };
 
-  // Calcular score platinum geral
   const sections = [
-    { name: 'Database & Segurança', score: 100, icon: Database },
-    { name: 'Edge Functions', score: 100, icon: Zap },
-    { name: 'Cron Jobs', score: getAutomationScore(), icon: Clock },
-    { name: 'Coleta de Dados', score: 100, icon: Activity },
-    { name: 'Integrações', score: 100, icon: Cloud },
-    { name: 'Documentação', score: 100, icon: FileText },
+    { name: 'Database & Segurança', score: 100, icon: Database, color: 'primary' },
+    { name: 'Edge Functions', score: 100, icon: Zap, color: 'cyan' },
+    { name: 'Cron Jobs', score: getAutomationScore(), icon: Clock, color: 'orange' },
+    { name: 'Coleta de Dados', score: 100, icon: Activity, color: 'green' },
+    { name: 'Integrações', score: 100, icon: Cloud, color: 'blue' },
+    { name: 'Documentação', score: 100, icon: FileText, color: 'purple' },
   ];
 
   const platinumScore = Math.round(sections.reduce((acc, s) => acc + s.score, 0) / sections.length);
 
   const getStatusColor = () => {
     switch (health.status) {
-      case 'healthy': return 'text-green-600 bg-green-50 border-green-200';
-      case 'degraded': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'unhealthy': return 'text-red-600 bg-red-50 border-red-200';
+      case 'healthy': return 'border-green-500/30 bg-gradient-to-br from-green-500/10 via-background to-background';
+      case 'degraded': return 'border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 via-background to-background';
+      case 'unhealthy': return 'border-red-500/30 bg-gradient-to-br from-red-500/10 via-background to-background';
     }
   };
 
   const getStatusIcon = () => {
     switch (health.status) {
-      case 'healthy': return <CheckCircle2 className="w-5 h-5" />;
-      case 'degraded': return <AlertCircle className="w-5 h-5" />;
-      case 'unhealthy': return <AlertCircle className="w-5 h-5" />;
+      case 'healthy': return <CheckCircle2 className="w-6 h-6 text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />;
+      case 'degraded': return <AlertCircle className="w-6 h-6 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]" />;
+      case 'unhealthy': return <AlertCircle className="w-6 h-6 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" />;
     }
+  };
+
+  const getSectionColorClasses = (color: string, score: number) => {
+    const baseColors: Record<string, { border: string; bg: string; icon: string; glow: string; badge: string }> = {
+      primary: { border: 'border-primary/30', bg: 'from-primary/10', icon: 'text-primary', glow: 'hover:shadow-primary/20', badge: 'bg-primary/20 text-primary border-primary/30' },
+      cyan: { border: 'border-cyan-500/30', bg: 'from-cyan-500/10', icon: 'text-cyan-500', glow: 'hover:shadow-cyan-500/20', badge: 'bg-cyan-500/20 text-cyan-500 border-cyan-500/30' },
+      orange: { border: 'border-orange-500/30', bg: 'from-orange-500/10', icon: 'text-orange-500', glow: 'hover:shadow-orange-500/20', badge: 'bg-orange-500/20 text-orange-500 border-orange-500/30' },
+      green: { border: 'border-green-500/30', bg: 'from-green-500/10', icon: 'text-green-500', glow: 'hover:shadow-green-500/20', badge: 'bg-green-500/20 text-green-500 border-green-500/30' },
+      blue: { border: 'border-blue-500/30', bg: 'from-blue-500/10', icon: 'text-blue-500', glow: 'hover:shadow-blue-500/20', badge: 'bg-blue-500/20 text-blue-500 border-blue-500/30' },
+      purple: { border: 'border-purple-500/30', bg: 'from-purple-500/10', icon: 'text-purple-500', glow: 'hover:shadow-purple-500/20', badge: 'bg-purple-500/20 text-purple-500 border-purple-500/30' },
+    };
+    return baseColors[color] || baseColors.primary;
   };
 
   return (
@@ -120,321 +131,376 @@ export default function SystemHealth() {
       {/* Animated Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
         {/* Premium Header */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-background/80 via-primary/5 to-background/80 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:border-primary/40 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
+          
           <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-2">
+            <div className="flex items-center gap-4 mb-3">
               <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-                <Shield className="h-8 w-8 text-primary" />
+                <Trophy className="h-8 w-8 text-primary drop-shadow-[0_0_12px_rgba(139,92,246,0.5)]" />
               </div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                🏆 Certificação PLATINUM
+              <h1 className="text-4xl md:text-5xl font-bold">
+                <span className="bg-gradient-to-r from-primary via-purple-400 to-primary bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] bg-clip-text text-transparent">
+                  Certificação PLATINUM
+                </span>
               </h1>
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-lg">
               Monitoramento completo da plataforma - Auditoria em tempo real
             </p>
           </div>
         </div>
 
         {/* SCORE PLATINUM PRINCIPAL */}
-        <Card className="p-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-purple-500/10 backdrop-blur-sm shadow-xl hover:shadow-primary/20 transition-all duration-500">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <Card className="relative overflow-hidden p-8 border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-purple-500/5 backdrop-blur-xl shadow-xl hover:shadow-primary/30 transition-all duration-500 group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6">
-              <div className="p-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-                <Shield className="w-12 h-12 text-primary" />
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 shadow-lg shadow-primary/20">
+                <Shield className="w-12 h-12 text-primary drop-shadow-[0_0_12px_rgba(139,92,246,0.5)]" />
               </div>
               <div>
-                <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">{platinumScore}% PLATINUM</h2>
-                <p className="text-muted-foreground">Status Geral da Plataforma</p>
+                <h2 className="text-4xl md:text-5xl font-bold mb-2">
+                  <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] bg-clip-text text-transparent">
+                    {platinumScore}% PLATINUM
+                  </span>
+                </h2>
+                <p className="text-muted-foreground text-lg">Status Geral da Plataforma</p>
               </div>
             </div>
-            <div className="w-full md:w-64">
-              <Progress value={platinumScore} className="h-4" />
-              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+            <div className="w-full md:w-72">
+              <Progress value={platinumScore} className="h-4 bg-primary/10" />
+              <div className="flex justify-between text-sm text-muted-foreground mt-3">
                 <span>0%</span>
-                <span className={platinumScore >= 95 ? 'text-green-500 font-bold' : platinumScore >= 85 ? 'text-yellow-500' : 'text-red-500'}>
-                  {platinumScore >= 95 ? '🏆 EXCELENTE' : platinumScore >= 85 ? '⚠️ BOM' : '❌ ATENÇÃO'}
-                </span>
+                <Badge className={platinumScore >= 95 ? 'bg-green-500/20 text-green-500 border-green-500/30' : platinumScore >= 85 ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-red-500/20 text-red-500 border-red-500/30'}>
+                  <Award className="w-3 h-3 mr-1" />
+                  {platinumScore >= 95 ? 'EXCELENTE' : platinumScore >= 85 ? 'BOM' : 'ATENÇÃO'}
+                </Badge>
                 <span>100%</span>
               </div>
             </div>
           </div>
         </Card>
 
-      {/* GRID DE SETORES */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {sections.map((section) => {
-          const Icon = section.icon;
-          return (
-            <Card key={section.name} className="p-6 hover:shadow-lg transition-all hover:scale-105">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${section.score >= 95 ? 'bg-green-500/10' : section.score >= 85 ? 'bg-yellow-500/10' : 'bg-red-500/10'}`}>
-                    <Icon className={`w-5 h-5 ${section.score >= 95 ? 'text-green-500' : section.score >= 85 ? 'text-yellow-500' : 'text-red-500'}`} />
+        {/* GRID DE SETORES */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sections.map((section, index) => {
+            const Icon = section.icon;
+            const colors = getSectionColorClasses(section.color, section.score);
+            return (
+              <Card 
+                key={section.name} 
+                className={`relative overflow-hidden p-6 ${colors.border} bg-gradient-to-br ${colors.bg} via-background to-background backdrop-blur-xl hover:shadow-lg ${colors.glow} transition-all duration-500 group animate-fadeIn`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" 
+                  style={{ backgroundColor: section.color === 'primary' ? 'rgba(139,92,246,0.2)' : section.color === 'cyan' ? 'rgba(6,182,212,0.2)' : section.color === 'orange' ? 'rgba(249,115,22,0.2)' : section.color === 'green' ? 'rgba(34,197,94,0.2)' : section.color === 'blue' ? 'rgba(59,130,246,0.2)' : 'rgba(168,85,247,0.2)' }}
+                />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2.5 rounded-xl bg-gradient-to-br ${colors.bg} border ${colors.border}`}>
+                        <Icon className={`w-5 h-5 ${colors.icon} drop-shadow-[0_0_6px_currentColor]`} />
+                      </div>
+                      <h3 className="font-semibold">{section.name}</h3>
+                    </div>
+                    <Badge className={colors.badge}>
+                      {section.score}%
+                    </Badge>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-sm">{section.name}</h3>
+                  <Progress value={section.score} className="h-2 mb-3" />
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {section.score >= 95 ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
+                        <span>Operacional</span>
+                      </>
+                    ) : section.score >= 85 ? (
+                      <>
+                        <AlertCircle className="w-3.5 h-3.5 text-yellow-500" />
+                        <span>Monitorar</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="w-3.5 h-3.5 text-red-500" />
+                        <span>Ação Necessária</span>
+                      </>
+                    )}
                   </div>
                 </div>
-                <Badge variant={section.score >= 95 ? 'default' : section.score >= 85 ? 'secondary' : 'destructive'}>
-                  {section.score}%
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* STATUS ORIGINAL - Premium */}
+        <Card className={`relative overflow-hidden p-6 border ${getStatusColor()} backdrop-blur-xl hover:shadow-lg transition-all duration-500 group`}>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className={`p-3 rounded-xl ${health.status === 'healthy' ? 'bg-green-500/10 border border-green-500/30' : health.status === 'degraded' ? 'bg-yellow-500/10 border border-yellow-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+                {getStatusIcon()}
+              </div>
+              <div>
+                <h2 className={`text-2xl font-bold capitalize ${health.status === 'healthy' ? 'text-green-500' : health.status === 'degraded' ? 'text-yellow-500' : 'text-red-500'}`}>
+                  {health.status}
+                </h2>
+                <p className="text-sm text-muted-foreground">Performance do Frontend</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-muted-foreground">Última atualização</div>
+              <div className="font-mono text-sm font-medium">
+                {new Date(health.metrics.lastUpdate).toLocaleTimeString('pt-BR')}
+              </div>
+            </div>
+          </div>
+
+          {health.issues.length > 0 && (
+            <div className="relative z-10 mt-4 space-y-2 p-4 rounded-lg bg-red-500/5 border border-red-500/20">
+              <div className="font-semibold text-sm text-red-500">Issues Detectadas:</div>
+              {health.issues.map((issue, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <AlertCircle className="w-4 h-4 text-red-500" />
+                  <span>{issue}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        {/* JOBS RECENTES - Premium */}
+        <Card className="relative overflow-hidden p-6 border border-border/50 bg-gradient-to-br from-background via-primary/5 to-background backdrop-blur-xl hover:shadow-lg hover:border-primary/30 transition-all duration-500 group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          
+          <div className="relative z-10">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                <Clock className="w-5 h-5 text-primary drop-shadow-[0_0_6px_rgba(139,92,246,0.5)]" />
+              </div>
+              <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                Execuções de Automação (Últimas 24h)
+              </span>
+            </h3>
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-2">
+                {automationJobs?.slice(0, 15).map((job) => (
+                  <div 
+                    key={job.id} 
+                    className="flex items-center justify-between p-4 border border-border/50 rounded-xl bg-background/50 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${job.status === 'completed' ? 'bg-green-500/10 border border-green-500/30' : job.status === 'failed' ? 'bg-red-500/10 border border-red-500/30' : 'bg-yellow-500/10 border border-yellow-500/30'}`}>
+                        {job.status === 'completed' ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        ) : job.status === 'failed' ? (
+                          <AlertCircle className="h-4 w-4 text-red-500" />
+                        ) : (
+                          <Activity className="h-4 w-4 text-yellow-500 animate-pulse" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{job.job_type}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatDistanceToNow(new Date(job.created_at), { addSuffix: true, locale: ptBR })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {job.duration_ms && (
+                        <span className="text-xs text-muted-foreground font-mono">
+                          {(job.duration_ms / 1000).toFixed(1)}s
+                        </span>
+                      )}
+                      <Badge className={job.status === 'completed' ? 'bg-green-500/20 text-green-500 border-green-500/30' : job.status === 'failed' ? 'bg-red-500/20 text-red-500 border-red-500/30' : 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30'}>
+                        {job.status}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+        </Card>
+
+        {/* MÉTRICAS DO SISTEMA - Premium */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="relative overflow-hidden p-6 border border-border/50 bg-gradient-to-br from-background via-background to-background backdrop-blur-xl hover:shadow-lg hover:border-primary/30 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="text-sm text-muted-foreground mb-1">Total de Marcas</div>
+              <div className="text-3xl font-bold">{systemMetrics?.totalBrands || 0}</div>
+              <p className="text-xs text-muted-foreground mt-1">Ativas no sistema</p>
+            </div>
+          </Card>
+
+          <Card className="relative overflow-hidden p-6 border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-primary/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="text-sm text-muted-foreground mb-1">Menções (7 dias)</div>
+              <div className="text-3xl font-bold text-primary">{systemMetrics?.mentionsWeek || 0}</div>
+              <p className="text-xs text-muted-foreground mt-1">LLM mentions coletadas</p>
+            </div>
+          </Card>
+
+          <Card className="relative overflow-hidden p-6 border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="text-sm text-muted-foreground mb-1">Cálculos GEO (7 dias)</div>
+              <div className="text-3xl font-bold text-purple-500">{systemMetrics?.scoresWeek || 0}</div>
+              <p className="text-xs text-muted-foreground mt-1">Scores processados</p>
+            </div>
+          </Card>
+        </div>
+
+        {/* Métricas de Performance - Premium */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Taxa de Erro */}
+          <Card className="relative overflow-hidden p-6 border border-red-500/20 bg-gradient-to-br from-red-500/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-red-500/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/30">
+                    <AlertCircle className="w-4 h-4 text-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
+                  </div>
+                  <h3 className="font-semibold">Taxa de Erro</h3>
+                </div>
+                <Badge className="bg-red-500/20 text-red-500 border-red-500/30">
+                  {(health.metrics.errorRate * 100).toFixed(1)}%
                 </Badge>
               </div>
-              <Progress value={section.score} className="h-2 mb-2" />
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                {section.score >= 95 ? (
-                  <>
-                    <CheckCircle2 className="w-3 h-3 text-green-500" />
-                    <span>Operacional</span>
-                  </>
-                ) : section.score >= 85 ? (
-                  <>
-                    <AlertCircle className="w-3 h-3 text-yellow-500" />
-                    <span>Monitorar</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertCircle className="w-3 h-3 text-red-500" />
-                    <span>Ação Necessária</span>
-                  </>
-                )}
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-
-      {/* STATUS ORIGINAL */}
-      <Card className={`p-6 border-2 ${getStatusColor()}`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            {getStatusIcon()}
-            <div>
-              <h2 className="text-2xl font-bold capitalize">{health.status}</h2>
-              <p className="text-sm opacity-80">Performance do Frontend</p>
+              <Progress value={health.metrics.errorRate * 100} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-3">Últimos 5 minutos</p>
             </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm opacity-80">Última atualização</div>
-            <div className="font-mono text-sm">
-              {new Date(health.metrics.lastUpdate).toLocaleTimeString('pt-BR')}
-            </div>
-          </div>
-        </div>
+          </Card>
 
-        {health.issues.length > 0 && (
-          <div className="mt-4 space-y-2">
-            <div className="font-semibold text-sm">Issues Detectadas:</div>
-            {health.issues.map((issue, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm">
-                <AlertCircle className="w-4 h-4" />
-                <span>{issue}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-
-      {/* JOBS RECENTES */}
-      <Card className="p-6">
-        <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5" />
-          Execuções de Automação (Últimas 24h)
-        </h3>
-        <ScrollArea className="h-[400px]">
-          <div className="space-y-2">
-            {automationJobs?.slice(0, 15).map((job) => (
-              <div 
-                key={job.id} 
-                className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  {job.status === 'completed' ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                  ) : job.status === 'failed' ? (
-                    <AlertCircle className="h-4 w-4 text-red-500" />
-                  ) : (
-                    <Activity className="h-4 w-4 text-yellow-500 animate-pulse" />
-                  )}
-                  <div>
-                    <p className="font-medium text-sm">{job.job_type}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(job.created_at), { addSuffix: true, locale: ptBR })}
-                    </p>
+          {/* Tempo Médio */}
+          <Card className="relative overflow-hidden p-6 border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/30">
+                    <Clock className="w-4 h-4 text-blue-500 drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
                   </div>
+                  <h3 className="font-semibold">Tempo Médio</h3>
                 </div>
-                <div className="flex items-center gap-3">
-                  {job.duration_ms && (
-                    <span className="text-xs text-muted-foreground">
-                      {(job.duration_ms / 1000).toFixed(1)}s
-                    </span>
-                  )}
-                  <Badge 
-                    variant={job.status === 'completed' ? 'default' : job.status === 'failed' ? 'destructive' : 'secondary'}
-                  >
-                    {job.status}
-                  </Badge>
-                </div>
+                <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">
+                  {health.metrics.avgDuration.toFixed(0)}ms
+                </Badge>
               </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </Card>
-
-      {/* MÉTRICAS DO SISTEMA */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-6">
-          <div className="text-sm text-muted-foreground mb-1">Total de Marcas</div>
-          <div className="text-3xl font-bold">{systemMetrics?.totalBrands || 0}</div>
-          <p className="text-xs text-muted-foreground mt-1">Ativas no sistema</p>
-        </Card>
-
-        <Card className="p-6">
-          <div className="text-sm text-muted-foreground mb-1">Menções (7 dias)</div>
-          <div className="text-3xl font-bold text-primary">{systemMetrics?.mentionsWeek || 0}</div>
-          <p className="text-xs text-muted-foreground mt-1">LLM mentions coletadas</p>
-        </Card>
-
-        <Card className="p-6">
-          <div className="text-sm text-muted-foreground mb-1">Cálculos GEO (7 dias)</div>
-          <div className="text-3xl font-bold text-purple-500">{systemMetrics?.scoresWeek || 0}</div>
-          <p className="text-xs text-muted-foreground mt-1">Scores processados</p>
-        </Card>
-      </div>
-
-      {/* Métricas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Taxa de Erro */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-red-500" />
-              <h3 className="font-semibold">Taxa de Erro</h3>
+              <Progress value={Math.min((health.metrics.avgDuration / 3000) * 100, 100)} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-3">Operações assíncronas</p>
             </div>
-            <Badge variant={health.metrics.errorRate > 0.05 ? 'destructive' : 'secondary'}>
-              {(health.metrics.errorRate * 100).toFixed(1)}%
-            </Badge>
-          </div>
-          <Progress 
-            value={health.metrics.errorRate * 100} 
-            className="h-2"
-          />
-          <p className="text-xs text-muted-foreground mt-2">
-            Últimos 5 minutos
-          </p>
-        </Card>
+          </Card>
 
-        {/* Tempo Médio */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-500" />
-              <h3 className="font-semibold">Tempo Médio</h3>
+          {/* Cache Hit Rate */}
+          <Card className="relative overflow-hidden p-6 border border-green-500/20 bg-gradient-to-br from-green-500/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-green-500/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/30">
+                    <Database className="w-4 h-4 text-green-500 drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]" />
+                  </div>
+                  <h3 className="font-semibold">Cache Hit</h3>
+                </div>
+                <Badge className="bg-green-500/20 text-green-500 border-green-500/30">
+                  {(health.metrics.cacheHitRate * 100).toFixed(1)}%
+                </Badge>
+              </div>
+              <Progress value={health.metrics.cacheHitRate * 100} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-3">Eficiência do cache</p>
             </div>
-            <Badge variant={health.metrics.avgDuration > 2000 ? 'destructive' : 'secondary'}>
-              {health.metrics.avgDuration.toFixed(0)}ms
-            </Badge>
-          </div>
-          <Progress 
-            value={Math.min((health.metrics.avgDuration / 3000) * 100, 100)} 
-            className="h-2"
-          />
-          <p className="text-xs text-muted-foreground mt-2">
-            Operações assíncronas
-          </p>
-        </Card>
+          </Card>
 
-        {/* Cache Hit Rate */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Database className="w-5 h-5 text-green-500" />
-              <h3 className="font-semibold">Cache Hit</h3>
+          {/* Total de Eventos */}
+          <Card className="relative overflow-hidden p-6 border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-background to-background backdrop-blur-xl hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-500 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                    <Activity className="w-4 h-4 text-purple-500 drop-shadow-[0_0_6px_rgba(168,85,247,0.5)]" />
+                  </div>
+                  <h3 className="font-semibold">Eventos</h3>
+                </div>
+                <Badge className="bg-purple-500/20 text-purple-500 border-purple-500/30">
+                  {health.metrics.totalEvents}
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Zap className="w-4 h-4 text-purple-500" />
+                <span>{health.metrics.apiCallCount} chamadas API</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">Últimos 5 minutos</p>
             </div>
-            <Badge variant={health.metrics.cacheHitRate > 0.7 ? 'secondary' : 'outline'}>
-              {(health.metrics.cacheHitRate * 100).toFixed(1)}%
-            </Badge>
-          </div>
-          <Progress 
-            value={health.metrics.cacheHitRate * 100} 
-            className="h-2"
-          />
-          <p className="text-xs text-muted-foreground mt-2">
-            Eficiência do cache
-          </p>
-        </Card>
-
-        {/* Total de Eventos */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-purple-500" />
-              <h3 className="font-semibold">Eventos</h3>
-            </div>
-            <Badge variant="outline">
-              {health.metrics.totalEvents}
-            </Badge>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Zap className="w-4 h-4" />
-            <span>{health.metrics.apiCallCount} chamadas API</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Últimos 5 minutos
-          </p>
-        </Card>
-      </div>
-
-      {/* Eventos Recentes */}
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5" />
-          <h2 className="text-xl font-semibold">Eventos Recentes</h2>
-          <Badge variant="outline" className="ml-auto">
-            {recentEvents.length} eventos
-          </Badge>
+          </Card>
         </div>
 
-        <ScrollArea className="h-[400px]">
-          <div className="space-y-2">
-            {recentEvents.map((event, i) => (
-              <div 
-                key={i}
-                className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1">
-                  <Badge variant={
-                    event.type === 'error' ? 'destructive' :
-                    event.type === 'cache_hit' ? 'secondary' :
-                    'outline'
-                  }>
-                    {event.type}
-                  </Badge>
-                  <span className="font-mono text-sm truncate flex-1">
-                    {event.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  {event.duration && (
-                    <span className={event.duration > 2000 ? 'text-red-500 font-semibold' : ''}>
-                      {event.duration.toFixed(0)}ms
-                    </span>
-                  )}
-                  <span className="font-mono">
-                    {new Date(event.timestamp).toLocaleTimeString('pt-BR')}
-                  </span>
-                </div>
+        {/* Eventos Recentes - Premium */}
+        <Card className="relative overflow-hidden p-6 border border-border/50 bg-gradient-to-br from-background via-cyan-500/5 to-background backdrop-blur-xl hover:shadow-lg hover:border-cyan-500/30 transition-all duration-500 group">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30">
+                <TrendingUp className="w-5 h-5 text-cyan-500 drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]" />
               </div>
-            ))}
+              <h2 className="text-xl font-semibold">Eventos Recentes</h2>
+              <Badge variant="outline" className="ml-auto border-cyan-500/30 text-cyan-500">
+                {recentEvents.length} eventos
+              </Badge>
+            </div>
+
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-2">
+                {recentEvents.map((event, i) => (
+                  <div 
+                    key={i}
+                    className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-background/50 hover:bg-cyan-500/5 hover:border-cyan-500/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <Badge className={
+                        event.type === 'error' ? 'bg-red-500/20 text-red-500 border-red-500/30' :
+                        event.type === 'cache_hit' ? 'bg-green-500/20 text-green-500 border-green-500/30' :
+                        'bg-muted/50 text-muted-foreground border-border'
+                      }>
+                        {event.type}
+                      </Badge>
+                      <span className="font-mono text-sm truncate flex-1">
+                        {event.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      {event.duration && (
+                        <span className={`font-mono ${event.duration > 2000 ? 'text-red-500 font-semibold' : ''}`}>
+                          {event.duration.toFixed(0)}ms
+                        </span>
+                      )}
+                      <span className="font-mono">
+                        {new Date(event.timestamp).toLocaleTimeString('pt-BR')}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
-      </Card>
+        </Card>
       </div>
     </div>
   );
