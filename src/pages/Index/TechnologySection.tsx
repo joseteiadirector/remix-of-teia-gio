@@ -55,6 +55,7 @@ export const TechnologySection = () => {
               Inteligência Generativa
               <br />
               <span className="text-primary">Observacional</span>
+              <span className="text-primary/70 font-mono text-2xl lg:text-3xl ml-3">(IGO)</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">
               A primeira plataforma que não apenas usa IA, mas observa e analisa 
