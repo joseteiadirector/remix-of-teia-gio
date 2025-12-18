@@ -225,7 +225,7 @@ O arquivo `.env` é gerado automaticamente pelo Lovable Cloud. Para desenvolvime
 
 ```env
 VITE_SUPABASE_URL=https://llzonwqocqzqpezcsbjh.supabase.co
-VITE_SUPABASE_ANON_KEY=sua_chave_anon
+VITE_SUPABASE_PUBLISHABLE_KEY=sua_chave_publica
 ```
 
 4. **Inicie o servidor de desenvolvimento**

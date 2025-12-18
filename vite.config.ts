@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
@@ -9,6 +9,16 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // Compat: alguns ambientes usam VITE_SUPABASE_ANON_KEY.
+  // Normalizamos para VITE_SUPABASE_PUBLISHABLE_KEY (nome esperado pelo app).
+  const env = loadEnv(mode, process.cwd(), "");
+  const supabasePublishableKey =
+    env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    env.VITE_SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    "";
+
   // Sentry é opcional. Só habilitar upload de sourcemaps se DSN + token estiverem presentes.
   // (Evita falha de build/publish quando apenas o DSN foi configurado.)
   const sentryDsn = process.env.VITE_SENTRY_DSN;
@@ -145,6 +155,8 @@ export default defineConfig(({ mode }) => {
   define: {
     __CDN_URL__: JSON.stringify(process.env.VITE_CDN_URL || ''),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    // Garante que o bundle sempre tenha a chave pública do backend disponível
+    "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(supabasePublishableKey),
   },
   build: {
     // Gera manifest.json no build (permite loader resiliente no index.html)
