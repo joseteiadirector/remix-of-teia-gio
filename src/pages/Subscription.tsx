@@ -168,15 +168,15 @@ export default function Subscription() {
 
       <div className="container mx-auto p-6 max-w-7xl">
         {/* Hero Section Premium */}
-        <div className="text-center mb-12 animate-slideUp">
+        <div className="text-center mb-12 animate-slideUp px-4">
           <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30 bg-primary/5 backdrop-blur-xl">
             <Sparkles className="w-3.5 h-3.5 mr-1.5 inline text-primary drop-shadow-[0_0_4px_rgba(139,92,246,0.5)]" />
             Framework IGO Exclusivo
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent leading-tight">
             Escolha seu Plano
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
             Potencialize sua presença em respostas de IA com o único framework IGO do mercado
           </p>
         </div>
