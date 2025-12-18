@@ -1,49 +1,87 @@
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
 import "./index.css";
-import "./i18n";
 
-// Inicialização segura
-const init = async () => {
+function showPrebootError(title: string, err?: unknown) {
   try {
-    // Injetar CSS crítico
+    const prebootText = document.getElementById("preboot-text");
+    if (prebootText) prebootText.textContent = title;
+
+    const help = document.getElementById("preboot-help");
+    if (help) help.style.display = "block";
+
+    // Debug (não quebra se o elemento não existir)
+    const details = document.getElementById("preboot-debug");
+    const message = err instanceof Error ? `${err.name}: ${err.message}` : String(err ?? "");
+    if (details && message) details.textContent = message;
+
+    // Log sempre para facilitar suporte
+    // eslint-disable-next-line no-console
+    console.error("[BOOT]", title, err);
+  } catch {
+    // ignore
+  }
+}
+
+async function bootstrap() {
+  try {
+    // Importa i18n de forma segura (evita travar o boot)
+    await import("./i18n");
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn("i18n init failed:", e);
+  }
+
+  try {
     const { injectCriticalCSS } = await import("./utils/criticalCSS");
     injectCriticalCSS();
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("Critical CSS failed:", e);
   }
 
   try {
-    // Inicializar Sentry apenas em produção
     if (import.meta.env.PROD) {
       const { initSentry } = await import("./lib/sentry");
       initSentry();
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("Sentry init failed:", e);
   }
 
-  // Desregistrar qualquer Service Worker existente (PWA desativado)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister();
-      }
-    });
+  // Importante: se variáveis do backend não estiverem presentes no build publicado,
+  // o app não consegue inicializar. Mostramos isso claramente em vez de travar.
+  if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) {
+    showPrebootError(
+      "Falha no deploy: configuração do backend ausente. Publique novamente (Publish → Update)."
+    );
+    return;
   }
-};
 
-// Executar inicialização
-init();
+  // Desregistrar qualquer Service Worker existente (reduz chance de cache quebrado no público)
+  try {
+    if ("serviceWorker" in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((r) => r.unregister()));
+    }
+  } catch {
+    // ignore
+  }
 
-// Renderizar app
-try {
-  createRoot(document.getElementById("root")!).render(<App />);
-  (window as any).__APP_BOOTED__ = true;
-  const preboot = document.getElementById("preboot");
-  if (preboot) preboot.style.display = "none";
-} catch (e) {
-  console.error("Boot failed:", e);
-  const prebootText = document.getElementById("preboot-text");
-  if (prebootText) prebootText.textContent = "Falha ao iniciar. Clique em 'Limpar cache e recarregar'.";
+  try {
+    const { default: App } = await import("./App");
+    const rootEl = document.getElementById("root");
+    if (!rootEl) throw new Error("Root element not found");
+
+    createRoot(rootEl).render(<App />);
+
+    (window as any).__APP_BOOTED__ = true;
+    const preboot = document.getElementById("preboot");
+    if (preboot) preboot.style.display = "none";
+  } catch (e) {
+    showPrebootError("Falha ao iniciar o app (erro no bundle).", e);
+  }
 }
+
+bootstrap();
+
