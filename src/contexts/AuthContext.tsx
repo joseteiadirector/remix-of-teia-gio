@@ -96,6 +96,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => authSubscription.unsubscribe();
   }, []);
 
+  // Função para tocar som de login da Teia
+  const playLoginSound = () => {
+    try {
+      const audio = new Audio('/sounds/teia-login.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(err => logger.warn('Não foi possível tocar som de login', { error: err }));
+    } catch (err) {
+      logger.warn('Erro ao criar áudio de login', { error: err });
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -111,6 +122,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           : error.message,
         variant: "destructive",
       });
+    } else {
+      // Tocar som de login da Teia
+      playLoginSound();
     }
 
     return { error };
