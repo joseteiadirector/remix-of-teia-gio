@@ -265,19 +265,7 @@ export default function Subscription() {
                 style={{ backgroundColor: key === 'pro' ? 'rgba(139,92,246,0.2)' : key === 'agency' ? 'rgba(249,115,22,0.2)' : key === 'enterprise' ? 'rgba(234,179,8,0.2)' : key === 'basic' ? 'rgba(6,182,212,0.2)' : 'rgba(100,100,100,0.1)' }} 
               />
 
-              {/* Badges */}
-              {tier.popular && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-primary/80 border-0 shadow-lg shadow-primary/30 z-10 whitespace-nowrap px-3 py-1">
-                  <Flame className="w-3 h-3 mr-1 shrink-0" />
-                  <span className="text-xs">Popular</span>
-                </Badge>
-              )}
-              {key === 'agency' && !isCurrentPlan && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600 border-0 shadow-lg shadow-orange-500/30 z-10 whitespace-nowrap px-3 py-1">
-                  <Briefcase className="w-3 h-3 mr-1 shrink-0" />
-                  <span className="text-xs">Indireto</span>
-                </Badge>
-              )}
+              {/* Badge apenas para plano atual */}
               {isCurrentPlan && (
                 <Badge className="absolute -top-3 right-4 z-10 bg-green-500/20 text-green-500 border-green-500/30 whitespace-nowrap">
                   <Crown className="w-3 h-3 mr-1 shrink-0" />
@@ -299,18 +287,6 @@ export default function Subscription() {
                   </span>
                   <span className="text-xs font-normal text-muted-foreground/80">/mês</span>
                 </div>
-                {tier.popular && (
-                  <p className="text-[10px] text-primary mt-1.5 font-medium flex items-center gap-1">
-                    <Flame className="w-3 h-3" />
-                    Escolha de 70%
-                  </p>
-                )}
-                {key === 'agency' && (
-                  <p className="text-[10px] text-orange-500 mt-1.5 font-medium flex items-center gap-1">
-                    <Briefcase className="w-3 h-3" />
-                    Canal Indireto
-                  </p>
-                )}
               </CardHeader>
               
               <CardContent className="relative z-10 flex-1 flex flex-col justify-between pt-0 px-4">
