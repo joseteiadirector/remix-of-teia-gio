@@ -58,14 +58,13 @@ async function bootstrap() {
     return;
   }
 
-  // Desregistrar qualquer Service Worker existente (reduz chance de cache quebrado no público)
+  // Registra PWA com auto-update (força reload quando há nova versão)
   try {
-    if ("serviceWorker" in navigator) {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((r) => r.unregister()));
-    }
-  } catch {
-    // ignore
+    const { setupPWAUpdater } = await import("./utils/pwaUpdater");
+    setupPWAUpdater();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn("PWA updater setup failed:", e);
   }
 
   try {
