@@ -51,6 +51,7 @@ const AlgorithmicGovernance = lazy(() => import("./pages/AlgorithmicGovernance")
 const ScientificReports = lazy(() => import("./pages/ScientificReports"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Status = lazy(() => import("./pages/Status"));
+const Install = lazy(() => import("./pages/Install"));
 
 // Admin pages
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -203,6 +204,7 @@ const App = () => (
                   <Route path="/" element={<PublicRoute><Index /></PublicRoute>} />
                   <Route path="/auth" element={<PublicRoute><Index /></PublicRoute>} />
                   <Route path="/status" element={<Status />} />
+                  <Route path="/install" element={<Install />} />
                   <Route path="/documentation" element={<Documentation />} />
                   
                   {/* Admin routes */}
