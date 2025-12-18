@@ -82,31 +82,70 @@
         }
 
         // Fallback extra: se por qualquer motivo o HTML publicado não injetar o bundle,
-        // tentamos localizar o arquivo principal via /sw.js (VitePWA) e carregar manualmente.
+        // tentamos localizar o arquivo principal via manifest.json (Vite) e carregar manualmente.
         function tryBootFromBuildAssets() {
           try {
             if (window.__APP_BOOTED__ || window.__BOOTSTRAP_INJECTED__) return;
 
-            // Se o HTML já tem um script de /assets, não faça nada.
-            var hasAssetScript = !!document.querySelector('script[type="module"][src^="/assets/"]');
-            if (hasAssetScript) return;
-
             window.__BOOTSTRAP_INJECTED__ = true;
 
-            fetch('/sw.js', { cache: 'no-store' })
-              .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('sw.js not found')); })
-              .then(function (txt) {
-                var m = txt.match(/assets\/app-[A-Za-z0-9_-]+\.js/);
-                if (!m) throw new Error('app bundle not found');
+            function injectBundle(src) {
+              // Evita injetar duplicado
+              if (document.querySelector('script[type="module"][src="' + src + '"]')) return;
 
-                var s = document.createElement('script');
-                s.type = 'module';
-                s.src = '/' + m[0];
-                s.onerror = function () {
-                  window.__BOOTSTRAP_INJECTED__ = false;
-                  setTimeout(showHelpIfNotBooted, 250);
-                };
-                document.body.appendChild(s);
+              var s = document.createElement('script');
+              s.type = 'module';
+              s.src = src;
+              s.onerror = function () {
+                window.__BOOTSTRAP_INJECTED__ = false;
+                setTimeout(showHelpIfNotBooted, 250);
+              };
+              document.body.appendChild(s);
+            }
+
+            function tryFromManifest() {
+              return fetch('/manifest.json', { cache: 'no-store' })
+                .then(function (r) {
+                  return r.ok ? r.json() : Promise.reject(new Error('manifest.json not found'));
+                })
+                .then(function (manifest) {
+                  // Vite manifest usa a chave do arquivo de entrada
+                  var entry = manifest && manifest['src/main.tsx'];
+                  var file = entry && entry.file;
+                  if (!file) throw new Error('main entry not found in manifest');
+
+                  var desiredSrc = '/' + file;
+
+                  // Se já existe um script de assets mas está apontando para outro hash, injeta o correto.
+                  var existingAssetScript = document.querySelector('script[type="module"][src^="/assets/"]');
+                  if (existingAssetScript && existingAssetScript.getAttribute('src') === desiredSrc) return;
+
+                  injectBundle(desiredSrc);
+                });
+            }
+
+            function tryFromSw() {
+              // Último recurso: tenta extrair o bundle do sw.js (se existir e for JS)
+              return fetch('/sw.js', { cache: 'no-store' })
+                .then(function (r) {
+                  return r.ok ? r.text() : Promise.reject(new Error('sw.js not found'));
+                })
+                .then(function (txt) {
+                  // Se o servidor estiver devolvendo HTML (SPA fallback), aborta.
+                  if (txt && (txt.indexOf('<!DOCTYPE html') !== -1 || txt.indexOf('<html') !== -1)) {
+                    throw new Error('sw.js returned html');
+                  }
+
+                  var m = txt.match(/assets\/app-[A-Za-z0-9_-]+\.js/);
+                  if (!m) throw new Error('app bundle not found');
+
+                  injectBundle('/' + m[0]);
+                });
+            }
+
+            tryFromManifest()
+              .catch(function () {
+                return tryFromSw();
               })
               .catch(function () {
                 window.__BOOTSTRAP_INJECTED__ = false;
@@ -158,36 +197,6 @@
         window.addEventListener('error', function () { setTimeout(showHelpIfNotBooted, 250); });
         window.addEventListener('unhandledrejection', function () { setTimeout(showHelpIfNotBooted, 250); });
       })();
-    </script>
-    <script type="module">
-      // Fallback emergencial: se após 3s o app não bootou, força injeção do bundle
-      setTimeout(() => {
-        if (window.__APP_BOOTED__) return;
-        
-        const existing = document.querySelector('script[type="module"][src^="/assets/app-"]');
-        if (existing) return; // já tem, aguarda carregar
-        
-        // Tenta localizar o bundle via manifest.json ou sw.js
-        fetch('/sw.js', { cache: 'no-store' })
-          .then(r => r.text())
-          .then(txt => {
-            const match = txt.match(/assets\/app-[A-Za-z0-9_-]+\.js/);
-            if (!match) throw new Error('Bundle não encontrado no SW');
-            
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.src = '/' + match[0];
-            script.onerror = () => {
-              const prebootText = document.getElementById('preboot-text');
-              if (prebootText) prebootText.textContent = 'Erro ao carregar. Use "Limpar cache e atualizar".';
-            };
-            document.body.appendChild(script);
-          })
-          .catch(() => {
-            const prebootText = document.getElementById('preboot-text');
-            if (prebootText) prebootText.textContent = 'Erro crítico. Use "Limpar cache e atualizar".';
-          });
-      }, 3000);
     </script>
 
     <script type="module" src="/src/main.tsx"></script>
