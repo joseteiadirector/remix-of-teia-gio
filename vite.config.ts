@@ -65,6 +65,11 @@ export default defineConfig(({ mode }) => {
         ]
       },
       workbox: {
+        // Evita SW velho segurando assets antigos (causa comum de "Carregando..." infinito)
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        navigateFallback: '/index.html',
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
@@ -161,8 +166,8 @@ export default defineConfig(({ mode }) => {
     },
     rollupOptions: {
       output: {
-        // Entry fixo (evita index.html apontar para /src/main.tsx no público)
-        entryFileNames: 'assets/app.js',
+        // Entry com hash (evita cache quebrado no deploy público)
+        entryFileNames: 'assets/app-[hash].js',
         chunkFileNames: 'assets/chunk-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
 

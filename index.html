@@ -55,8 +55,74 @@
       <div id="preboot" class="app-loader">
         <div class="app-loader-spinner"></div>
         <span id="preboot-text">Carregando...</span>
+
+        <div id="preboot-help" style="display:none; text-align:center; max-width: 520px; padding: 0 24px;">
+          <p style="margin: 8px 0 12px; font-size: 14px; opacity: .85; line-height: 1.4;">
+            Se o app ficar preso em “Carregando…”, normalmente é cache antigo.
+          </p>
+          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+            <button id="preboot-reload" type="button" style="cursor:pointer; padding:10px 12px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.35); color:#f1f5f9;">
+              Recarregar
+            </button>
+            <button id="preboot-fix-cache" type="button" style="cursor:pointer; padding:10px 12px; border-radius:10px; border:1px solid rgba(139,92,246,.35); background: rgba(139,92,246,.18); color:#f1f5f9;">
+              Limpar cache e atualizar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <script>
+      (function () {
+        function showHelpIfNotBooted() {
+          if (!window.__APP_BOOTED__) {
+            var help = document.getElementById('preboot-help');
+            if (help) help.style.display = 'block';
+          }
+        }
+
+        setTimeout(showHelpIfNotBooted, 6000);
+
+        var reloadBtn = document.getElementById('preboot-reload');
+        if (reloadBtn) reloadBtn.addEventListener('click', function () { window.location.reload(); });
+
+        var fixBtn = document.getElementById('preboot-fix-cache');
+        if (fixBtn) fixBtn.addEventListener('click', function () {
+          var p = Promise.resolve();
+
+          try {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations) {
+              p = p.then(function () { return navigator.serviceWorker.getRegistrations(); })
+                .then(function (regs) {
+                  return Promise.all((regs || []).map(function (r) { return r.unregister(); }));
+                });
+            }
+
+            if ('caches' in window && window.caches && window.caches.keys) {
+              p = p.then(function () { return caches.keys(); })
+                .then(function (keys) {
+                  return Promise.all((keys || []).map(function (k) { return caches.delete(k); }));
+                });
+            }
+
+            p = p.then(function () {
+              try { localStorage.clear(); } catch (e) {}
+              try { sessionStorage.clear(); } catch (e) {}
+            });
+          } catch (e) {
+            // ignore
+          }
+
+          p.finally(function () {
+            window.location.reload();
+          });
+        });
+
+        // Se o bundle falhar, mostra ajuda rápido
+        window.addEventListener('error', function () { setTimeout(showHelpIfNotBooted, 250); });
+        window.addEventListener('unhandledrejection', function () { setTimeout(showHelpIfNotBooted, 250); });
+      })();
+    </script>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>
