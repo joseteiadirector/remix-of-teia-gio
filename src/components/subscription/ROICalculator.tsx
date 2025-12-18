@@ -137,12 +137,16 @@ export default function ROICalculator() {
   return (
     <div className="mt-20 animate-fadeIn" style={{ animationDelay: '700ms' }}>
       <div className="text-center mb-10">
-        <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30">
-          <Calculator className="w-3.5 h-3.5 mr-1.5 inline" />
+        <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30 bg-primary/5 backdrop-blur-xl">
+          <Calculator className="w-3.5 h-3.5 mr-1.5 inline text-primary drop-shadow-[0_0_4px_rgba(139,92,246,0.5)]" />
           Calculadora de ROI
         </Badge>
-        <h2 className="text-3xl font-bold mb-3">Calcule seu Retorno sobre Investimento</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 relative">
+          <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] bg-clip-text text-transparent">
+            Calcule seu Retorno sobre Investimento
+          </span>
+        </h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto px-4">
           Descubra quanto você pode economizar com observabilidade de LLM e proteção de marca
         </p>
       </div>
@@ -150,11 +154,14 @@ export default function ROICalculator() {
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* Inputs */}
-          <Card className="border-border/50">
-            <CardHeader className="pb-4">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background backdrop-blur-xl overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <CardHeader className="pb-4 relative z-10">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Configure seu cenário
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
+                  <Target className="h-4 w-4 text-primary drop-shadow-[0_0_6px_rgba(139,92,246,0.5)]" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">Configure seu cenário</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -206,11 +213,14 @@ export default function ROICalculator() {
           </Card>
 
           {/* Value Breakdown */}
-          <Card className="border-border/50 md:col-span-2">
-            <CardHeader className="pb-4">
+          <Card className="border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-background backdrop-blur-xl md:col-span-2 overflow-hidden group hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <CardHeader className="pb-4 relative z-10">
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                Valor Gerado Anualmente
+                <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30">
+                  <TrendingUp className="h-4 w-4 text-cyan-500 drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]" />
+                </div>
+                <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">Valor Gerado Anualmente</span>
               </CardTitle>
               <CardDescription>
                 Baseado em benchmarks de mercado B2B

@@ -168,15 +168,17 @@ export default function Subscription() {
 
       <div className="container mx-auto p-6 max-w-7xl">
         {/* Hero Section Premium */}
-        <div className="text-center mb-12 animate-slideUp px-4">
-          <Badge variant="outline" className="mb-4 text-sm px-4 py-1.5 border-primary/30 bg-primary/5 backdrop-blur-xl">
+        <div className="text-center mb-12 animate-slideUp">
+          <Badge variant="outline" className="mb-6 text-sm px-4 py-1.5 border-primary/30 bg-primary/5 backdrop-blur-xl">
             <Sparkles className="w-3.5 h-3.5 mr-1.5 inline text-primary drop-shadow-[0_0_4px_rgba(139,92,246,0.5)]" />
             Framework IGO Exclusivo
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent leading-tight">
-            Escolha seu Plano
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 relative">
+            <span className="bg-gradient-to-r from-primary via-purple-400 to-primary bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+              Escolha seu Plano
+            </span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto px-4">
             Potencialize sua presença em respostas de IA com o único framework IGO do mercado
           </p>
         </div>
@@ -265,21 +267,21 @@ export default function Subscription() {
 
               {/* Badges */}
               {tier.popular && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-primary/80 border-0 shadow-lg shadow-primary/30 z-10">
-                  <Flame className="w-3 h-3 mr-1" />
-                  Mais Popular
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-primary/80 border-0 shadow-lg shadow-primary/30 z-10 whitespace-nowrap px-3 py-1">
+                  <Flame className="w-3 h-3 mr-1 shrink-0" />
+                  <span className="text-xs">Popular</span>
                 </Badge>
               )}
               {key === 'agency' && !isCurrentPlan && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600 border-0 shadow-lg shadow-orange-500/30 z-10">
-                  <Briefcase className="w-3 h-3 mr-1" />
-                  Canal Indireto
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600 border-0 shadow-lg shadow-orange-500/30 z-10 whitespace-nowrap px-3 py-1">
+                  <Briefcase className="w-3 h-3 mr-1 shrink-0" />
+                  <span className="text-xs">Indireto</span>
                 </Badge>
               )}
               {isCurrentPlan && (
-                <Badge className="absolute -top-3 right-4 z-10 bg-green-500/20 text-green-500 border-green-500/30">
-                  <Crown className="w-3 h-3 mr-1" />
-                  Seu Plano
+                <Badge className="absolute -top-3 right-4 z-10 bg-green-500/20 text-green-500 border-green-500/30 whitespace-nowrap">
+                  <Crown className="w-3 h-3 mr-1 shrink-0" />
+                  <span className="text-xs">Atual</span>
                 </Badge>
               )}
               
@@ -389,8 +391,10 @@ export default function Subscription() {
       {/* Seção de Benefícios Premium */}
       <div className="mt-20 animate-fadeIn" style={{ animationDelay: '600ms' }}>
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-foreground via-primary/80 to-foreground bg-clip-text text-transparent">
-            Por que escolher Teia GEO?
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 relative">
+            <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] bg-clip-text text-transparent">
+              Por que escolher Teia GEO?
+            </span>
           </h2>
           <p className="text-muted-foreground">
             O único framework IGO do mercado com resultados comprovados
