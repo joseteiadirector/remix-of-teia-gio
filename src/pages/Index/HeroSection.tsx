@@ -1,13 +1,20 @@
 import { LoginCard } from "@/components/LoginCard";
 import { ArrowRight } from "lucide-react";
+import heroBrainBg from "@/assets/hero-brain-bg.png";
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center py-32">
-      {/* Minimal gradient background */}
+    <section className="relative min-h-screen flex items-center justify-center py-32 overflow-hidden">
+      {/* Background image */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-primary/3" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-[150px] opacity-50" />
+        <img 
+          src={heroBrainBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-30"
+        />
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
