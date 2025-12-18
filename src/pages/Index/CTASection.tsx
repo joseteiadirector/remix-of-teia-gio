@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import ctaSectionBg from "@/assets/cta-section-bg.png";
 
 export const CTASection = () => {
@@ -24,16 +21,9 @@ export const CTASection = () => {
             <span className="text-primary">pelas IAs?</span>
           </h2>
           
-          <p className="text-lg text-muted-foreground mb-12 font-light">
+          <p className="text-lg text-muted-foreground font-light">
             Comece hoje mesmo a otimizar sua presença em motores generativos.
           </p>
-
-          <Link to="/auth">
-            <Button size="lg" className="px-8 gap-2 group">
-              Começar Gratuitamente
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
         </div>
       </div>
     </section>
