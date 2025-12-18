@@ -1,3 +1,5 @@
+import frameworkIgoBg from "@/assets/framework-igo-bg.png";
+
 const metrics = [
   {
     code: "ICE",
@@ -29,8 +31,18 @@ const pillars = [
 
 export const MetricsSection = () => {
   return (
-    <section className="py-32 bg-muted/30">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section className="relative py-32 overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img 
+          src={frameworkIgoBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
+      </div>
+      
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-20 animate-fade-in">
