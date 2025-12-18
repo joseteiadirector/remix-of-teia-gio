@@ -63,13 +63,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let sessionChecked = false;
     let mounted = true;
 
-    // Timeout de segurança - se não conseguir carregar auth em 10s, continua sem usuário
+    // Timeout de segurança mais curto - se não conseguir carregar auth em 3s, continua sem usuário
     const safetyTimeout = setTimeout(() => {
       if (mounted && loading) {
         logger.warn('Auth timeout - continuando sem sessão');
         setLoading(false);
       }
-    }, 10000);
+    }, 3000);
 
     // Set up auth state listener FIRST
     const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
