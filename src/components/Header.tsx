@@ -20,27 +20,27 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" role="banner">
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="flex h-14 md:h-16 items-center justify-between">
-          {/* Logo */}
+          {/* Logo - Clean white text */}
           <a 
             href="/" 
             className="flex items-center gap-2 md:gap-3 group cursor-pointer"
             aria-label="Teia GEO - Página Inicial"
           >
-            <span className="text-base md:text-xl font-display font-bold bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
-              <span className="hidden sm:inline">Teia GEO — IA Generativa Observacional</span>
+            <span className="text-base md:text-xl font-serif font-medium text-foreground">
+              <span className="hidden sm:inline">Teia GEO</span>
               <span className="sm:hidden">Teia GEO</span>
             </span>
           </a>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-6" role="navigation" aria-label="Navegação principal">
-            <a href="#framework" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Navegação principal">
+            <a href="#framework" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
               {t('nav.framework')}
             </a>
-            <a href="#modules" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#modules" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
               {t('nav.modules')}
             </a>
-            <a href="/documentation" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="/documentation" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
               {t('nav.documentation')}
             </a>
           </nav>
@@ -71,12 +71,12 @@ const Header = () => {
             ) : (
               <>
                 <a href="/auth" className="hidden sm:inline">
-                  <Button variant="ghost" size="sm" className="font-medium" aria-label="Fazer login">
+                  <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-foreground font-medium" aria-label="Fazer login">
                     {t('nav.login')}
                   </Button>
                 </a>
                 <a href="/auth">
-                  <Button size="sm" className="shadow-md hover:shadow-lg transition-all hover:scale-105 font-medium" aria-label="Começar grátis">
+                  <Button size="sm" className="font-medium" aria-label="Começar grátis">
                     <span className="hidden sm:inline">{t('nav.getStarted')}</span>
                     <span className="sm:hidden">{t('nav.login')}</span>
                   </Button>
