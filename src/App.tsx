@@ -5,9 +5,10 @@ import "@/i18n"; // Initialize i18n translations
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { AppSidebar } from "@/components/AppSidebar";
+import { AppHeader } from "@/components/layout/AppHeader";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { BrandProvider } from "@/contexts/BrandContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -140,9 +141,7 @@ function ProtectedContent() {
         <div className="min-h-screen flex w-full">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0">
-            <header className="h-14 border-b border-border/40 flex items-center px-4 bg-background/95 backdrop-blur sticky top-0 z-10">
-              <SidebarTrigger />
-            </header>
+            <AppHeader />
             <main className="flex-1">
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
