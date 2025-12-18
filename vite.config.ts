@@ -5,12 +5,9 @@ import { componentTagger } from "lovable-tagger";
 import { visualizer } from "rollup-plugin-visualizer";
 import viteCompression from "vite-plugin-compression";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Compat: alguns ambientes usam VITE_SUPABASE_ANON_KEY.
-  // Normalizamos para VITE_SUPABASE_PUBLISHABLE_KEY (nome esperado pelo app).
   const env = loadEnv(mode, process.cwd(), "");
   const supabasePublishableKey =
     env.VITE_SUPABASE_PUBLISHABLE_KEY ||
@@ -19,8 +16,6 @@ export default defineConfig(({ mode }) => {
     process.env.VITE_SUPABASE_ANON_KEY ||
     "";
 
-  // Sentry é opcional. Só habilitar upload de sourcemaps se DSN + token estiverem presentes.
-  // (Evita falha de build/publish quando apenas o DSN foi configurado.)
   const sentryDsn = process.env.VITE_SENTRY_DSN;
   const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || process.env.VITE_SENTRY_AUTH_TOKEN;
   const sentryOrg = process.env.SENTRY_ORG || process.env.VITE_SENTRY_ORG;
@@ -35,104 +30,27 @@ export default defineConfig(({ mode }) => {
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // PWA Configuration
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png'],
-      manifest: {
-        name: 'Teia GEO - Plataforma de Otimização para IAs Generativas',
-        short_name: 'Teia GEO',
-        description: 'Plataforma brasileira de GEO e IGO. Monitore sua marca em ChatGPT, Claude, Gemini e Perplexity.',
-        theme_color: '#8B5CF6',
-        background_color: '#0f172a',
-        display: 'standalone',
-        orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-maskable-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable'
-          },
-          {
-            src: 'pwa-maskable-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
-          }
-        ]
-      },
-      workbox: {
-        // Evita SW velho segurando assets antigos (causa comum de "Carregando..." infinito)
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-        skipWaiting: true,
-        navigateFallback: '/index.html',
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'gstatic-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
-        ]
-      }
-    }),
-    // Bundle Analyzer - gerar stats.html após build
+    // PWA DESABILITADO TEMPORARIAMENTE para resolver problema de cache no publish
+    // Bundle Analyzer
     visualizer({
       open: false,
       filename: 'dist/stats.html',
       gzipSize: true,
       brotliSize: true,
-      template: 'treemap', // 'sunburst' | 'treemap' | 'network'
+      template: 'treemap',
     }),
     // Compressão Brotli e Gzip
     viteCompression({
       algorithm: 'brotliCompress',
       ext: '.br',
-      threshold: 10240, // Apenas arquivos > 10kb
+      threshold: 10240,
     }),
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
       threshold: 10240,
     }),
-    // Sentry Plugin - Upload de source maps em produção
+    // Sentry Plugin
     sentryEnabled && sentryVitePlugin({
       org: sentryOrg || 'teia-geo',
       project: sentryProject || 'teia-geo-cogni-weave',
