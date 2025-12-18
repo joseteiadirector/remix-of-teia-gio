@@ -77,7 +77,7 @@ function LoadingFallback() {
   const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
-    const t = window.setTimeout(() => setShowHelp(true), 8000);
+    const t = window.setTimeout(() => setShowHelp(true), 5000); // Reduzido para 5s
     return () => window.clearTimeout(t);
   }, []);
 
@@ -93,6 +93,9 @@ function LoadingFallback() {
         const keys = await caches.keys();
         await Promise.all(keys.map((k) => caches.delete(k)));
       }
+      // Limpar localStorage também
+      localStorage.clear();
+      sessionStorage.clear();
     } catch {
       // ignorar e recarregar mesmo assim
     } finally {
@@ -107,15 +110,15 @@ function LoadingFallback() {
         <p className="text-muted-foreground">Carregando...</p>
 
         {showHelp && (
-          <div className="pt-2 space-y-3">
+          <div className="pt-2 space-y-3 animate-in fade-in duration-300">
             <p className="text-sm text-muted-foreground">
-              Se ficar preso aqui, normalmente é cache do navegador/Service Worker após uma atualização.
+              Demorando mais que o esperado? Tente as opções abaixo:
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
-              <Button onClick={handleReload} variant="secondary">
-                Recarregar
+              <Button onClick={handleReload} variant="secondary" size="sm">
+                Recarregar página
               </Button>
-              <Button onClick={handleClearCacheAndReload}>
+              <Button onClick={handleClearCacheAndReload} size="sm">
                 Limpar cache e recarregar
               </Button>
             </div>

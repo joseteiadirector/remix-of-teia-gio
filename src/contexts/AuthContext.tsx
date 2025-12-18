@@ -61,13 +61,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let sessionChecked = false;
+    let mounted = true;
+
+    // Timeout de segurança - se não conseguir carregar auth em 10s, continua sem usuário
+    const safetyTimeout = setTimeout(() => {
+      if (mounted && loading) {
+        logger.warn('Auth timeout - continuando sem sessão');
+        setLoading(false);
+      }
+    }, 10000);
 
     // Set up auth state listener FIRST
     const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        if (!mounted) return;
+        
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        clearTimeout(safetyTimeout);
         
         // Check subscription only on SIGN_IN event (não em outros eventos)
         if (session?.user && event === 'SIGNED_IN' && !sessionChecked) {
@@ -82,18 +94,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     // THEN check for existing session (apenas uma vez na inicialização)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-      sessionChecked = true;
-      
-      if (session?.user) {
-        checkSubscription();
-      }
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        if (!mounted) return;
+        
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+        sessionChecked = true;
+        clearTimeout(safetyTimeout);
+        
+        if (session?.user) {
+          checkSubscription();
+        }
+      })
+      .catch((error) => {
+        logger.error('Erro ao obter sessão', { error });
+        if (mounted) {
+          setLoading(false);
+          clearTimeout(safetyTimeout);
+        }
+      });
 
-    return () => authSubscription.unsubscribe();
+    return () => {
+      mounted = false;
+      clearTimeout(safetyTimeout);
+      authSubscription.unsubscribe();
+    };
   }, []);
 
   // Função para tocar som de login da Teia
