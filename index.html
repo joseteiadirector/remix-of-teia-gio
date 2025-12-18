@@ -159,6 +159,36 @@
         window.addEventListener('unhandledrejection', function () { setTimeout(showHelpIfNotBooted, 250); });
       })();
     </script>
+    <script type="module">
+      // Fallback emergencial: se após 3s o app não bootou, força injeção do bundle
+      setTimeout(() => {
+        if (window.__APP_BOOTED__) return;
+        
+        const existing = document.querySelector('script[type="module"][src^="/assets/app-"]');
+        if (existing) return; // já tem, aguarda carregar
+        
+        // Tenta localizar o bundle via manifest.json ou sw.js
+        fetch('/sw.js', { cache: 'no-store' })
+          .then(r => r.text())
+          .then(txt => {
+            const match = txt.match(/assets\/app-[A-Za-z0-9_-]+\.js/);
+            if (!match) throw new Error('Bundle não encontrado no SW');
+            
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = '/' + match[0];
+            script.onerror = () => {
+              const prebootText = document.getElementById('preboot-text');
+              if (prebootText) prebootText.textContent = 'Erro ao carregar. Use "Limpar cache e atualizar".';
+            };
+            document.body.appendChild(script);
+          })
+          .catch(() => {
+            const prebootText = document.getElementById('preboot-text');
+            if (prebootText) prebootText.textContent = 'Erro crítico. Use "Limpar cache e atualizar".';
+          });
+      }, 3000);
+    </script>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>
