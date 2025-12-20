@@ -1,29 +1,19 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Loader2 } from 'lucide-react';
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoadingState } from "@/components/LoadingState";
 
-export function PublicRoute({ children }: { children: React.ReactNode }) {
+export function PublicRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loading && user) {
-      navigate('/dashboard', { replace: true });
-    }
-  }, [user, loading, navigate]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <LoadingState message="Carregando…" />;
   }
 
   if (user) {
-    return null;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
 }
+
