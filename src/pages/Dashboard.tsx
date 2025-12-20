@@ -1,12 +1,13 @@
 import { Activity, Brain, FileText, Zap, ArrowRight, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { DashboardPremiumHeader } from "@/components/dashboard/DashboardPremiumHeader";
 import { DashboardKPIHero } from "@/components/dashboard/DashboardKPIHero";
 import { DashboardAlertsBanner } from "@/components/dashboard/DashboardAlertsBanner";
 import { DashboardQuickInsight } from "@/components/dashboard/DashboardQuickInsight";
 import { DashboardTrendMini } from "@/components/dashboard/DashboardTrendMini";
+import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { cn } from "@/lib/utils";
-
 const quickActions = [
   {
     title: "IGO Dashboard",
@@ -52,6 +53,20 @@ const quickActions = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    // Short delay to ensure smooth transition from skeleton to content
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isInitialLoad) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden">
